@@ -1,0 +1,37 @@
+.glass-navbar {
+  background: rgba(15, 23, 42, 0.4) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1rem 0;
+}
+
+.brand-gradient {
+  background: linear-gradient(to right, #818cf8, #c084fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 1.5rem;
+  letter-spacing: 1px;
+}
+
+.glass-navbar .nav-link {
+  color: #f8fafc !important;
+  transition: color 0.3s ease;
+}
+
+.glass-navbar .nav-link:hover {
+  color: #818cf8 !important;
+}
+
+.glass-navbar .nav-link.text-danger:hover {
+  color: #ef4444 !important;
+}
+
+/* Adjust the navbar toggler for dark mode */
+.glass-navbar .navbar-toggler {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.glass-navbar .navbar-toggler:focus {
+  box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.1);
+}

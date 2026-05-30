@@ -1,20 +1,18 @@
+/* Container adjustments */
 .auth-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  min-height: 100vh;
   width: 100%;
-  padding: 1.5rem;
 }
 
+/* Glassmorphism Card to override Bootstrap defaults */
 .auth-card {
   width: 100%;
-  background: var(--glass-bg);
+  max-width: 420px;
+  background: rgba(255, 255, 255, 0.05) !important;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--glass-border);
-  border-radius: 1.5rem;
-  padding: 2rem 1.5rem;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 1.5rem !important;
   animation: slideUp 0.5s ease-out forwards;
 }
 
@@ -29,123 +27,58 @@
   }
 }
 
-.auth-header {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
+/* Header Text Gradient */
 .auth-header h2 {
-  font-size: 1.75rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
   background: linear-gradient(to right, #818cf8, #c084fc);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-.auth-header p {
-  color: var(--text-secondary);
-  font-size: 0.875rem;
-  line-height: 1.5;
+/* Custom Input Styling over Bootstrap */
+.custom-input {
+  background: rgba(0, 0, 0, 0.2) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: white !important;
+  border-radius: 0.75rem !important;
+  transition: all 0.3s ease !important;
 }
 
-.auth-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
+.custom-input::placeholder {
+  color: rgba(255, 255, 255, 0.3) !important;
 }
 
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  text-align: left;
+.custom-input:focus {
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2) !important;
+  background: rgba(0, 0, 0, 0.4) !important;
+  border-color: #6366f1 !important;
 }
 
-.form-group label {
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--text-primary);
-}
-
-.form-group input {
-  padding: 0.75rem 1rem;
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 0.75rem;
-  color: white;
-  font-size: 1rem;
-  font-family: inherit;
-  transition: all 0.3s ease;
-}
-
-.form-group input::placeholder {
-  color: rgba(255, 255, 255, 0.3);
-}
-
-.form-group input:focus {
-  outline: none;
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
-  background: rgba(0, 0, 0, 0.4);
-}
-
+/* Button Styling Overrides */
 .auth-button {
-  margin-top: 1rem;
-  padding: 0.875rem;
-  background: var(--primary-color);
-  color: white;
-  border: none;
-  border-radius: 0.75rem;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-family: inherit;
+  background-color: #6366f1 !important;
+  border-color: #6366f1 !important;
+  border-radius: 0.75rem !important;
+  transition: all 0.3s ease !important;
 }
 
 .auth-button:hover {
-  background: var(--primary-hover);
+  background-color: #4f46e5 !important;
+  border-color: #4f46e5 !important;
   transform: translateY(-2px);
-  box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.4);
+  box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.4) !important;
 }
 
 .auth-button:active {
-  transform: translateY(0);
-}
-
-.auth-footer {
-  margin-top: 2rem;
-  text-align: center;
-  font-size: 0.875rem;
-  color: var(--text-secondary);
+  transform: translateY(0) !important;
 }
 
 .toggle-btn {
-  background: none;
-  border: none;
-  color: var(--primary-color);
-  font-weight: 600;
-  font-family: inherit;
-  font-size: 0.875rem;
-  cursor: pointer;
-  margin-left: 0.5rem;
-  transition: color 0.3s ease;
+  color: #6366f1 !important;
+  transition: color 0.3s ease !important;
 }
 
 .toggle-btn:hover {
-  color: #818cf8;
-  text-decoration: underline;
-}
-
-/* Tablet and Desktop scaling (Mobile First Strategy) */
-@media (min-width: 640px) {
-  .auth-card {
-    max-width: 420px;
-    padding: 3rem;
-  }
-
-  .auth-header h2 {
-    font-size: 2rem;
-  }
+  color: #818cf8 !important;
+  text-decoration: underline !important;
 }

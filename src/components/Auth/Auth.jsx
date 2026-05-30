@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Container, Card, Form, Button } from 'react-bootstrap';
 import './Auth.css';
 
 const Auth = () => {
@@ -10,51 +11,52 @@ const Auth = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Simulate submission
     console.log(isLogin ? "Logging in..." : "Registering...");
   };
 
   return (
-    <div className="auth-container">
-      <div className="auth-card">
-        <div className="auth-header">
-          <h2>{isLogin ? 'Welcome Back' : 'Create Account'}</h2>
-          <p>{isLogin ? 'Enter your details to access your account' : 'Sign up to get started with our platform'}</p>
-        </div>
-
-        <form className="auth-form" onSubmit={handleSubmit}>
-          {!isLogin && (
-            <div className="form-group">
-              <label htmlFor="name">Full Name</label>
-              <input type="text" id="name" placeholder="John Doe" required />
-            </div>
-          )}
-
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-            <input type="email" id="email" placeholder="hello@example.com" required />
+    <Container className="d-flex justify-content-center align-items-center auth-container">
+      <Card className="auth-card p-4 p-sm-5 border-0 shadow-lg">
+        <Card.Body>
+          <div className="text-center mb-4 auth-header">
+            <h2 className="fw-bold">{isLogin ? 'Welcome Back' : 'Create Account'}</h2>
+            <p className="text-light">
+              {isLogin ? 'Enter your details to access your account' : 'Sign up to get started with our platform'}
+            </p>
           </div>
 
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <input type="password" id="password" placeholder="••••••••" required />
-          </div>
+          <Form onSubmit={handleSubmit} className="auth-form">
+            {!isLogin && (
+              <Form.Group className="mb-3" controlId="name">
+                <Form.Label className="fw-medium text-white">Full Name</Form.Label>
+                <Form.Control type="text" placeholder="John Doe" required className="custom-input" />
+              </Form.Group>
+            )}
 
-          <button type="submit" className="auth-button">
-            {isLogin ? 'Sign In' : 'Sign Up'}
-          </button>
-        </form>
+            <Form.Group className="mb-3" controlId="email">
+              <Form.Label className="fw-medium text-white">Email address</Form.Label>
+              <Form.Control type="email" placeholder="hello@example.com" required className="custom-input" />
+            </Form.Group>
 
-        <div className="auth-footer">
-          <p>
-            {isLogin ? "Don't have an account?" : "Already have an account?"}
-            <button type="button" className="toggle-btn" onClick={toggleAuthMode}>
+            <Form.Group className="mb-4" controlId="password">
+              <Form.Label className="fw-medium text-white">Password</Form.Label>
+              <Form.Control type="password" placeholder="••••••••" required className="custom-input" />
+            </Form.Group>
+
+            <Button variant="primary" type="submit" className="w-100 fw-bold auth-button py-2">
+              {isLogin ? 'Sign In' : 'Sign Up'}
+            </Button>
+          </Form>
+
+          <div className="text-center mt-4 auth-footer text-muted">
+            {isLogin ? "Don't have an account? " : "Already have an account? "}
+            <Button variant="link" className="p-0 text-decoration-none toggle-btn fw-bold" onClick={toggleAuthMode}>
               {isLogin ? 'Sign up' : 'Log in'}
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
+            </Button>
+          </div>
+        </Card.Body>
+      </Card>
+    </Container>
   );
 };
 
