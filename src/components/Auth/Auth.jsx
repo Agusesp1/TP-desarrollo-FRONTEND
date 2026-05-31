@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Container, Card, Form, Button } from 'react-bootstrap';
 import './Auth.css';
 
@@ -28,18 +28,18 @@ const Auth = () => {
           <Form onSubmit={handleSubmit} className="auth-form">
             {!isLogin && (
               <Form.Group className="mb-3" controlId="name">
-                <Form.Label className="fw-medium text-white">Full Name</Form.Label>
-                <Form.Control type="text" placeholder="John Doe" required className="custom-input" />
+                <Form.Label className="fw-medium text-white">Nombre completo</Form.Label>
+                <Form.Control type="text" placeholder="Juan Perez" required className="custom-input" />
               </Form.Group>
             )}
 
             <Form.Group className="mb-3" controlId="email">
-              <Form.Label className="fw-medium text-white">Email address</Form.Label>
-              <Form.Control type="email" placeholder="hello@example.com" required className="custom-input" />
+              <Form.Label className="fw-medium text-white">Correo electrónico</Form.Label>
+              <Form.Control type="email" placeholder="tu-email@gmail.com" required className="custom-input" />
             </Form.Group>
 
             <Form.Group className="mb-4" controlId="password">
-              <Form.Label className="fw-medium text-white">Password</Form.Label>
+              <Form.Label className="fw-medium text-white">Contraseña</Form.Label>
               <Form.Control type="password" placeholder="••••••••" required className="custom-input" />
             </Form.Group>
 
@@ -48,7 +48,7 @@ const Auth = () => {
             </Button>
           </Form>
 
-          <div className="text-center mt-4 auth-footer text-muted">
+          <div className="text-center mt-4 auth-footer text-light">
             {isLogin ? "Don't have an account? " : "Already have an account? "}
             <Button variant="link" className="p-0 text-decoration-none toggle-btn fw-bold" onClick={toggleAuthMode}>
               {isLogin ? 'Sign up' : 'Log in'}
