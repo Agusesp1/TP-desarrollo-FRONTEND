@@ -19,9 +19,9 @@ const Auth = () => {
       <Card className="auth-card p-4 p-sm-5 border-0 shadow-lg">
         <Card.Body>
           <div className="text-center mb-4 auth-header">
-            <h2 className="fw-bold">{isLogin ? 'Welcome Back' : 'Create Account'}</h2>
+            <h2 className="fw-bold">{isLogin ? 'Bienvenido nuevamente' : 'Crear cuenta'}</h2>
             <p className="text-light">
-              {isLogin ? 'Enter your details to access your account' : 'Sign up to get started with our platform'}
+              {isLogin ? 'Ingrese datos para iniciar sesión' : 'Registrarse para poder ingresar'}
             </p>
           </div>
 
@@ -49,7 +49,7 @@ const Auth = () => {
           </Form>
 
           <div className="text-center mt-4 auth-footer text-light">
-            {isLogin ? "Don't have an account? " : "Already have an account? "}
+            {isLogin ? "No tienes cuenta? " : "Ya tienes una cuenta? "}
             <Button variant="link" className="p-0 text-decoration-none toggle-btn fw-bold" onClick={toggleAuthMode}>
               {isLogin ? 'Sign up' : 'Log in'}
             </Button>
