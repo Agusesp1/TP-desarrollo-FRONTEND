@@ -1,4 +1,4 @@
-
+import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Auth from './components/Auth/Auth';
 import User from './components/User/User';
@@ -11,7 +11,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Auth />} />
         {/* User Dashboard route */}
-        <Route path="/usuario" element={<User />} />
+        <Route path="/user" element={<User />} />
       </Routes>
     </BrowserRouter>
   );

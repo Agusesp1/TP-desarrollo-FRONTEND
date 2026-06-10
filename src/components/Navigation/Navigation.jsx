@@ -17,12 +17,12 @@ const Navigation = () => {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto">
             {isAuthPage ? (
-              <Nav.Link as={Link} to="/usuario" className="fw-medium">
+              <Nav.Link as={Link} to="/user" className="fw-medium">
                 Ver Demo Perfil
               </Nav.Link>
             ) : (
               <>
-                <Nav.Link as={Link} to="/usuario" className="fw-medium mx-2">
+                <Nav.Link as={Link} to="/user" className="fw-medium mx-2">
                   Mi Perfil
                 </Nav.Link>
                 <Nav.Link as={Link} to="/" className="fw-medium mx-2 text-danger">
