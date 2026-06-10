@@ -1,3 +1,8 @@
+.user-page {
+  min-height: 100vh;
+  background: #0f172a;
+}
+
 .usuario-container {
   min-height: 100vh;
   padding-top: 2rem;

@@ -12,17 +12,17 @@ const User = () => {
           <>
             <h2 className="fw-bold text-white mb-4 header-gradient">Mis Cuotas</h2>
             <div className="text-white">
-              <p className="text-muted">Aquí podrás ver el estado de tus pagos y vencimientos.</p>
-              
+              <p className="text-white">Aquí podrás ver el estado de tus pagos y vencimientos.</p>
+
               <Card className="glass-card border-0 mb-3 p-3">
                 <div className="d-flex justify-content-between align-items-center">
                   <div>
-                    <h5 className="mb-1 fw-bold">Pase Premium Mensual</h5>
+                    <h5 className="mb-1 fw-bold text-white">Pase Premium Mensual</h5>
                     <small className="text-success fw-medium">Al día</small>
                   </div>
                   <div className="text-end">
-                    <h4 className="mb-0 fw-bold">$15.000</h4>
-                    <small className="text-muted">Vence: 15/06/2026</small>
+                    <h4 className="mb-0 fw-bold text-warning">$15.000</h4>
+                    <small className="text-white">Vence: 15/06/2026</small>
                   </div>
                 </div>
               </Card>
@@ -30,12 +30,12 @@ const User = () => {
               <Card className="glass-card border-0 mb-3 p-3 opacity-75">
                 <div className="d-flex justify-content-between align-items-center">
                   <div>
-                    <h5 className="mb-1 fw-bold">Pase Premium Mensual</h5>
-                    <small className="text-muted fw-medium">Pagado</small>
+                    <h5 className="mb-1 fw-bold text-white">Pase Premium Mensual</h5>
+                    <small className="text-white fw-medium">Pagado</small>
                   </div>
                   <div className="text-end">
-                    <h4 className="mb-0 fw-bold">$15.000</h4>
-                    <small className="text-muted">Pagado: 15/05/2026</small>
+                    <h4 className="mb-0 fw-bold text-success">$15.000</h4>
+                    <small className="text-white">Pagado: 15/05/2026</small>
                   </div>
                 </div>
               </Card>
@@ -106,6 +106,7 @@ const User = () => {
   };
 
   return (
+    <div className="user-page">
     <Container fluid className="user-container py-4">
       <Row className="h-100 justify-content-center">
         {/* Left Sidebar */}
@@ -154,6 +155,7 @@ const User = () => {
         </Col>
       </Row>
     </Container>
+    </div>
   );
 };
 

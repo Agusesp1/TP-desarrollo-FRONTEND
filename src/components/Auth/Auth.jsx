@@ -11,7 +11,7 @@ const Auth = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(isLogin ? "Logging in..." : "Registering...");
+    console.log(isLogin ? "Iniciando sesión..." : "Registrando...");
   };
 
   return (
@@ -19,9 +19,9 @@ const Auth = () => {
       <Card className="auth-card p-4 p-sm-5 border-0 shadow-lg">
         <Card.Body>
           <div className="text-center mb-4 auth-header">
-            <h2 className="fw-bold">{isLogin ? 'Welcome Back' : 'Create Account'}</h2>
+            <h2 className="fw-bold">{isLogin ? 'Bienvenido nuevamente' : 'Crear cuenta'}</h2>
             <p className="text-light">
-              {isLogin ? 'Enter your details to access your account' : 'Sign up to get started with our platform'}
+              {isLogin ? 'Ingrese datos para iniciar sesión' : 'Registrarse para poder ingresar'}
             </p>
           </div>
 
@@ -29,29 +29,50 @@ const Auth = () => {
             {!isLogin && (
               <Form.Group className="mb-3" controlId="name">
                 <Form.Label className="fw-medium text-white">Nombre completo</Form.Label>
-                <Form.Control type="text" placeholder="Juan Perez" required className="custom-input" />
+                <Form.Control
+                  type="text"
+                  placeholder="Juan Perez"
+                  required
+                  className="custom-input"
+                  onInvalid={e => e.target.setCustomValidity('Por favor completá este campo')}
+                  onInput={e => e.target.setCustomValidity('')}
+                />
               </Form.Group>
             )}
 
             <Form.Group className="mb-3" controlId="email">
               <Form.Label className="fw-medium text-white">Correo electrónico</Form.Label>
-              <Form.Control type="email" placeholder="tu-email@gmail.com" required className="custom-input" />
+              <Form.Control
+                type="email"
+                placeholder="tu-email@gmail.com"
+                required
+                className="custom-input"
+                onInvalid={e => e.target.setCustomValidity(e.target.value === '' ? 'Por favor completá este campo' : 'Ingresá un correo electrónico válido')}
+                onInput={e => e.target.setCustomValidity('')}
+              />
             </Form.Group>
 
             <Form.Group className="mb-4" controlId="password">
               <Form.Label className="fw-medium text-white">Contraseña</Form.Label>
-              <Form.Control type="password" placeholder="••••••••" required className="custom-input" />
+              <Form.Control
+                type="password"
+                placeholder="••••••••"
+                required
+                className="custom-input"
+                onInvalid={e => e.target.setCustomValidity('Por favor completá este campo')}
+                onInput={e => e.target.setCustomValidity('')}
+              />
             </Form.Group>
 
             <Button variant="primary" type="submit" className="w-100 fw-bold auth-button py-2">
-              {isLogin ? 'Sign In' : 'Sign Up'}
+              {isLogin ? 'Iniciar sesión' : 'Registrarse'}
             </Button>
           </Form>
 
           <div className="text-center mt-4 auth-footer text-light">
-            {isLogin ? "Don't have an account? " : "Already have an account? "}
+            {isLogin ? "¿No tienes cuenta? " : "¿Ya tienes una cuenta? "}
             <Button variant="link" className="p-0 text-decoration-none toggle-btn fw-bold" onClick={toggleAuthMode}>
-              {isLogin ? 'Sign up' : 'Log in'}
+              {isLogin ? 'Registrarse' : 'Iniciar sesión'}
             </Button>
           </div>
         </Card.Body>
