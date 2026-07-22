@@ -1,0 +1,14 @@
+.footer-container {
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(10px);
+}
+
+.footer-container a:hover {
+  color: #818cf8 !important;
+  opacity: 1 !important;
+  transition: opacity 0.2s ease, color 0.2s ease;
+}
+
+.sedes-list li {
+  line-height: 1.5;
+}

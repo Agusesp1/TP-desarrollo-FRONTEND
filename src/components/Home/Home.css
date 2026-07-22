@@ -1,0 +1,95 @@
+.home-container {
+  min-height: calc(100vh - 70px);
+}
+
+.hero-section {
+  padding: 5rem 1rem 4rem;
+}
+
+.hero-title {
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  letter-spacing: -0.5px;
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #818cf8 0%, #c084fc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.tracking-wider {
+  letter-spacing: 1px;
+}
+
+.hero-btn {
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  border: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hero-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4) !important;
+}
+
+.hero-btn-outline {
+  border-color: rgba(255, 255, 255, 0.3);
+  transition: all 0.2s ease;
+}
+
+.hero-btn-outline:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.section-title {
+  color: #f8fafc;
+  font-size: 2.2rem;
+}
+
+.feature-card {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 1rem;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(99, 102, 241, 0.4) !important;
+}
+
+.feature-icon {
+  font-size: 3rem;
+}
+
+.stat-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.about-image-card {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+}
+
+.sede-item {
+  background: rgba(255, 255, 255, 0.03);
+  border-left: 3px solid #6366f1;
+}
+
+.contact-card {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 1.25rem;
+}
+
+.cta-card {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(168, 85, 247, 0.15) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(16px);
+}

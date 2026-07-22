@@ -16,8 +16,17 @@ const Navigation = () => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto">
+            <Nav.Link as={Link} to="/" className="fw-medium mx-2">
+              Inicio
+            </Nav.Link>
+            <Nav.Link as="a" href="/#nosotros" className="fw-medium mx-2">
+              Nosotros
+            </Nav.Link>
+            <Nav.Link as="a" href="/#contacto" className="fw-medium mx-2">
+              Contacto
+            </Nav.Link>
             {isAuthPage ? (
-              <Nav.Link as={Link} to="/user" className="fw-medium">
+              <Nav.Link as={Link} to="/user" className="fw-medium mx-2">
                 Ver Demo Perfil
               </Nav.Link>
             ) : (
@@ -25,8 +34,8 @@ const Navigation = () => {
                 <Nav.Link as={Link} to="/user" className="fw-medium mx-2">
                   Mi Perfil
                 </Nav.Link>
-                <Nav.Link as={Link} to="/" className="fw-medium mx-2 text-danger">
-                  Cerrar Sesión
+                <Nav.Link as={Link} to="/login" className="fw-medium mx-2">
+                  Ingresar
                 </Nav.Link>
               </>
             )}

@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { Container, Card, Form, Button } from 'react-bootstrap';
+import { useLocation } from 'react-router-dom';
 import './Auth.css';
 
 const Auth = () => {
-  const [isLogin, setIsLogin] = useState(true);
+  const location = useLocation();
+  const [isLogin, setIsLogin] = useState(location.state?.mode !== 'register');
 
   const toggleAuthMode = () => {
     setIsLogin((prev) => !prev);

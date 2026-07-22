@@ -42,29 +42,7 @@ const User = () => {
             </div>
           </>
         );
-      case 'rutinas':
-        return (
-          <>
-            <h2 className="fw-bold text-white mb-4 header-gradient">Mis Rutinas</h2>
-            <div className="text-white">
-              <p className="text-muted">Tus planes de entrenamiento personalizados.</p>
-              <div className="d-grid gap-3">
-                <Button variant="outline-light" className="text-start p-3 custom-input d-flex justify-content-between align-items-center">
-                  <span className="fw-medium">Día 1: Pecho y Tríceps</span>
-                  <span className="text-primary">Ver rutina ➔</span>
-                </Button>
-                <Button variant="outline-light" className="text-start p-3 custom-input d-flex justify-content-between align-items-center">
-                  <span className="fw-medium">Día 2: Espalda y Bíceps</span>
-                  <span className="text-primary">Ver rutina ➔</span>
-                </Button>
-                <Button variant="outline-light" className="text-start p-3 custom-input d-flex justify-content-between align-items-center">
-                  <span className="fw-medium">Día 3: Piernas y Hombros</span>
-                  <span className="text-primary">Ver rutina ➔</span>
-                </Button>
-              </div>
-            </div>
-          </>
-        );
+
       case 'perfil':
       default:
         return (
@@ -107,54 +85,48 @@ const User = () => {
 
   return (
     <div className="user-page">
-    <Container fluid className="user-container py-4">
-      <Row className="h-100 justify-content-center">
-        {/* Left Sidebar */}
-        <Col md={4} lg={3} className="mb-4 mb-md-0">
-          <Card className="glass-card h-100 border-0 shadow-sm">
-            <Card.Body className="d-flex flex-column p-4">
-              <div className="text-center mb-4">
-                <div className="avatar-placeholder mx-auto mb-3">
-                  <span className="fw-bold fs-3 text-white">JP</span>
+      <Container fluid className="user-container py-4">
+        <Row className="h-100 justify-content-center">
+          {/* Left Sidebar */}
+          <Col md={4} lg={3} className="mb-4 mb-md-0">
+            <Card className="glass-card h-100 border-0 shadow-sm">
+              <Card.Body className="d-flex flex-column p-4">
+                <div className="text-center mb-4">
+                  <div className="avatar-placeholder mx-auto mb-3">
+                    <span className="fw-bold fs-3 text-white">JP</span>
+                  </div>
+                  <h4 className="fw-bold text-white mb-0">Juan Perez</h4>
+                  <p className="text-muted small">Miembro Premium</p>
                 </div>
-                <h4 className="fw-bold text-white mb-0">Juan Perez</h4>
-                <p className="text-muted small">Miembro Premium</p>
-              </div>
 
-              <Nav className="flex-column custom-nav mt-3">
-                <Nav.Link 
-                  className={`nav-item ${activeTab === 'perfil' ? 'active' : ''}`}
-                  onClick={() => setActiveTab('perfil')}
-                >
-                  Editar Perfil
-                </Nav.Link>
-                <Nav.Link 
-                  className={`nav-item ${activeTab === 'cuotas' ? 'active' : ''}`}
-                  onClick={() => setActiveTab('cuotas')}
-                >
-                  Ver Cuotas
-                </Nav.Link>
-                <Nav.Link 
-                  className={`nav-item ${activeTab === 'rutinas' ? 'active' : ''}`}
-                  onClick={() => setActiveTab('rutinas')}
-                >
-                  Mis Rutinas
-                </Nav.Link>
-              </Nav>
-            </Card.Body>
-          </Card>
-        </Col>
-        
-        {/* Main Content */}
-        <Col md={8} lg={7}>
-          <Card className="glass-card h-100 border-0 shadow-sm">
-            <Card.Body className="p-4 p-md-5">
-              {renderContent()}
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
-    </Container>
+                <Nav className="flex-column custom-nav mt-3">
+                  <Nav.Link
+                    className={`nav-item ${activeTab === 'perfil' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('perfil')}
+                  >
+                    Editar Perfil
+                  </Nav.Link>
+                  <Nav.Link
+                    className={`nav-item ${activeTab === 'cuotas' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('cuotas')}
+                  >
+                    Ver Cuotas
+                  </Nav.Link>
+                </Nav>
+              </Card.Body>
+            </Card>
+          </Col>
+
+          {/* Main Content */}
+          <Col md={8} lg={7}>
+            <Card className="glass-card h-100 border-0 shadow-sm">
+              <Card.Body className="p-4 p-md-5">
+                {renderContent()}
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
     </div>
   );
 };
