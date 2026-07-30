@@ -1,11 +1,17 @@
 
-import { Navbar, Nav, Container } from 'react-bootstrap';
-import { Link, useLocation } from 'react-router-dom';
+import { Navbar, Nav, Container, Button } from 'react-bootstrap';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import './Navigation.css';
 
 const Navigation = () => {
-  const location = useLocation();
-  const isUserPage = location.pathname === '/user';
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
 
   return (
     <Navbar expand="lg" variant="dark" className="glass-navbar sticky-top">
@@ -15,35 +21,41 @@ const Navigation = () => {
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="ms-auto">
-            <Nav.Link as={Link} to="/" className="fw-medium mx-2">
+          <Nav className="ms-auto align-items-center gap-2">
+            <Nav.Link as={Link} to="/" className="fw-medium mx-1">
               Inicio
             </Nav.Link>
+            <Nav.Link as="a" href="/#nosotros" className="fw-medium mx-1">
+              Nosotros
+            </Nav.Link>
+            <Nav.Link as="a" href="/#contacto" className="fw-medium mx-1">
+              Contacto
+            </Nav.Link>
 
-            {!isUserPage ? (
+            {user ? (
               <>
-                <Nav.Link as="a" href="/#nosotros" className="fw-medium mx-2">
-                  Nosotros
+                <Nav.Link as={Link} to="/user" className="fw-medium mx-1 text-info">
+                  👤 Mi Perfil
                 </Nav.Link>
-                <Nav.Link as="a" href="/#contacto" className="fw-medium mx-2">
-                  Contacto
-                </Nav.Link>
-                <Nav.Link as={Link} to="/user" className="fw-medium mx-2">
-                  Mi Perfil
-                </Nav.Link>
-                <Nav.Link as={Link} to="/login" className="fw-medium mx-2">
-                  Ingresar
-                </Nav.Link>
+                
+                <Button 
+                  variant="outline-danger" 
+                  size="sm" 
+                  onClick={handleLogout} 
+                  className="ms-lg-2 px-3 fw-bold rounded-pill"
+                >
+                  Cerrar Sesión
+                </Button>
               </>
             ) : (
-              <>
-                <Nav.Link as={Link} to="/user" className="fw-medium mx-2">
-                  Mi Perfil
-                </Nav.Link>
-                <Nav.Link as={Link} to="/" className="fw-medium mx-2 text-danger">
-                  Cerrar Sesión
-                </Nav.Link>
-              </>
+              <Nav.Link 
+                as={Link} 
+                to="/login" 
+                state={{ mode: 'login' }} 
+                className="fw-bold mx-1 btn btn-primary text-white px-4 py-1 rounded-pill ms-lg-2"
+              >
+                Ingresar
+              </Nav.Link>
             )}
           </Nav>
         </Navbar.Collapse>

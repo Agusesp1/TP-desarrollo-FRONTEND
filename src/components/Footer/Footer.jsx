@@ -1,9 +1,12 @@
 import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import './Footer.css';
 
 const Footer = () => {
+  const { user } = useAuth();
+
   return (
     <footer className="footer-container py-5 text-light border-top border-secondary-subtle mt-auto">
       <Container>
@@ -47,24 +50,31 @@ const Footer = () => {
                     <Link to="/" className="text-light text-decoration-none opacity-75">Inicio</Link>
                   </li>
                   <li className="mb-2">
-                    <a href="#nosotros" className="text-light text-decoration-none opacity-75">Sobre Nosotros</a>
+                    <a href="/#nosotros" className="text-light text-decoration-none opacity-75">Sobre Nosotros</a>
                   </li>
                   <li className="mb-2">
-                    <a href="#contacto" className="text-light text-decoration-none opacity-75">Contacto</a>
+                    <a href="/#contacto" className="text-light text-decoration-none opacity-75">Contacto</a>
                   </li>
                 </ul>
               </Col>
               <Col xs={6}>
                 <ul className="list-unstyled">
-                  <li className="mb-2">
-                    <Link to="/login" state={{ mode: 'login' }} className="text-light text-decoration-none opacity-75">Iniciar Sesión</Link>
-                  </li>
-                  <li className="mb-2">
-                    <Link to="/login" state={{ mode: 'register' }} className="text-light text-decoration-none opacity-75">Registrarse</Link>
-                  </li>
-                  <li className="mb-2">
-                    <Link to="/user" className="text-light text-decoration-none opacity-75">Mi Perfil</Link>
-                  </li>
+                  {user ? (
+                    <>
+                      <li className="mb-2">
+                        <Link to="/user" className="text-light text-decoration-none opacity-75">Mi Perfil</Link>
+                      </li>
+                    </>
+                  ) : (
+                    <>
+                      <li className="mb-2">
+                        <Link to="/login" state={{ mode: 'login' }} className="text-light text-decoration-none opacity-75">Iniciar Sesión</Link>
+                      </li>
+                      <li className="mb-2">
+                        <Link to="/login" state={{ mode: 'register' }} className="text-light text-decoration-none opacity-75">Registrarse</Link>
+                      </li>
+                    </>
+                  )}
                 </ul>
               </Col>
             </Row>

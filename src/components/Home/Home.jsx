@@ -1,9 +1,43 @@
-import React from 'react';
-import { Container, Row, Col, Card, Form, Button } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { Container, Row, Col, Card, Form, Button, Alert } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import './Home.css';
 
 const Home = () => {
+  const { user } = useAuth();
+  const [contactData, setContactData] = useState({
+    nombre: '',
+    email: '',
+    asunto: '',
+    mensaje: ''
+  });
+  const [contactoEnviado, setContactoEnviado] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      setContactData((prev) => ({
+        ...prev,
+        nombre: `${user.nombre || ''} ${user.apellido || ''}`.trim(),
+        email: user.email || ''
+      }));
+    }
+  }, [user]);
+
+  const handleContactSubmit = (e) => {
+    e.preventDefault();
+    setContactoEnviado(true);
+    setTimeout(() => {
+      setContactoEnviado(false);
+      setContactData({
+        nombre: user ? `${user.nombre || ''} ${user.apellido || ''}`.trim() : '',
+        email: user ? user.email || '' : '',
+        asunto: '',
+        mensaje: ''
+      });
+    }, 4000);
+  };
+
   return (
     <div className="home-container">
       {/* Hero Section */}
@@ -15,33 +49,57 @@ const Home = () => {
                 Transforma Tu Estilo de Vida
               </span>
               <h1 className="display-3 fw-bold mb-4 hero-title">
-                Bienvenido a <span className="text-gradient">FitApp Premium</span>
+                {user ? (
+                  <>
+                    ¡Hola, <span className="text-gradient">{user.nombre || 'Socio'}</span>! Bienvenid@ a FitApp
+                  </>
+                ) : (
+                  <>
+                    Bienvenido a <span className="text-gradient">FitApp Premium</span>
+                  </>
+                )}
               </h1>
               <p className="lead mb-5 text-light opacity-75">
                 Un espacio diseñado para superar tus límites con equipamiento de alta gama,
                 entrenadores certificados y planes personalizados a tu medida.
               </p>
               <div className="d-flex flex-wrap justify-content-center gap-3">
-                <Button 
-                  as={Link} 
-                  to="/login" 
-                  state={{ mode: 'register' }}
-                  variant="primary" 
-                  size="lg" 
-                  className="px-4 py-3 fw-bold hero-btn shadow-lg"
-                >
-                  Registrarse Ahora
-                </Button>
-                <Button 
-                  as={Link} 
-                  to="/login" 
-                  state={{ mode: 'login' }}
-                  variant="outline-light" 
-                  size="lg" 
-                  className="px-4 py-3 fw-bold hero-btn-outline"
-                >
-                  Iniciar Sesión
-                </Button>
+                {user ? (
+                  <>
+                    <Button 
+                      as={Link} 
+                      to="/user" 
+                      variant="primary" 
+                      size="lg" 
+                      className="px-4 py-3 fw-bold hero-btn shadow-lg"
+                    >
+                      👤 Ir a Mi Perfil
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button 
+                      as={Link} 
+                      to="/login" 
+                      state={{ mode: 'register' }}
+                      variant="primary" 
+                      size="lg" 
+                      className="px-4 py-3 fw-bold hero-btn shadow-lg"
+                    >
+                      Registrarse Ahora
+                    </Button>
+                    <Button 
+                      as={Link} 
+                      to="/login" 
+                      state={{ mode: 'login' }}
+                      variant="outline-light" 
+                      size="lg" 
+                      className="px-4 py-3 fw-bold hero-btn-outline"
+                    >
+                      Iniciar Sesión
+                    </Button>
+                  </>
+                )}
               </div>
             </Col>
           </Row>
@@ -172,30 +230,64 @@ const Home = () => {
           <Row className="justify-content-center">
             <Col lg={8}>
               <Card className="contact-card p-4 p-md-5 border-0 shadow-lg">
-                <Form onSubmit={(e) => e.preventDefault()}>
+                {contactoEnviado && (
+                  <Alert variant="success" className="text-center mb-4">
+                    ¡Gracias por tu mensaje! Nos pondremos en contacto a la brevedad.
+                  </Alert>
+                )}
+                <Form onSubmit={handleContactSubmit}>
                   <Row className="g-3">
                     <Col md={6}>
                       <Form.Group controlId="contactName">
                         <Form.Label className="text-white fw-medium">Nombre Completo</Form.Label>
-                        <Form.Control type="text" placeholder="Tu nombre" className="custom-input" required />
+                        <Form.Control 
+                          type="text" 
+                          placeholder="Tu nombre" 
+                          value={contactData.nombre}
+                          onChange={(e) => setContactData({ ...contactData, nombre: e.target.value })}
+                          className="custom-input" 
+                          required 
+                        />
                       </Form.Group>
                     </Col>
                     <Col md={6}>
                       <Form.Group controlId="contactEmail">
                         <Form.Label className="text-white fw-medium">Correo Electrónico</Form.Label>
-                        <Form.Control type="email" placeholder="tu-email@gmail.com" className="custom-input" required />
+                        <Form.Control 
+                          type="email" 
+                          placeholder="tu-email@gmail.com" 
+                          value={contactData.email}
+                          onChange={(e) => setContactData({ ...contactData, email: e.target.value })}
+                          className="custom-input" 
+                          required 
+                        />
                       </Form.Group>
                     </Col>
                     <Col md={12}>
                       <Form.Group controlId="contactSubject">
                         <Form.Label className="text-white fw-medium">Asunto</Form.Label>
-                        <Form.Control type="text" placeholder="Consulta sobre planes, clases, etc." className="custom-input" required />
+                        <Form.Control 
+                          type="text" 
+                          placeholder="Consulta sobre planes, clases, etc." 
+                          value={contactData.asunto}
+                          onChange={(e) => setContactData({ ...contactData, asunto: e.target.value })}
+                          className="custom-input" 
+                          required 
+                        />
                       </Form.Group>
                     </Col>
                     <Col md={12}>
                       <Form.Group controlId="contactMessage">
                         <Form.Label className="text-white fw-medium">Mensaje</Form.Label>
-                        <Form.Control as="textarea" rows={4} placeholder="Escribe tu mensaje aquí..." className="custom-input" required />
+                        <Form.Control 
+                          as="textarea" 
+                          rows={4} 
+                          placeholder="Escribe tu mensaje aquí..." 
+                          value={contactData.mensaje}
+                          onChange={(e) => setContactData({ ...contactData, mensaje: e.target.value })}
+                          className="custom-input" 
+                          required 
+                        />
                       </Form.Group>
                     </Col>
                     <Col md={12} className="text-center mt-4">
@@ -215,20 +307,34 @@ const Home = () => {
       <section className="cta-section py-5 my-4">
         <Container>
           <div className="cta-card p-5 rounded-4 text-center text-light">
-            <h2 className="fw-bold mb-3">¿Listo para comenzar tu transformación?</h2>
+            <h2 className="fw-bold mb-3">
+              {user ? '¡Continúa alcanzando tus objetivos!' : '¿Listo para comenzar tu transformación?'}
+            </h2>
             <p className="lead mb-4 opacity-75">
-              Únete hoy y obtén tu primera sesión de evaluación totalmente gratuita.
+              {user ? 'Gestiona tus cuotas y consulta tus horarios en tu perfil.' : 'Únete hoy y obtén tu primera sesión de evaluación totalmente gratuita.'}
             </p>
-            <Button 
-              as={Link} 
-              to="/login" 
-              state={{ mode: 'register' }}
-              variant="primary" 
-              size="lg" 
-              className="px-5 py-3 fw-bold shadow"
-            >
-              Crear mi cuenta gratis
-            </Button>
+            {user ? (
+              <Button 
+                as={Link} 
+                to="/user" 
+                variant="primary" 
+                size="lg" 
+                className="px-5 py-3 fw-bold shadow"
+              >
+                Acceder a Mi Perfil
+              </Button>
+            ) : (
+              <Button 
+                as={Link} 
+                to="/login" 
+                state={{ mode: 'register' }}
+                variant="primary" 
+                size="lg" 
+                className="px-5 py-3 fw-bold shadow"
+              >
+                Crear mi cuenta gratis
+              </Button>
+            )}
           </div>
         </Container>
       </section>

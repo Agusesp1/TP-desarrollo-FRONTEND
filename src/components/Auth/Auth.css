@@ -14,6 +14,11 @@
   border: 1px solid rgba(255, 255, 255, 0.1) !important;
   border-radius: 1.5rem !important;
   animation: slideUp 0.5s ease-out forwards;
+  transition: max-width 0.3s ease;
+}
+
+.auth-card.auth-card-wide {
+  max-width: 650px;
 }
 
 @keyframes slideUp {
