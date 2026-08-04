@@ -28,3 +28,24 @@ body {
 #root {
   width: 100%;
 }
+
+/* Helper classes for SVG icons to replace emojis */
+.inline-icon {
+  vertical-align: -0.125em;
+  margin-right: 0.5rem;
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+.feature-icon-svg {
+  width: 3.5rem;
+  height: 3.5rem;
+  stroke: #818cf8; /* sleek gradient-like default color */
+  stroke-width: 1.5;
+  transition: stroke 0.3s ease;
+}
+
+.feature-card:hover .feature-icon-svg {
+  stroke: #c084fc; /* subtle change on card hover */
+}
+

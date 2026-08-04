@@ -71,9 +71,13 @@ const Home = () => {
                       to="/user" 
                       variant="primary" 
                       size="lg" 
-                      className="px-4 py-3 fw-bold hero-btn shadow-lg"
+                      className="px-4 py-3 fw-bold hero-btn shadow-lg d-inline-flex align-items-center"
                     >
-                      👤 Ir a Mi Perfil
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-icon">
+                        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                        <circle cx="12" cy="7" r="4" />
+                      </svg>
+                      Ir a Mi Perfil
                     </Button>
                   </>
                 ) : (
@@ -119,8 +123,20 @@ const Home = () => {
           <Row className="g-4">
             <Col md={4}>
               <Card className="feature-card h-100 p-4 border-0 shadow text-center">
-                <Card.Body>
-                  <div className="feature-icon mb-3">🏋️‍♂️</div>
+                <Card.Body className="d-flex flex-column align-items-center">
+                  <div className="feature-icon mb-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" className="feature-icon-svg">
+                      <path d="m6.5 6.5 11 11" />
+                      <path d="m21 21-1-1" />
+                      <path d="m3 3 1 1" />
+                      <path d="m18 22 4-4" />
+                      <path d="m2 6 4-4" />
+                      <path d="m3 10 7-7" />
+                      <path d="m14 21 7-7" />
+                      <path d="M6.5 12.5 12.5 6.5" />
+                      <path d="m11.5 17.5 6-6" />
+                    </svg>
+                  </div>
                   <Card.Title className="fw-bold mb-3 text-white">Equipamiento Moderno</Card.Title>
                   <Card.Text className="text-light opacity-75">
                     Máquinas e instalaciones de última generación para asegurar un entrenamiento eficiente y seguro.
@@ -131,8 +147,16 @@ const Home = () => {
 
             <Col md={4}>
               <Card className="feature-card h-100 p-4 border-0 shadow text-center">
-                <Card.Body>
-                  <div className="feature-icon mb-3">📋</div>
+                <Card.Body className="d-flex flex-column align-items-center">
+                  <div className="feature-icon mb-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" className="feature-icon-svg">
+                      <rect width="8" height="4" x="8" y="2" rx="1" ry="1" />
+                      <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+                      <path d="M9 12h6" />
+                      <path d="M9 16h6" />
+                      <path d="M9 8h6" />
+                    </svg>
+                  </div>
                   <Card.Title className="fw-bold mb-3 text-white">Planes Personalizados</Card.Title>
                   <Card.Text className="text-light opacity-75">
                     Rutinas y seguimiento nutricional adaptados específicamente a tus metas personales.
@@ -143,8 +167,12 @@ const Home = () => {
 
             <Col md={4}>
               <Card className="feature-card h-100 p-4 border-0 shadow text-center">
-                <Card.Body>
-                  <div className="feature-icon mb-3">🔥</div>
+                <Card.Body className="d-flex flex-column align-items-center">
+                  <div className="feature-icon mb-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" className="feature-icon-svg">
+                      <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" />
+                    </svg>
+                  </div>
                   <Card.Title className="fw-bold mb-3 text-white">Clases Guiadas</Card.Title>
                   <Card.Text className="text-light opacity-75">
                     Spinning, Yoga, Crossfit y más con entrenadores profesionales listos para motivarte.
@@ -195,17 +223,35 @@ const Home = () => {
               <div className="about-image-card p-4 rounded-4 shadow-lg">
                 <h4 className="fw-bold text-white mb-3">Nuestras Sedes</h4>
                 <div className="sede-item p-3 mb-3 rounded-3">
-                  <h5 className="fw-bold text-white mb-1">📍 Sede Central (Centro)</h5>
+                  <h5 className="fw-bold text-white mb-1 d-flex align-items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-icon text-primary">
+                      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                      <circle cx="12" cy="10" r="3" />
+                    </svg>
+                    Sede Central (Centro)
+                  </h5>
                   <p className="small text-light opacity-75 mb-1">Av. Corrientes 1234, CABA</p>
                   <small className="text-primary">Lun a Vie: 06:00 - 23:00 hs | Sáb: 08:00 - 20:00 hs</small>
                 </div>
                 <div className="sede-item p-3 mb-3 rounded-3">
-                  <h5 className="fw-bold text-white mb-1">📍 Sede Norte (Palermo)</h5>
+                  <h5 className="fw-bold text-white mb-1 d-flex align-items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-icon text-primary">
+                      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                      <circle cx="12" cy="10" r="3" />
+                    </svg>
+                    Sede Norte (Palermo)
+                  </h5>
                   <p className="small text-light opacity-75 mb-1">Av. Santa Fe 4567, CABA</p>
                   <small className="text-primary">Lun a Vie: 06:00 - 23:00 hs | Sáb: 08:00 - 20:00 hs</small>
                 </div>
                 <div className="sede-item p-3 rounded-3">
-                  <h5 className="fw-bold text-white mb-1">📍 Sede Belgrano</h5>
+                  <h5 className="fw-bold text-white mb-1 d-flex align-items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-icon text-primary">
+                      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                      <circle cx="12" cy="10" r="3" />
+                    </svg>
+                    Sede Belgrano
+                  </h5>
                   <p className="small text-light opacity-75 mb-1">Cabildo 2345, CABA</p>
                   <small className="text-primary">24 horas los 7 días de la semana</small>
                 </div>

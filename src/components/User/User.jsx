@@ -232,10 +232,17 @@ const User = () => {
               <Button 
                 variant="outline-info" 
                 size="sm" 
-                className="fw-bold px-3 py-2"
+                className="fw-bold px-3 py-2 d-inline-flex align-items-center"
                 onClick={() => setShowHistoryModal(true)}
               >
-                📜 Ver Historial Completo
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-icon text-info">
+                  <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+                  <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+                  <path d="M10 9H8" />
+                  <path d="M16 13H8" />
+                  <path d="M16 17H8" />
+                </svg>
+                Ver Historial Completo
               </Button>
             </div>
 
@@ -264,10 +271,14 @@ const User = () => {
                       <Button 
                         variant="primary" 
                         size="sm" 
-                        className="fw-bold px-4 py-2 hero-btn shadow"
+                        className="fw-bold px-4 py-2 hero-btn shadow d-inline-flex align-items-center"
                         onClick={() => handleOpenPayment(cuota)}
                       >
-                        💳 Pagar
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-icon">
+                          <rect width="20" height="14" x="2" y="5" rx="2" />
+                          <line x1="2" x2="22" y1="10" y2="10" />
+                        </svg>
+                        Pagar
                       </Button>
                     ) : (
                       <Button variant="outline-success" size="sm" disabled className="px-3">
@@ -497,22 +508,34 @@ const User = () => {
 
                 <Nav className="flex-column custom-nav mt-3">
                   <Nav.Link
-                    className={`nav-item ${activeTab === 'perfil' ? 'active' : ''}`}
+                    className={`nav-item ${activeTab === 'perfil' ? 'active' : ''} d-flex align-items-center`}
                     onClick={() => setActiveTab('perfil')}
                   >
-                    👤 Editar Perfil
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-icon">
+                      <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                      <circle cx="12" cy="7" r="4" />
+                    </svg>
+                    Editar Perfil
                   </Nav.Link>
                   <Nav.Link
-                    className={`nav-item ${activeTab === 'password' ? 'active' : ''}`}
+                    className={`nav-item ${activeTab === 'password' ? 'active' : ''} d-flex align-items-center`}
                     onClick={() => setActiveTab('password')}
                   >
-                    🔒 Cambiar Contraseña
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-icon">
+                      <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+                      <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                    </svg>
+                    Cambiar Contraseña
                   </Nav.Link>
                   <Nav.Link
-                    className={`nav-item ${activeTab === 'cuotas' ? 'active' : ''}`}
+                    className={`nav-item ${activeTab === 'cuotas' ? 'active' : ''} d-flex align-items-center`}
                     onClick={() => setActiveTab('cuotas')}
                   >
-                    💳 Ver Cuotas y Pagos
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-icon">
+                      <rect width="20" height="14" x="2" y="5" rx="2" />
+                      <line x1="2" x2="22" y1="10" y2="10" />
+                    </svg>
+                    Ver Cuotas y Pagos
                   </Nav.Link>
                 </Nav>
               </Card.Body>
@@ -565,7 +588,16 @@ const User = () => {
       {/* Modal de Historial Completo */}
       <Modal show={showHistoryModal} onHide={() => setShowHistoryModal(false)} size="lg" centered className="dark-modal">
         <Modal.Header closeButton className="border-secondary text-white">
-          <Modal.Title className="fw-bold">📜 Historial Completo de Pagos</Modal.Title>
+          <Modal.Title className="fw-bold d-flex align-items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-icon text-info">
+              <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+              <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+              <path d="M10 9H8" />
+              <path d="M16 13H8" />
+              <path d="M16 17H8" />
+            </svg>
+            Historial Completo de Pagos
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body className="text-white">
           <div className="table-responsive">
