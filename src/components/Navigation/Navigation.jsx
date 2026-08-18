@@ -56,7 +56,7 @@ const Navigation = () => {
                 as={Link} 
                 to="/login" 
                 state={{ mode: 'login' }} 
-                className="fw-bold mx-1 btn btn-primary text-white px-4 py-1 rounded-pill ms-lg-2"
+                className="fw-bold mx-1 btn hero-btn text-white px-4 py-1 rounded-pill ms-lg-2"
               >
                 Ingresar
               </Nav.Link>

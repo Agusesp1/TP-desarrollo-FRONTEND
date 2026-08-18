@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Form, Button, Alert } from 'react-bootstrap';
+import { Container, Row, Col, Card, Form, Button, Alert, Spinner } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import './Home.css';
@@ -13,6 +13,8 @@ const Home = () => {
     mensaje: ''
   });
   const [contactoEnviado, setContactoEnviado] = useState(false);
+  const [cargandoContacto, setCargandoContacto] = useState(false);
+  const [errorContacto, setErrorContacto] = useState(null);
 
   useEffect(() => {
     if (user) {
@@ -24,18 +26,43 @@ const Home = () => {
     }
   }, [user]);
 
-  const handleContactSubmit = (e) => {
+  const handleContactSubmit = async (e) => {
     e.preventDefault();
-    setContactoEnviado(true);
-    setTimeout(() => {
-      setContactoEnviado(false);
-      setContactData({
-        nombre: user ? `${user.nombre || ''} ${user.apellido || ''}`.trim() : '',
-        email: user ? user.email || '' : '',
-        asunto: '',
-        mensaje: ''
+    setCargandoContacto(true);
+    setErrorContacto(null);
+    setContactoEnviado(false);
+
+    try {
+      const res = await fetch('http://localhost:3000/api/email/contacto', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(contactData)
       });
-    }, 4000);
+
+      const data = await res.json();
+
+      if (res.ok && data.exito) {
+        setContactoEnviado(true);
+        setContactData({
+          nombre: user ? `${user.nombre || ''} ${user.apellido || ''}`.trim() : '',
+          email: user ? user.email || '' : '',
+          asunto: '',
+          mensaje: ''
+        });
+        setTimeout(() => {
+          setContactoEnviado(false);
+        }, 5000);
+      } else {
+        setErrorContacto(data.mensaje || 'Ocurrió un error al enviar el mensaje.');
+      }
+    } catch (err) {
+      console.error('Error al enviar mensaje de contacto:', err);
+      setErrorContacto('No se pudo conectar con el servidor. Asegúrate de que el backend esté iniciado.');
+    } finally {
+      setCargandoContacto(false);
+    }
   };
 
   return (
@@ -281,6 +308,11 @@ const Home = () => {
                     ¡Gracias por tu mensaje! Nos pondremos en contacto a la brevedad.
                   </Alert>
                 )}
+                {errorContacto && (
+                  <Alert variant="danger" className="text-center mb-4" onClose={() => setErrorContacto(null)} dismissible>
+                    {errorContacto}
+                  </Alert>
+                )}
                 <Form onSubmit={handleContactSubmit}>
                   <Row className="g-3">
                     <Col md={6}>
@@ -337,8 +369,15 @@ const Home = () => {
                       </Form.Group>
                     </Col>
                     <Col md={12} className="text-center mt-4">
-                      <Button variant="primary" type="submit" size="lg" className="px-5 py-3 fw-bold hero-btn shadow">
-                        Enviar Consulta
+                      <Button variant="primary" type="submit" size="lg" disabled={cargandoContacto} className="px-5 py-3 fw-bold hero-btn shadow d-inline-flex align-items-center justify-content-center gap-2">
+                        {cargandoContacto ? (
+                          <>
+                            <Spinner animation="border" size="sm" />
+                            Enviando...
+                          </>
+                        ) : (
+                          'Enviar Consulta'
+                        )}
                       </Button>
                     </Col>
                   </Row>
