@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Form, Button, Nav, Modal, Badge, Table, Alert, InputGroup, Spinner } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import './User.css';
 
@@ -21,10 +21,14 @@ const EyeSlashIcon = () => (
 );
 
 const User = () => {
-  const { user, updateUser } = useAuth();
+  const { user, updateUser, logout } = useAuth();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('perfil');
   const [showHistoryModal, setShowHistoryModal] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [cargandoDelete, setCargandoDelete] = useState(false);
+  const [deleteError, setDeleteError] = useState(null);
   const [selectedCuota, setSelectedCuota] = useState(null);
   const [mensaje, setMensaje] = useState(null);
 
@@ -214,6 +218,42 @@ const User = () => {
     setShowPaymentModal(false);
   };
 
+  const handleConfirmDelete = async () => {
+    const userId = user?.id;
+    if (!userId) {
+      logout();
+      navigate('/');
+      return;
+    }
+
+    setCargandoDelete(true);
+    setDeleteError(null);
+
+    try {
+      const response = await fetch(`http://localhost:3000/api/usuarios/${userId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.exito) {
+        setDeleteError(data.mensaje || 'Error al procesar la baja del perfil');
+      } else {
+        setShowDeleteModal(false);
+        logout();
+        navigate('/');
+      }
+    } catch (error) {
+      console.error('Error al dar de baja el perfil:', error);
+      setDeleteError('No se pudo conectar con el servidor backend. Asegurate de que esté corriendo.');
+    } finally {
+      setCargandoDelete(false);
+    }
+  };
+
   // Compute Initials
   const inicialNombre = (user?.nombre || profileData.nombre || 'U').charAt(0).toUpperCase();
   const inicialApellido = (user?.apellido || profileData.apellido || '').charAt(0).toUpperCase();
@@ -313,6 +353,7 @@ const User = () => {
                     value={passwordData.actual} 
                     onChange={handleChangePassword}
                     placeholder="••••••••"
+                    maxLength={100}
                     className="custom-input" 
                     required
                   />
@@ -337,6 +378,8 @@ const User = () => {
                     value={passwordData.nueva} 
                     onChange={handleChangePassword}
                     placeholder="••••••••"
+                    minLength={6}
+                    maxLength={100}
                     className="custom-input" 
                     required
                   />
@@ -361,6 +404,8 @@ const User = () => {
                     value={passwordData.confirmar} 
                     onChange={handleChangePassword}
                     placeholder="••••••••"
+                    minLength={6}
+                    maxLength={100}
                     className="custom-input" 
                     required
                   />
@@ -413,6 +458,7 @@ const User = () => {
                       value={profileData.nombre} 
                       onChange={handleChangeProfile}
                       placeholder="Tu nombre"
+                      maxLength={100}
                       className="custom-input" 
                       required
                     />
@@ -427,6 +473,7 @@ const User = () => {
                       value={profileData.apellido} 
                       onChange={handleChangeProfile}
                       placeholder="Tu apellido"
+                      maxLength={100}
                       className="custom-input" 
                       required
                     />
@@ -444,6 +491,7 @@ const User = () => {
                       value={profileData.email} 
                       onChange={handleChangeProfile}
                       placeholder="correo@example.com"
+                      maxLength={150}
                       className="custom-input" 
                       required
                     />
@@ -462,6 +510,41 @@ const User = () => {
                 )}
               </Button>
             </Form>
+
+            <div className="danger-zone-card p-3 p-md-4 rounded-4 mt-5">
+              <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                <div>
+                  <h5 className="text-danger fw-bold mb-1 d-flex align-items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+                      <line x1="12" y1="9" x2="12" y2="13"/>
+                      <line x1="12" y1="17" x2="12.01" y2="17"/>
+                    </svg>
+                    Zona de Peligro
+                  </h5>
+                  <p className="text-light opacity-75 small mb-0">
+                    Dar de baja tu perfil desactivará tu cuenta y cerrará tu sesión activa.
+                  </p>
+                </div>
+                <Button 
+                  variant="outline-danger" 
+                  className="fw-bold px-3 py-2 d-inline-flex align-items-center justify-content-center gap-2 rounded-3 text-nowrap"
+                  onClick={() => {
+                    setDeleteError(null);
+                    setShowDeleteModal(true);
+                  }}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M3 6h18"/>
+                    <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                    <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                    <line x1="10" y1="11" x2="10" y2="17"/>
+                    <line x1="14" y1="11" x2="14" y2="17"/>
+                  </svg>
+                  Eliminar Perfil
+                </Button>
+              </div>
+            </div>
           </>
         );
     }
@@ -631,8 +714,67 @@ const User = () => {
           </Button>
         </Modal.Footer>
       </Modal>
+
+      {/* Modal de Confirmación de Eliminación de Perfil */}
+      <Modal 
+        show={showDeleteModal} 
+        onHide={() => !cargandoDelete && setShowDeleteModal(false)} 
+        centered 
+        className="dark-modal"
+      >
+        <Modal.Header closeButton={!cargandoDelete} className="border-secondary text-white">
+          <Modal.Title className="fw-bold text-danger d-flex align-items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+              <line x1="12" y1="9" x2="12" y2="13"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+            Confirmar Eliminación de Perfil
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="text-white">
+          {deleteError && (
+            <Alert variant="danger" dismissible onClose={() => setDeleteError(null)} className="mb-3">
+              {deleteError}
+            </Alert>
+          )}
+          <p className="mb-3">
+            ¿Estás seguro de que deseas dar de baja el perfil de <strong>{nombreCompleto}</strong>?
+          </p>
+          <div className="p-3 rounded-3 bg-danger bg-opacity-10 border border-danger border-opacity-25 mb-2">
+            <p className="small text-light opacity-90 mb-0">
+              ⚠️ <strong>Nota importante:</strong> Esta acción realizará una <strong>baja lógica</strong> de tu cuenta. Tu sesión será cerrada automáticamente y no podrás volver a ingresar con estas credenciales mientras el perfil permanezca desactivado.
+            </p>
+          </div>
+        </Modal.Body>
+        <Modal.Footer className="border-secondary">
+          <Button 
+            variant="secondary" 
+            onClick={() => setShowDeleteModal(false)}
+            disabled={cargandoDelete}
+          >
+            Cancelar
+          </Button>
+          <Button 
+            variant="danger" 
+            className="fw-bold px-4 d-inline-flex align-items-center" 
+            onClick={handleConfirmDelete}
+            disabled={cargandoDelete}
+          >
+            {cargandoDelete ? (
+              <>
+                <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" className="me-2" />
+                Eliminando...
+              </>
+            ) : (
+              'Sí, eliminar perfil'
+            )}
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };
 
 export default User;
+

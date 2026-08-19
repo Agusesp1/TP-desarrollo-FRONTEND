@@ -60,6 +60,13 @@ const Auth = () => {
     setMensaje(null);
     setCargando(true);
 
+    if (!isLogin && formData.password.length < 6) {
+      setTipoMensaje('danger');
+      setMensaje('La contraseña debe tener al menos 6 caracteres');
+      setCargando(false);
+      return;
+    }
+
     const endpoint = isLogin ? `${API_BASE_URL}/login` : `${API_BASE_URL}/registro`;
 
     const bodyData = isLogin
@@ -140,6 +147,7 @@ const Auth = () => {
                         placeholder="Juan"
                         value={formData.nombre}
                         onChange={handleChange}
+                        maxLength={100}
                         required
                         className="custom-input"
                         onInvalid={e => e.target.setCustomValidity('Por favor completá este campo')}
@@ -156,6 +164,7 @@ const Auth = () => {
                         placeholder="Pérez"
                         value={formData.apellido}
                         onChange={handleChange}
+                        maxLength={100}
                         required
                         className="custom-input"
                         onInvalid={e => e.target.setCustomValidity('Por favor completá este campo')}
@@ -172,6 +181,7 @@ const Auth = () => {
                         placeholder="12345678"
                         value={formData.dni}
                         onChange={handleChange}
+                        maxLength={20}
                         required
                         className="custom-input"
                         onInvalid={e => e.target.setCustomValidity('Por favor completá este campo')}
@@ -188,6 +198,7 @@ const Auth = () => {
                         placeholder="29/04/2004"
                         value={formData.fechaNac}
                         onChange={handleChange}
+                        maxLength={10}
                         required
                         className="custom-input"
                         onInvalid={e => e.target.setCustomValidity('Por favor completá este campo')}
@@ -207,6 +218,7 @@ const Auth = () => {
                     placeholder="tu-email@gmail.com"
                     value={formData.email}
                     onChange={handleChange}
+                    maxLength={150}
                     required
                     className="custom-input"
                     onInvalid={e => e.target.setCustomValidity(e.target.value === '' ? 'Por favor completá este campo' : 'Ingresá un correo electrónico válido')}
@@ -225,6 +237,8 @@ const Auth = () => {
                       placeholder="••••••••"
                       value={formData.password}
                       onChange={handleChange}
+                      minLength={isLogin ? undefined : 6}
+                      maxLength={100}
                       required
                       className="custom-input"
                       onInvalid={e => e.target.setCustomValidity('Por favor completá este campo')}

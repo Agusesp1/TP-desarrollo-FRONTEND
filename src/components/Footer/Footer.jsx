@@ -104,7 +104,7 @@ const Footer = () => {
             &copy; {new Date().getFullYear()} FitApp Premium. Todos los derechos reservados.
           </Col>
           <Col md={6} className="text-center text-md-end mt-2 mt-md-0">
-            Desarrollado para el TP de Desarrollo Frontend.
+            Desarrollado para DSW
           </Col>
         </Row>
       </Container>

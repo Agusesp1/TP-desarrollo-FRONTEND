@@ -101,3 +101,17 @@
   border-radius: 1.25rem !important;
   backdrop-filter: blur(20px);
 }
+
+/* Danger Zone */
+.danger-zone-card {
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.danger-zone-card:hover {
+  border-color: rgba(239, 68, 68, 0.5);
+  background: rgba(239, 68, 68, 0.12);
+}
+

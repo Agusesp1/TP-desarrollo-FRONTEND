@@ -7,6 +7,7 @@ import Navigation from './components/Navigation/Navigation';
 import Home from './components/Home/Home';
 import Footer from './components/Footer/Footer';
 import ScrollToTop from './components/ScrollToTop/ScrollToTop';
+import WhatsAppButton from './components/WhatsAppButton/WhatsAppButton';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="/user" element={<User />} />
         </Routes>
         <Footer />
+        <WhatsAppButton />
       </BrowserRouter>
     </AuthProvider>
   );
