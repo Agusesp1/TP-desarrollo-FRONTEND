@@ -1,0 +1,291 @@
+/* Admin Panel Styles */
+.admin-page {
+  min-height: calc(100vh - 80px);
+  background: radial-gradient(circle at 10% 20%, rgba(15, 23, 42, 0.98) 0%, rgba(30, 27, 75, 0.98) 90%),
+              radial-gradient(circle at 90% 80%, rgba(99, 102, 241, 0.15) 0%, transparent 60%);
+  position: relative;
+}
+
+.admin-container {
+  max-width: 1400px;
+}
+
+.admin-header-card {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1.25rem;
+}
+
+.admin-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.35);
+}
+
+.stat-card {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(99, 102, 241, 0.4);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.stat-icon-wrapper {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stat-icon-primary {
+  background: rgba(99, 102, 241, 0.18);
+  color: #6366f1;
+}
+
+.stat-icon-success {
+  background: rgba(25, 135, 84, 0.18);
+  color: #20c997;
+}
+
+.admin-nav-tabs .nav-link {
+  color: rgba(255, 255, 255, 0.7);
+  border: none;
+  font-weight: 600;
+  padding: 0.8rem 1.4rem;
+  border-radius: 0.75rem;
+  transition: all 0.2s ease;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.admin-nav-tabs .nav-link:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.admin-nav-tabs .nav-link.active {
+  color: #ffffff;
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+}
+
+.sede-card, .actividad-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1rem;
+  transition: all 0.3s ease;
+}
+
+.sede-card:hover, .actividad-card:hover {
+  border-color: rgba(99, 102, 241, 0.35);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.custom-table {
+  background: transparent !important;
+}
+
+.custom-table th {
+  background: rgba(255, 255, 255, 0.03) !important;
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 600;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  padding: 1rem 0.8rem;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.custom-table td {
+  background: transparent !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+  padding: 1rem 0.8rem;
+  vertical-align: middle;
+}
+
+.custom-table tr:hover td {
+  background: rgba(255, 255, 255, 0.03) !important;
+}
+
+/* Badges con paleta brand y letra blanca */
+.badge-especialidad, .badge-actividad {
+  background: rgba(99, 102, 241, 0.25) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(99, 102, 241, 0.5);
+  font-weight: 600;
+}
+
+.badge-turno, .badge-horario {
+  background: rgba(79, 70, 229, 0.35) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(99, 102, 241, 0.45);
+  font-weight: 600;
+}
+
+.badge-sede, .badge-dia {
+  background: rgba(30, 27, 75, 0.7) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(99, 102, 241, 0.45);
+  font-weight: 600;
+}
+
+.badge-duracion {
+  background: rgba(99, 102, 241, 0.2) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(99, 102, 241, 0.35);
+  font-weight: 500;
+}
+
+.badge-cupo {
+  background: rgba(30, 27, 75, 0.8) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(99, 102, 241, 0.35);
+  font-weight: 500;
+}
+
+/* Time Slot Card and Schedule Styling */
+.time-slot-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.85rem;
+  padding: 0.85rem 1rem;
+  transition: all 0.25s ease;
+}
+
+.time-slot-card:hover {
+  border-color: rgba(99, 102, 241, 0.45);
+  background: rgba(99, 102, 241, 0.08);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.time-slot-card.slot-inactive {
+  opacity: 0.55;
+  border-style: dashed;
+}
+
+.schedule-class-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1rem;
+  padding: 1.25rem;
+  transition: all 0.25s ease;
+}
+
+.schedule-class-card:hover {
+  border-color: rgba(99, 102, 241, 0.35);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.filter-pill-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.85);
+  border-radius: 2rem;
+  padding: 0.5rem 1.15rem;
+  font-size: 0.88rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  user-select: none;
+}
+
+.filter-pill-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  border-color: rgba(99, 102, 241, 0.4);
+}
+
+.filter-pill-btn.active {
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  color: #ffffff !important;
+  border-color: #6366f1;
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
+  font-weight: 600;
+}
+
+.day-pill-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.75);
+  border-radius: 0.6rem;
+  padding: 0.45rem 0.9rem;
+  font-size: 0.84rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.day-pill-btn:hover {
+  background: rgba(255, 255, 255, 0.09);
+  color: #ffffff;
+}
+
+.day-pill-btn.active {
+  background: rgba(99, 102, 241, 0.35);
+  border-color: #6366f1;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.25);
+}
+
+/* Botones de acción con armonía de color */
+.btn-action-edit {
+  background: rgba(99, 102, 241, 0.15);
+  border: 1px solid rgba(99, 102, 241, 0.45);
+  color: #ffffff;
+  transition: all 0.2s ease;
+}
+
+.btn-action-edit:hover, .btn-action-edit:focus {
+  background: #6366f1;
+  border-color: #6366f1;
+  color: #ffffff;
+}
+
+.btn-action-deactivate {
+  background: rgba(148, 163, 184, 0.1);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  color: #ffffff;
+  transition: all 0.2s ease;
+}
+
+.btn-action-deactivate:hover, .btn-action-deactivate:focus {
+  background: rgba(148, 163, 184, 0.2);
+  border-color: #e2e8f0;
+  color: #ffffff;
+}
+
+.custom-spinner-primary {
+  color: #6366f1 !important;
+}
+
+.activity-summary-banner {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(30, 27, 75, 0.4) 100%);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  border-radius: 1rem;
+  padding: 1.1rem 1.4rem;
+}
+

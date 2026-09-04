@@ -263,19 +263,25 @@ const User = () => {
     : 'Invitado';
 
   const renderContent = () => {
+    const esAdmin = user && (user.rol === 'admin' || user.email === 'administraciongymfit@gmail.com');
+    if (activeTab === 'cuotas' && esAdmin) {
+      setActiveTab('perfil');
+    }
+
     switch (activeTab) {
       case 'cuotas':
+        if (esAdmin) return null;
         return (
           <>
             <div className="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
               <h2 className="fw-bold text-white mb-0 header-gradient">Mis Cuotas y Pagos</h2>
               <Button 
-                variant="outline-info" 
+                variant="outline-primary" 
                 size="sm" 
-                className="fw-bold px-3 py-2 d-inline-flex align-items-center"
+                className="fw-bold px-3 py-2 d-inline-flex align-items-center text-white"
                 onClick={() => setShowHistoryModal(true)}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-icon text-info">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-icon text-white">
                   <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
                   <path d="M14 2v4a2 2 0 0 0 2 2h4" />
                   <path d="M10 9H8" />
@@ -581,11 +587,18 @@ const User = () => {
                     <span className="fw-bold fs-3 text-white">{iniciales}</span>
                   </div>
                   <h4 className="fw-bold text-white mb-1">{nombreCompleto}</h4>
-                  <Badge bg="info" className="mb-2 px-3 py-1 text-dark fw-bold">
+                  <Badge bg="primary" className="mb-2 px-3 py-1 text-white fw-bold">
                     Categoría: {user.categoria || 'Inicial'}
                   </Badge>
                   {user.dni && (
                     <p className="text-light opacity-75 small mb-0">DNI: {user.dni}</p>
+                  )}
+                  {(user.rol === 'admin' || user.email === 'administraciongymfit@gmail.com') && (
+                    <div className="mt-3">
+                      <Button as={Link} to="/admin" variant="primary" size="sm" className="hero-btn fw-bold w-100 rounded-pill text-white shadow-sm">
+                        🛡️ Ir al Panel Admin
+                      </Button>
+                    </div>
                   )}
                 </div>
 
@@ -610,16 +623,18 @@ const User = () => {
                     </svg>
                     Cambiar Contraseña
                   </Nav.Link>
-                  <Nav.Link
-                    className={`nav-item ${activeTab === 'cuotas' ? 'active' : ''} d-flex align-items-center`}
-                    onClick={() => setActiveTab('cuotas')}
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-icon">
-                      <rect width="20" height="14" x="2" y="5" rx="2" />
-                      <line x1="2" x2="22" y1="10" y2="10" />
-                    </svg>
-                    Ver Cuotas y Pagos
-                  </Nav.Link>
+                  {!(user.rol === 'admin' || user.email === 'administraciongymfit@gmail.com') && (
+                    <Nav.Link
+                      className={`nav-item ${activeTab === 'cuotas' ? 'active' : ''} d-flex align-items-center`}
+                      onClick={() => setActiveTab('cuotas')}
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-icon">
+                        <rect width="20" height="14" x="2" y="5" rx="2" />
+                        <line x1="2" x2="22" y1="10" y2="10" />
+                      </svg>
+                      Ver Cuotas y Pagos
+                    </Nav.Link>
+                  )}
                 </Nav>
               </Card.Body>
             </Card>
@@ -672,7 +687,7 @@ const User = () => {
       <Modal show={showHistoryModal} onHide={() => setShowHistoryModal(false)} size="lg" centered className="dark-modal">
         <Modal.Header closeButton className="border-secondary text-white">
           <Modal.Title className="fw-bold d-flex align-items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-icon text-info">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-icon text-white">
               <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
               <path d="M14 2v4a2 2 0 0 0 2 2h4" />
               <path d="M10 9H8" />
@@ -700,7 +715,7 @@ const User = () => {
                     <td className="fw-bold">{item.concepto}</td>
                     <td>{item.fechaPago}</td>
                     <td>{item.metodo}</td>
-                    <td><small className="text-info">{item.comprobante}</small></td>
+                    <td><small className="text-light opacity-75">{item.comprobante}</small></td>
                     <td className="fw-bold text-success">${item.monto.toLocaleString('es-AR')}</td>
                   </tr>
                 ))}

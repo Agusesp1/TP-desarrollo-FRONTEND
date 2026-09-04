@@ -103,9 +103,13 @@ const Auth = () => {
 
         authLogin(usuarioValido);
 
-        // Redirigir al panel de usuario o inicio después de un breve delay
+        // Redirigir al panel de administración o inicio después de un breve delay
         setTimeout(() => {
-          navigate('/');
+          if (usuarioValido.rol === 'admin' || usuarioValido.email === 'administraciongymfit@gmail.com') {
+            navigate('/admin');
+          } else {
+            navigate('/');
+          }
         }, 1000);
       }
     } catch (error) {
