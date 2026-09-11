@@ -1,6 +1,11 @@
+/* ==========================================================================
+   User Profile Styles - FitApp Design Tokens Palette
+   ========================================================================== */
+
 .user-page {
-  min-height: 100vh;
-  background: #0f172a;
+  min-height: calc(100vh - 80px);
+  background: radial-gradient(circle at 10% 20%, rgba(11, 15, 29, 0.98) 0%, rgba(22, 27, 51, 0.98) 90%),
+              radial-gradient(circle at 90% 80%, rgba(88, 86, 240, 0.15) 0%, transparent 60%);
 }
 
 .user-container {
@@ -14,104 +19,54 @@
   to { opacity: 1; transform: scale(1); }
 }
 
-/* Glassmorphism Card (reusing aesthetic) */
-.glass-card {
-  background: rgba(255, 255, 255, 0.05) !important;
+.user-header-card {
+  background: var(--surface-card) !important;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  border-radius: 1.25rem !important;
+  border: 1px solid var(--surface-border) !important;
+  border-radius: 1.25rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
 }
 
-.header-gradient {
-  background: linear-gradient(to right, #818cf8, #c084fc);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.avatar-placeholder {
-  width: 80px;
-  height: 80px;
+.user-avatar {
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #6366f1, #c084fc);
+  background: linear-gradient(135deg, var(--primary-accent) 0%, var(--brand-highlight) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.4);
+  box-shadow: 0 0 20px rgba(88, 86, 240, 0.35);
 }
 
-/* Sidebar Nav styling */
-.custom-nav .nav-item {
-  color: #94a3b8 !important;
-  padding: 0.75rem 1rem;
+.user-nav-tabs .nav-link {
+  color: var(--text-secondary);
+  border: none;
+  font-weight: 600;
+  padding: 0.8rem 1.4rem;
   border-radius: 0.75rem;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  text-decoration: none;
-  cursor: pointer;
+  transition: all 0.2s ease;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.custom-nav .nav-item:hover,
-.custom-nav .nav-item.active {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff !important;
+.user-nav-tabs .nav-link:hover {
+  color: var(--text-primary);
+  background: rgba(44, 53, 88, 0.4);
 }
 
-/* Form Styles & Select */
-.custom-input {
-  background: rgba(0, 0, 0, 0.3) !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  color: white !important;
-  border-radius: 0.75rem !important;
-  padding: 0.75rem 1rem !important;
-  transition: all 0.3s ease !important;
-}
-
-.custom-input option {
-  background: #1e1b4b;
-  color: white;
-}
-
-.custom-input:focus {
-  outline: none !important;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2) !important;
-  background: rgba(0, 0, 0, 0.5) !important;
-  border-color: #6366f1 !important;
-}
-
-.custom-button {
-  background-color: #6366f1 !important;
-  border-color: #6366f1 !important;
-  border-radius: 0.75rem !important;
-  transition: all 0.3s ease !important;
-}
-
-.custom-button:hover {
-  background-color: #4f46e5 !important;
-  border-color: #4f46e5 !important;
-  transform: translateY(-2px);
-  box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.4) !important;
+.user-nav-tabs .nav-link.active {
+  color: var(--text-primary);
+  background: linear-gradient(135deg, var(--primary-accent) 0%, var(--primary-hover) 100%);
+  box-shadow: 0 4px 15px rgba(88, 86, 240, 0.4);
 }
 
 /* Modals */
 .dark-modal .modal-content {
-  background: #1e1b4b !important;
-  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  background: var(--surface-card-solid) !important;
+  border: 1px solid var(--surface-border) !important;
   border-radius: 1.25rem !important;
   backdrop-filter: blur(20px);
 }
-
-/* Danger Zone */
-.danger-zone-card {
-  background: rgba(239, 68, 68, 0.08);
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
-}
-
-.danger-zone-card:hover {
-  border-color: rgba(239, 68, 68, 0.5);
-  background: rgba(239, 68, 68, 0.12);
-}
-

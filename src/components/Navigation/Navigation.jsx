@@ -1,4 +1,3 @@
-
 import { Navbar, Nav, Container, Button } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
@@ -8,6 +7,18 @@ const Navigation = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
+  const handleGoHome = (e) => {
+    e.preventDefault();
+    if (window.location.pathname === '/') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      navigate('/');
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 50);
+    }
+  };
+
   const handleLogout = () => {
     logout();
     navigate('/');
@@ -16,13 +27,13 @@ const Navigation = () => {
   return (
     <Navbar expand="lg" variant="dark" className="glass-navbar sticky-top">
       <Container>
-        <Navbar.Brand as={Link} to="/" className="fw-bold brand-gradient">
+        <Navbar.Brand as={Link} to="/" onClick={handleGoHome} className="fw-bold brand-gradient">
           FitApp Premium
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto align-items-center gap-2">
-            <Nav.Link as={Link} to="/" className="fw-medium mx-1">
+            <Nav.Link as={Link} to="/" onClick={handleGoHome} className="fw-medium mx-1">
               Inicio
             </Nav.Link>
             <Nav.Link as="a" href="/#nosotros" className="fw-medium mx-1">

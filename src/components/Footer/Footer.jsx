@@ -1,11 +1,24 @@
 import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import './Footer.css';
 
 const Footer = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
+
+  const handleGoHome = (e) => {
+    e.preventDefault();
+    if (window.location.pathname === '/') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      navigate('/');
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 50);
+    }
+  };
 
   return (
     <footer className="footer-container py-5 text-light border-top border-secondary-subtle mt-auto">
@@ -13,7 +26,9 @@ const Footer = () => {
         <Row className="g-4 mb-4">
           {/* Info general y contacto */}
           <Col lg={4} md={6}>
-            <h5 className="fw-bold brand-gradient mb-3">FitApp Premium</h5>
+            <h5 className="fw-bold brand-gradient mb-3 style-clickable" style={{ cursor: 'pointer' }} onClick={handleGoHome}>
+              FitApp Premium
+            </h5>
             <p className="small opacity-75 mb-3">
               Tu centro de salud y entrenamiento integral. Ofrecemos las mejores instalaciones y profesionales dedicados a tu bienestar físico.
             </p>
@@ -63,7 +78,7 @@ const Footer = () => {
               <Col xs={6}>
                 <ul className="list-unstyled">
                   <li className="mb-2">
-                    <Link to="/" className="text-light text-decoration-none opacity-75">Inicio</Link>
+                    <Link to="/" onClick={handleGoHome} className="text-light text-decoration-none opacity-75">Inicio</Link>
                   </li>
                   <li className="mb-2">
                     <a href="/#nosotros" className="text-light text-decoration-none opacity-75">Sobre Nosotros</a>

@@ -47,12 +47,32 @@ const Auth = () => {
     setMensaje(null);
   };
 
+  const formatearFechaAuto = (val) => {
+    // Eliminar cualquier carácter que no sea número
+    const digitos = val.replace(/\D/g, '').slice(0, 8);
+    if (digitos.length > 4) {
+      return `${digitos.slice(0, 2)}/${digitos.slice(2, 4)}/${digitos.slice(4)}`;
+    }
+    if (digitos.length > 2) {
+      return `${digitos.slice(0, 2)}/${digitos.slice(2)}`;
+    }
+    return digitos;
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value
-    }));
+    if (name === 'fechaNac') {
+      const fechaFormateada = formatearFechaAuto(value);
+      setFormData((prev) => ({
+        ...prev,
+        fechaNac: fechaFormateada
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {

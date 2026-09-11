@@ -1,15 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-
-:root {
-  --primary-color: #6366f1;
-  --primary-hover: #4f46e5;
-  --bg-gradient-start: #0f172a;
-  --bg-gradient-end: #1e1b4b;
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --glass-bg: rgba(255, 255, 255, 0.05);
-  --glass-border: rgba(255, 255, 255, 0.1);
-}
+@import './styles/theme.css';
 
 * {
   box-sizing: border-box;
@@ -19,7 +9,9 @@
 
 body {
   font-family: 'Inter', sans-serif;
-  background: linear-gradient(to bottom, rgba(15, 23, 42, 0.9), rgba(30, 27, 75, 0.9)), url('./assets/gym_background.png') center/cover no-repeat fixed;
+  background-color: var(--canvas-bg);
+  background: radial-gradient(circle at 10% 20%, rgba(14, 19, 38, 0.88) 0%, rgba(26, 32, 59, 0.88) 90%),
+              url('./assets/gym_background.png') center/cover no-repeat fixed;
   color: var(--text-primary);
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
@@ -29,23 +21,87 @@ body {
   width: 100%;
 }
 
-/* Helper classes for SVG icons to replace emojis */
+/* Glass Card & Container Component */
+.glass-card {
+  background: var(--surface-card) !important;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--surface-border) !important;
+  border-radius: 1.25rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+/* Primary Hero Buttons & CTA */
+.btn-primary, .hero-btn {
+  background-color: var(--primary-accent) !important;
+  border-color: var(--primary-accent) !important;
+  color: var(--text-primary) !important;
+  transition: all 0.25s ease;
+}
+
+.btn-primary:hover, .hero-btn:hover, .btn-primary:focus {
+  background-color: var(--primary-hover) !important;
+  border-color: var(--primary-hover) !important;
+  box-shadow: 0 4px 15px rgba(88, 86, 240, 0.4) !important;
+}
+
+/* Destructive Buttons (Cerrar Sesión, Eliminar) */
+.btn-outline-danger {
+  color: var(--destructive-accent) !important;
+  border-color: var(--destructive-accent) !important;
+  background: transparent !important;
+  transition: all 0.25s ease;
+}
+
+.btn-outline-danger:hover, .btn-outline-danger:focus {
+  color: var(--text-primary) !important;
+  background-color: var(--destructive-accent) !important;
+  border-color: var(--destructive-accent) !important;
+  box-shadow: 0 4px 14px rgba(225, 29, 72, 0.35) !important;
+}
+
+/* Secondary Accents & Badges */
+.text-primary, .text-secondary-accent {
+  color: var(--secondary-accent) !important;
+}
+
+.text-brand-highlight {
+  color: var(--brand-highlight) !important;
+}
+
+.text-secondary {
+  color: var(--text-secondary) !important;
+}
+
+/* Badges */
+.badge-primary, .bg-primary {
+  background-color: var(--primary-accent) !important;
+  color: var(--text-primary) !important;
+}
+
+.badge-brand, .bg-brand {
+  background-color: var(--brand-highlight) !important;
+  color: var(--canvas-bg) !important;
+  font-weight: 700;
+}
+
+/* Helper classes for SVG icons */
 .inline-icon {
   vertical-align: -0.125em;
   margin-right: 0.5rem;
   flex-shrink: 0;
   display: inline-block;
+  stroke: var(--secondary-accent);
 }
 
 .feature-icon-svg {
   width: 3.5rem;
   height: 3.5rem;
-  stroke: #818cf8; /* sleek gradient-like default color */
+  stroke: var(--secondary-accent);
   stroke-width: 1.5;
   transition: stroke 0.3s ease;
 }
 
 .feature-card:hover .feature-icon-svg {
-  stroke: #c084fc; /* subtle change on card hover */
+  stroke: var(--brand-highlight);
 }
-

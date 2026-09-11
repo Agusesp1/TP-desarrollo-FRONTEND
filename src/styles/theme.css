@@ -1,0 +1,56 @@
+/* ==========================================================================
+   FitApp Theme Palette & Design Tokens
+   ==========================================================================
+   Token Role          | Color Name              | HEX Code | RGB / RGBA
+   --------------------+-------------------------+----------+-----------------------
+   Canvas Background   | Midnight Obsidian       | #0E1326  | rgb(14, 19, 38)
+   Surface (Cards)     | Translucent Slate Indigo| #1A203B  | rgba(26, 32, 59, 0.65)
+   Surface Border      | Subdued Indigo Stroke   | #333C66  | rgba(129, 140, 248, 0.25)
+   Primary Accent      | Electric Indigo         | #5856F0  | rgb(88, 86, 240)
+   Secondary Accent    | Periwinkle Glow         | #818CF8  | rgb(129, 140, 248)
+   Brand Highlight     | Soft Lavender           | #A78BFA  | rgb(167, 139, 250)
+   Text Primary        | Pure White              | #FFFFFF  | rgb(255, 255, 255)
+   Text Secondary      | Cool Periwinkle Slate   | #94A3B8  | rgb(148, 163, 184)
+   Destructive / Alert | Crimson Outline         | #E11D48  | rgb(225, 29, 72)
+   ========================================================================== */
+
+:root {
+  /* Canvas Background: Midnight Obsidian */
+  --canvas-bg: #0E1326;
+  --canvas-bg-rgb: 14, 19, 38;
+
+  /* Surface (Cards & Modals): Translucent Slate Indigo (Más nítida y cristalina) */
+  --surface-card: rgba(26, 32, 59, 0.65);
+  --surface-card-solid: #1A203B;
+
+  /* Surface Border: Subdued Indigo Stroke */
+  --surface-border: rgba(129, 140, 248, 0.25);
+  --surface-border-solid: #333C66;
+
+  /* Primary Accent: Electric Indigo (CTA buttons, focused states) */
+  --primary-accent: #5856F0;
+  --primary-accent-rgb: 88, 86, 240;
+  --primary-hover: #4644e0;
+
+  /* Secondary Accent: Periwinkle Glow (Icons, bullet points) */
+  --secondary-accent: #818CF8;
+  --secondary-accent-rgb: 129, 140, 248;
+
+  /* Brand Highlight: Soft Lavender (Badges, accents) */
+  --brand-highlight: #A78BFA;
+  --brand-highlight-rgb: 167, 139, 250;
+
+  /* Text Primary: Pure White */
+  --text-primary: #FFFFFF;
+
+  /* Text Secondary: Cool Periwinkle Slate */
+  --text-secondary: #94A3B8;
+
+  /* Destructive / Alert: Crimson Outline */
+  --destructive-accent: #E11D48;
+  --destructive-hover: #be123c;
+
+  /* Glassmorphism Aliases */
+  --glass-bg: rgba(26, 32, 59, 0.65);
+  --glass-border: rgba(129, 140, 248, 0.25);
+}
