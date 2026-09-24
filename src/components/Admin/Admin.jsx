@@ -11,6 +11,7 @@ import SedesManager from './modules/SedesManager';
 import ActividadesManager from './modules/ActividadesManager';
 import TurnosManager from './modules/TurnosManager';
 import ClientesManager from './modules/ClientesManager';
+import CalendarioAdmin from './modules/CalendarioAdmin';
 
 const API_BASE = 'http://localhost:3000/api';
 
@@ -242,11 +243,18 @@ const Admin = () => {
         {/* Tarjetas de Estadísticas Rápidas */}
         <AdminStats stats={stats} />
 
-        {/* Alerta general */}
+        {/* Alerta general flotante (siempre por encima de modales) */}
         {alerta && (
-          <Alert variant={alerta.type} dismissible onClose={() => setAlerta(null)} className="mb-4 text-center">
-            {alerta.mensaje}
-          </Alert>
+          <div className="admin-floating-alert-wrapper">
+            <Alert
+              variant={alerta.type}
+              dismissible
+              onClose={() => setAlerta(null)}
+              className="text-center shadow-lg border-0 mb-0 py-3"
+            >
+              {alerta.mensaje}
+            </Alert>
+          </div>
         )}
 
         {/* Navegación por Pestañas */}
@@ -318,6 +326,21 @@ const Admin = () => {
               Socios / Clientes
             </Nav.Link>
           </Nav.Item>
+
+          <Nav.Item>
+            <Nav.Link
+              className={activeTab === 'calendario' ? 'active' : ''}
+              onClick={() => setActiveTab('calendario')}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                <line x1="16" y1="2" x2="16" y2="6" />
+                <line x1="8" y1="2" x2="8" y2="6" />
+                <line x1="3" y1="10" x2="21" y2="10" />
+              </svg>
+              Calendario Semanal
+            </Nav.Link>
+          </Nav.Item>
         </Nav>
 
         {/* Submódulos según la pestaña seleccionada */}
@@ -347,6 +370,8 @@ const Admin = () => {
         {activeTab === 'actividades' && (
           <ActividadesManager
             actividades={actividades}
+            sedes={sedes}
+            profesores={profesores}
             cargando={cargandoActividades}
             onRecargar={cargarActividades}
             onMostrarAlerta={mostrarAlerta}
@@ -373,6 +398,13 @@ const Admin = () => {
           <ClientesManager
             onMostrarAlerta={mostrarAlerta}
             apiBase={API_BASE}
+          />
+        )}
+
+        {activeTab === 'calendario' && (
+          <CalendarioAdmin
+            turnos={turnos}
+            sedes={sedes}
           />
         )}
 

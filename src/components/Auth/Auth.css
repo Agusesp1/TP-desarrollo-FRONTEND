@@ -87,3 +87,8 @@
   color: #818cf8 !important;
   text-decoration: underline !important;
 }
+
+input[type="date"].custom-input {
+  color-scheme: dark;
+}
+

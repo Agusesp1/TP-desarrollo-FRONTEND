@@ -279,3 +279,34 @@
   border: 1px solid #2C3558 !important;
   color: #FFFFFF !important;
 }
+
+/* Floating Alerts above modals */
+.admin-floating-alert-wrapper {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 99999;
+  width: 90%;
+  max-width: 580px;
+  animation: adminAlertFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.admin-floating-alert-wrapper .alert {
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.55) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 0.85rem !important;
+}
+
+@keyframes adminAlertFadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -20px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+

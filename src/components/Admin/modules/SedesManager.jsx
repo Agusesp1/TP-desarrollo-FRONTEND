@@ -283,11 +283,14 @@ const SedesManager = ({
               </Col>
               <Col md={6}>
                 <Form.Group>
-                  <Form.Label>Teléfono</Form.Label>
+                  <Form.Label>Teléfono (solo números)</Form.Label>
                   <Form.Control
                     type="text"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    placeholder="Solo números (ej: 3514451234)"
                     value={formData.telefono}
-                    onChange={(e) => setFormData({ ...formData, telefono: e.target.value })}
+                    onChange={(e) => setFormData({ ...formData, telefono: e.target.value.replace(/\D/g, '') })}
                   />
                 </Form.Group>
               </Col>

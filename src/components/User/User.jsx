@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Card, Row, Col, Button, Nav, Badge, Alert } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
@@ -8,12 +8,20 @@ import ProfileTab from './modules/ProfileTab';
 import SecurityTab from './modules/SecurityTab';
 import CuotasTab from './modules/CuotasTab';
 import TurnosTab from './modules/TurnosTab';
+import ProfesorAgendaTab from './modules/ProfesorAgendaTab';
 
 const User = () => {
   const { user, updateUser, logout } = useAuth();
-  const [activeTab, setActiveTab] = useState('perfil');
+  const [activeTab, setActiveTab] = useState(user?.rol === 'profesor' ? 'agenda' : 'perfil');
 
   const esAdmin = user && (user.rol === 'admin' || user.email === 'administraciongymfit@gmail.com');
+  const esProfesor = user && user.rol === 'profesor';
+
+  useEffect(() => {
+    if (user?.rol === 'profesor') {
+      setActiveTab((prev) => (prev === 'perfil' || prev === 'cuotas' || prev === 'turnos' ? 'agenda' : prev));
+    }
+  }, [user?.rol]);
 
   return (
     <div className="user-page py-4">
@@ -36,6 +44,10 @@ const User = () => {
                   {esAdmin ? (
                     <Badge bg="warning" className="text-dark px-3 py-1 rounded-pill fw-bold">
                       Administrador del Sistema
+                    </Badge>
+                  ) : esProfesor ? (
+                    <Badge bg="info" className="text-dark px-3 py-1 rounded-pill fw-bold">
+                      Profesor del Staff FitApp
                     </Badge>
                   ) : (
                     <Badge bg="primary" className="px-3 py-1 rounded-pill">
@@ -69,6 +81,24 @@ const User = () => {
 
         {/* Navegación por Pestañas */}
         <Nav className="user-nav-tabs mb-4 gap-2 border-0 flex-wrap">
+          {/* Pestaña exclusiva de Profesores */}
+          {esProfesor && (
+            <Nav.Item>
+              <Nav.Link
+                className={activeTab === 'agenda' ? 'active' : ''}
+                onClick={() => setActiveTab('agenda')}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                  <line x1="16" y1="2" x2="16" y2="6" />
+                  <line x1="8" y1="2" x2="8" y2="6" />
+                  <line x1="3" y1="10" x2="21" y2="10" />
+                </svg>
+                Mis Clases, Sedes & Horarios
+              </Nav.Link>
+            </Nav.Item>
+          )}
+
           <Nav.Item>
             <Nav.Link
               className={activeTab === 'perfil' ? 'active' : ''}
@@ -96,7 +126,7 @@ const User = () => {
           </Nav.Item>
 
           {/* Únicamente mostrar Pestañas de Cuotas y Turnos a los Socios/Usuarios regulares */}
-          {!esAdmin && (
+          {!esAdmin && !esProfesor && (
             <>
               <Nav.Item>
                 <Nav.Link
@@ -128,6 +158,10 @@ const User = () => {
         </Nav>
 
         {/* Renderizado de Módulos */}
+        {esProfesor && activeTab === 'agenda' && (
+          <ProfesorAgendaTab user={user} />
+        )}
+
         {activeTab === 'perfil' && (
           <ProfileTab user={user} updateUser={updateUser} logout={logout} />
         )}
@@ -136,11 +170,11 @@ const User = () => {
           <SecurityTab user={user} />
         )}
 
-        {!esAdmin && activeTab === 'cuotas' && (
+        {!esAdmin && !esProfesor && activeTab === 'cuotas' && (
           <CuotasTab user={user} />
         )}
 
-        {!esAdmin && activeTab === 'turnos' && (
+        {!esAdmin && !esProfesor && activeTab === 'turnos' && (
           <TurnosTab user={user} />
         )}
       </Container>

@@ -310,12 +310,21 @@ const TurnosManager = ({
                   <Form.Select
                     required
                     value={formData.actividad_id}
-                    onChange={(e) => setFormData({ ...formData, actividad_id: e.target.value })}
+                    onChange={(e) => {
+                      const selectedId = e.target.value;
+                      const act = actividades.find((a) => a.id?.toString() === selectedId);
+                      setFormData((prev) => ({
+                        ...prev,
+                        actividad_id: selectedId,
+                        profesor_id: act?.profesor_id ? act.profesor_id.toString() : (act?.profesor?.id ? act.profesor.id.toString() : prev.profesor_id),
+                        sede_id: act?.sede_id ? act.sede_id.toString() : (act?.sede?.id ? act.sede.id.toString() : prev.sede_id)
+                      }));
+                    }}
                   >
                     <option value="">-- Seleccionar Actividad --</option>
                     {actividades.map((a) => (
                       <option key={a.id} value={a.id}>
-                        {a.nombre}
+                        {a.nombre} {a.profesor ? `(Prof. ${a.profesor.nombre} ${a.profesor.apellido})` : ''}
                       </option>
                     ))}
                   </Form.Select>

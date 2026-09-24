@@ -3,6 +3,8 @@ import { Card, Button, Row, Col, Table, Form, InputGroup, Modal, Spinner } from 
 
 const ActividadesManager = ({
   actividades,
+  sedes,
+  profesores = [],
   cargando,
   onRecargar,
   onMostrarAlerta,
@@ -10,6 +12,8 @@ const ActividadesManager = ({
   apiBase
 }) => {
   const [filtroTexto, setFiltroTexto] = useState('');
+  const [filtroSede, setFiltroSede] = useState('todas');
+  const [filtroProfesor, setFiltroProfesor] = useState('todos');
 
   // Modal State
   const [showModal, setShowModal] = useState(false);
@@ -19,7 +23,9 @@ const ActividadesManager = ({
     nombre: '',
     duracion: 60,
     cupo: 20,
-    descripcion: ''
+    descripcion: '',
+    sede_id: '',
+    profesor_id: ''
   });
 
   const handleAbrirModal = (actividad = null) => {
@@ -29,7 +35,9 @@ const ActividadesManager = ({
         nombre: actividad.nombre || '',
         duracion: actividad.duracion || 60,
         cupo: actividad.cupo || 20,
-        descripcion: actividad.descripcion || ''
+        descripcion: actividad.descripcion || '',
+        sede_id: (actividad.sede_id ?? actividad.sede?.id ?? '').toString(),
+        profesor_id: (actividad.profesor_id ?? actividad.profesor?.id ?? '').toString()
       });
     } else {
       setActividadEditando(null);
@@ -37,7 +45,9 @@ const ActividadesManager = ({
         nombre: '',
         duracion: 60,
         cupo: 20,
-        descripcion: ''
+        descripcion: '',
+        sede_id: '',
+        profesor_id: ''
       });
     }
     setShowModal(true);
@@ -90,8 +100,27 @@ const ActividadesManager = ({
   };
 
   const actividadesFiltradas = actividades.filter((a) => {
-    const texto = `${a.nombre} ${a.descripcion || ''}`.toLowerCase();
-    return texto.includes(filtroTexto.toLowerCase());
+    const profObj = a.profesor || (profesores && profesores.find((p) => p.id?.toString() === a.profesor_id?.toString()));
+    const texto = `${a.nombre} ${a.descripcion || ''} ${profObj ? `${profObj.nombre} ${profObj.apellido}` : ''}`.toLowerCase();
+    const coincideTexto = texto.includes(filtroTexto.toLowerCase());
+
+    let coincideSede = true;
+    if (filtroSede === 'sin_sede') {
+      coincideSede = !a.sede_id && !a.sede;
+    } else if (filtroSede !== 'todas') {
+      const actSedeId = a.sede_id?.toString() || a.sede?.id?.toString();
+      coincideSede = actSedeId === filtroSede.toString();
+    }
+
+    let coincideProfesor = true;
+    if (filtroProfesor === 'sin_profesor') {
+      coincideProfesor = !a.profesor_id && !a.profesor;
+    } else if (filtroProfesor !== 'todos') {
+      const actProfId = a.profesor_id?.toString() || a.profesor?.id?.toString();
+      coincideProfesor = actProfId === filtroProfesor.toString();
+    }
+
+    return coincideTexto && coincideSede && coincideProfesor;
   });
 
   return (
@@ -100,7 +129,7 @@ const ActividadesManager = ({
         <div>
           <h4 className="fw-bold mb-1 text-white">Gestión de Actividades y Clases</h4>
           <p className="text-secondary small mb-0">
-            Administra disciplinas deportivas, cupos máximos por clase y duraciones.
+            Administra disciplinas deportivas, profesores a cargo, sedes y cupos máximos por clase.
           </p>
         </div>
 
@@ -118,7 +147,7 @@ const ActividadesManager = ({
       </div>
 
       <Row className="g-3 mb-4">
-        <Col md={12}>
+        <Col md={5} lg={5}>
           <InputGroup>
             <InputGroup.Text>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -128,13 +157,71 @@ const ActividadesManager = ({
             </InputGroup.Text>
             <Form.Control
               type="text"
-              placeholder="Buscar actividad por nombre o descripción..."
+              placeholder="Buscar por actividad o profesor..."
               value={filtroTexto}
               onChange={(e) => setFiltroTexto(e.target.value)}
             />
             {filtroTexto && (
               <Button variant="outline-secondary" onClick={() => setFiltroTexto('')}>
                 Limpiar
+              </Button>
+            )}
+          </InputGroup>
+        </Col>
+
+        <Col md={3} lg={3}>
+          <InputGroup>
+            <InputGroup.Text title="Filtrar por sede">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+            </InputGroup.Text>
+            <Form.Select
+              value={filtroSede}
+              onChange={(e) => setFiltroSede(e.target.value)}
+            >
+              <option value="todas">Todas las sedes</option>
+              <option value="sin_sede">Sin sede asignada</option>
+              {sedes && sedes.map((s) => (
+                <option key={s.id} value={s.id.toString()}>
+                  {s.nombre}
+                </option>
+              ))}
+            </Form.Select>
+          </InputGroup>
+        </Col>
+
+        <Col md={4} lg={4}>
+          <InputGroup>
+            <InputGroup.Text title="Filtrar por profesor">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+            </InputGroup.Text>
+            <Form.Select
+              value={filtroProfesor}
+              onChange={(e) => setFiltroProfesor(e.target.value)}
+            >
+              <option value="todos">Todos los profesores</option>
+              <option value="sin_profesor">Sin profesor asignado</option>
+              {profesores && profesores.map((p) => (
+                <option key={p.id} value={p.id.toString()}>
+                  {p.nombre} {p.apellido}
+                </option>
+              ))}
+            </Form.Select>
+            {(filtroSede !== 'todas' || filtroProfesor !== 'todos') && (
+              <Button
+                variant="outline-secondary"
+                onClick={() => {
+                  setFiltroSede('todas');
+                  setFiltroProfesor('todos');
+                }}
+                title="Restablecer filtros"
+              >
+                ✕
               </Button>
             )}
           </InputGroup>
@@ -148,7 +235,9 @@ const ActividadesManager = ({
         </div>
       ) : actividadesFiltradas.length === 0 ? (
         <div className="text-center py-5 text-secondary">
-          <p className="mb-0">No se encontraron actividades registradas.</p>
+          <p className="mb-0">
+            No se encontraron actividades {filtroSede !== 'todas' || filtroProfesor !== 'todos' || filtroTexto ? 'con los filtros seleccionados.' : 'registradas.'}
+          </p>
         </div>
       ) : (
         <div className="table-responsive">
@@ -156,7 +245,8 @@ const ActividadesManager = ({
             <thead>
               <tr>
                 <th>Actividad</th>
-                <th>Descripción</th>
+                <th>Sede Asignada</th>
+                <th>Profesor a Cargo</th>
                 <th>Duración</th>
                 <th>Cupo Máximo</th>
                 <th>Turnos Creados</th>
@@ -165,15 +255,40 @@ const ActividadesManager = ({
               </tr>
             </thead>
             <tbody>
-              {actividadesFiltradas.map((act) => (
+              {actividadesFiltradas.map((act) => {
+                const sedeObj = act.sede || (sedes && sedes.find(s => s.id?.toString() === act.sede_id?.toString()));
+                const profObj = act.profesor || (profesores && profesores.find(p => p.id?.toString() === act.profesor_id?.toString()));
+
+                return (
                 <tr key={act.id}>
                   <td>
                     <div className="fw-bold text-white fs-6">{act.nombre}</div>
                   </td>
-                  <td style={{ maxWidth: '280px' }}>
-                    <small className="text-secondary text-truncate d-block">
-                      {act.descripcion || 'Sin descripción'}
-                    </small>
+                  <td>
+                    {sedeObj ? (
+                      <span className="badge bg-dark border border-secondary text-info px-2 py-1 d-inline-flex align-items-center gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
+                          <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                        {sedeObj.nombre}
+                      </span>
+                    ) : (
+                      <span className="badge bg-secondary text-white-50 px-2 py-1">Sin sede</span>
+                    )}
+                  </td>
+                  <td>
+                    {profObj ? (
+                      <span className="badge bg-dark border border-secondary text-light px-2 py-1 d-inline-flex align-items-center gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary">
+                          <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                          <circle cx="12" cy="7" r="4" />
+                        </svg>
+                        {profObj.nombre} {profObj.apellido}
+                      </span>
+                    ) : (
+                      <span className="badge bg-secondary text-white-50 px-2 py-1">Sin profesor</span>
+                    )}
                   </td>
                   <td>
                     <span className="badge-token-subdued">{act.duracion} min</span>
@@ -224,7 +339,8 @@ const ActividadesManager = ({
                     </div>
                   </td>
                 </tr>
-              ))}
+                );
+              })}
             </tbody>
           </Table>
         </div>
@@ -250,6 +366,36 @@ const ActividadesManager = ({
                     value={formData.nombre}
                     onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
                   />
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group>
+                  <Form.Label>Sede</Form.Label>
+                  <Form.Select
+                    value={formData.sede_id}
+                    onChange={(e) => setFormData({ ...formData, sede_id: e.target.value })}
+                  >
+                    <option value="">Seleccione una sede...</option>
+                    {sedes && sedes.map(sede => (
+                      <option key={sede.id} value={sede.id}>{sede.nombre}</option>
+                    ))}
+                  </Form.Select>
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group>
+                  <Form.Label>Profesor a Cargo</Form.Label>
+                  <Form.Select
+                    value={formData.profesor_id}
+                    onChange={(e) => setFormData({ ...formData, profesor_id: e.target.value })}
+                  >
+                    <option value="">-- Sin profesor asignado --</option>
+                    {profesores && profesores.map(prof => (
+                      <option key={prof.id} value={prof.id}>
+                        {prof.nombre} {prof.apellido} ({prof.especialidad})
+                      </option>
+                    ))}
+                  </Form.Select>
                 </Form.Group>
               </Col>
               <Col md={6}>

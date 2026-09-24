@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, Button, Row, Col, Table, Form, InputGroup, Modal, Spinner } from 'react-bootstrap';
+import { Card, Button, Row, Col, Table, Form, InputGroup, Modal, Spinner, Alert } from 'react-bootstrap';
 
 const ProfesoresManager = ({
   profesores,
@@ -17,6 +17,7 @@ const ProfesoresManager = ({
   const [showModal, setShowModal] = useState(false);
   const [profesorEditando, setProfesorEditando] = useState(null);
   const [guardando, setGuardando] = useState(false);
+  const [modalAlerta, setModalAlerta] = useState(null);
   const [formData, setFormData] = useState({
     nombre: '',
     apellido: '',
@@ -25,10 +26,12 @@ const ProfesoresManager = ({
     telefono: '',
     especialidad: 'Musculación & Hipertrofia',
     turno: 'Mañana',
-    sede_id: ''
+    sede_id: '',
+    password: ''
   });
 
   const handleAbrirModal = (profesor = null) => {
+    setModalAlerta(null);
     if (profesor) {
       setProfesorEditando(profesor);
       setFormData({
@@ -39,7 +42,8 @@ const ProfesoresManager = ({
         telefono: profesor.telefono || '',
         especialidad: profesor.especialidad || 'Musculación & Hipertrofia',
         turno: profesor.turno || 'Mañana',
-        sede_id: profesor.sede_id || ''
+        sede_id: profesor.sede_id || '',
+        password: ''
       });
     } else {
       setProfesorEditando(null);
@@ -51,7 +55,8 @@ const ProfesoresManager = ({
         telefono: '',
         especialidad: 'Musculación & Hipertrofia',
         turno: 'Mañana',
-        sede_id: sedes.length > 0 ? sedes[0].id : ''
+        sede_id: sedes.length > 0 ? sedes[0].id : '',
+        password: ''
       });
     }
     setShowModal(true);
@@ -60,6 +65,7 @@ const ProfesoresManager = ({
   const handleGuardar = async (e) => {
     e.preventDefault();
     setGuardando(true);
+    setModalAlerta(null);
 
     try {
       const endpoint = profesorEditando
@@ -79,10 +85,14 @@ const ProfesoresManager = ({
         setShowModal(false);
         onRecargar();
       } else {
-        onMostrarAlerta(data.mensaje || 'Error al guardar profesor', 'danger');
+        const errorMsg = data.mensaje || 'Error al guardar profesor';
+        setModalAlerta(errorMsg);
+        onMostrarAlerta(errorMsg, 'danger');
       }
     } catch (err) {
-      onMostrarAlerta('Error de red al guardar profesor', 'danger');
+      const errorMsg = 'Error de red al guardar profesor';
+      setModalAlerta(errorMsg);
+      onMostrarAlerta(errorMsg, 'danger');
     } finally {
       setGuardando(false);
     }
@@ -273,6 +283,16 @@ const ProfesoresManager = ({
         </Modal.Header>
         <Form onSubmit={handleGuardar}>
           <Modal.Body>
+            {modalAlerta && (
+              <Alert
+                variant="danger"
+                dismissible
+                onClose={() => setModalAlerta(null)}
+                className="py-2 mb-3 text-center small border-0 shadow-sm"
+              >
+                {modalAlerta}
+              </Alert>
+            )}
             <Row className="g-3">
               <Col md={6}>
                 <Form.Group>
@@ -301,30 +321,48 @@ const ProfesoresManager = ({
                   <Form.Label>DNI *</Form.Label>
                   <Form.Control
                     type="text"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    placeholder="Solo números (ej: 38123456)"
                     required
                     value={formData.dni}
-                    onChange={(e) => setFormData({ ...formData, dni: e.target.value })}
+                    onChange={(e) => setFormData({ ...formData, dni: e.target.value.replace(/\D/g, '') })}
                   />
                 </Form.Group>
               </Col>
               <Col md={6}>
                 <Form.Group>
-                  <Form.Label>Teléfono</Form.Label>
+                  <Form.Label>Teléfono (solo números)</Form.Label>
                   <Form.Control
                     type="text"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    placeholder="Solo números (ej: 3516112233)"
                     value={formData.telefono}
-                    onChange={(e) => setFormData({ ...formData, telefono: e.target.value })}
+                    onChange={(e) => setFormData({ ...formData, telefono: e.target.value.replace(/\D/g, '') })}
                   />
                 </Form.Group>
               </Col>
-              <Col md={12}>
+              <Col md={6}>
                 <Form.Group>
                   <Form.Label>Correo Electrónico *</Form.Label>
                   <Form.Control
                     type="email"
                     required
+                    placeholder="profe@gymfit.com"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group>
+                  <Form.Label>Contraseña de acceso</Form.Label>
+                  <Form.Control
+                    type="password"
+                    placeholder={profesorEditando ? "Dejar en blanco para conservar actual" : "Por defecto su DNI"}
+                    value={formData.password}
+                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   />
                 </Form.Group>
               </Col>

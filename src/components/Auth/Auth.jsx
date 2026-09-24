@@ -47,25 +47,12 @@ const Auth = () => {
     setMensaje(null);
   };
 
-  const formatearFechaAuto = (val) => {
-    // Eliminar cualquier carácter que no sea número
-    const digitos = val.replace(/\D/g, '').slice(0, 8);
-    if (digitos.length > 4) {
-      return `${digitos.slice(0, 2)}/${digitos.slice(2, 4)}/${digitos.slice(4)}`;
-    }
-    if (digitos.length > 2) {
-      return `${digitos.slice(0, 2)}/${digitos.slice(2)}`;
-    }
-    return digitos;
-  };
-
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name === 'fechaNac') {
-      const fechaFormateada = formatearFechaAuto(value);
+    if (name === 'dni') {
       setFormData((prev) => ({
         ...prev,
-        fechaNac: fechaFormateada
+        dni: value.replace(/\D/g, '')
       }));
     } else {
       setFormData((prev) => ({
@@ -198,34 +185,35 @@ const Auth = () => {
                   </Col>
                   <Col xs={12} sm={6}>
                     <Form.Group className="mb-3" controlId="dni">
-                      <Form.Label className="fw-medium text-white">DNI</Form.Label>
+                      <Form.Label className="fw-medium text-white">DNI *</Form.Label>
                       <Form.Control
                         type="text"
                         name="dni"
+                        inputMode="numeric"
+                        pattern="[0-9]*"
                         placeholder="12345678"
                         value={formData.dni}
                         onChange={handleChange}
                         maxLength={20}
                         required
                         className="custom-input"
-                        onInvalid={e => e.target.setCustomValidity('Por favor completá este campo')}
+                        onInvalid={e => e.target.setCustomValidity('Por favor completá este campo con tu DNI numérico')}
                         onInput={e => e.target.setCustomValidity('')}
                       />
                     </Form.Group>
                   </Col>
                   <Col xs={12} sm={6}>
                     <Form.Group className="mb-3" controlId="fechaNac">
-                      <Form.Label className="fw-medium text-white">Fecha de Nacimiento</Form.Label>
+                      <Form.Label className="fw-medium text-white">Fecha de Nacimiento *</Form.Label>
                       <Form.Control
-                        type="text"
+                        type="date"
                         name="fechaNac"
-                        placeholder="29/04/2004"
                         value={formData.fechaNac}
                         onChange={handleChange}
-                        maxLength={10}
+                        max={new Date().toISOString().split('T')[0]}
                         required
                         className="custom-input"
-                        onInvalid={e => e.target.setCustomValidity('Por favor completá este campo')}
+                        onInvalid={e => e.target.setCustomValidity('Por favor seleccioná tu fecha de nacimiento')}
                         onInput={e => e.target.setCustomValidity('')}
                       />
                     </Form.Group>

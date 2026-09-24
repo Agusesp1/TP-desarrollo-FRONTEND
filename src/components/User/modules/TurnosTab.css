@@ -1,0 +1,367 @@
+/* ==========================================================================
+   Turnos & Reservas - FitApp Theme & Design Tokens Palette
+   ========================================================================== */
+
+.mobile-reservas-container {
+  background: var(--surface-card) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--surface-border) !important;
+  border-radius: 1.25rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  color: var(--text-primary);
+  min-height: auto;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  overflow: hidden;
+}
+
+/* Header & Back Button */
+.reservas-header-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--surface-border);
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--secondary-accent);
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+
+.reservas-header-btn:hover {
+  background: rgba(88, 86, 240, 0.2);
+  color: var(--text-primary);
+  border-color: var(--secondary-accent);
+  transform: scale(1.05);
+}
+
+/* Tab Toggle Button */
+.turnos-toggle-tabs {
+  background: rgba(14, 19, 38, 0.6);
+  border: 1px solid var(--surface-border);
+  border-radius: 0.75rem;
+  padding: 4px;
+  display: flex;
+  gap: 4px;
+}
+
+.turnos-tab-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.turnos-tab-btn:hover {
+  color: var(--text-primary);
+}
+
+.turnos-tab-btn.active {
+  background: linear-gradient(135deg, var(--primary-accent) 0%, var(--primary-hover) 100%);
+  color: var(--text-primary);
+  box-shadow: 0 2px 10px rgba(88, 86, 240, 0.4);
+}
+
+/* Horizontal Scroll Containers */
+.sedes-scroll-container,
+.dates-scroll-container {
+  display: flex;
+  overflow-x: auto;
+  gap: 10px;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  padding-bottom: 6px;
+}
+
+.sedes-scroll-container::-webkit-scrollbar,
+.dates-scroll-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* Sede Pills */
+.sede-pill {
+  white-space: nowrap;
+  border-radius: 9999px;
+  padding: 8px 18px;
+  font-weight: 600;
+  font-size: 0.82rem;
+  border: 1px solid var(--surface-border);
+  background: rgba(26, 32, 59, 0.5);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+
+.sede-pill:hover {
+  background: rgba(44, 53, 88, 0.6);
+  color: var(--text-primary);
+  border-color: var(--secondary-accent);
+}
+
+.sede-pill.active {
+  background: linear-gradient(135deg, var(--primary-accent) 0%, var(--brand-highlight) 100%);
+  color: #ffffff;
+  border-color: var(--brand-highlight);
+  box-shadow: 0 4px 15px rgba(88, 86, 240, 0.45);
+}
+
+/* Month Navigation */
+.month-nav-btn {
+  background: transparent;
+  border: none;
+  color: var(--secondary-accent);
+  padding: 4px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.month-nav-btn:hover {
+  color: var(--brand-highlight);
+  background: rgba(129, 140, 248, 0.15);
+}
+
+/* Date Cards */
+.date-card {
+  min-width: 70px;
+  height: 90px;
+  background: rgba(26, 32, 59, 0.55);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--surface-border);
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  user-select: none;
+}
+
+.date-card:hover {
+  border-color: var(--secondary-accent);
+  background: rgba(36, 45, 80, 0.7);
+  transform: translateY(-2px);
+}
+
+.date-card .dia-num {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.1;
+}
+
+.date-card .dia-nom {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 2px;
+}
+
+.date-card .hoy-tag {
+  position: absolute;
+  top: 5px;
+  font-size: 0.6rem;
+  font-weight: 700;
+  background: rgba(129, 140, 248, 0.25);
+  color: var(--brand-highlight);
+  padding: 1px 5px;
+  border-radius: 6px;
+  letter-spacing: 0.3px;
+}
+
+.date-card.active {
+  background: linear-gradient(135deg, var(--primary-accent) 0%, var(--primary-hover) 100%);
+  border-color: var(--brand-highlight);
+  box-shadow: 0 6px 20px rgba(88, 86, 240, 0.5);
+  transform: translateY(-2px);
+}
+
+.date-card.active .dia-num,
+.date-card.active .dia-nom {
+  color: #ffffff;
+}
+
+.date-card.active .hoy-tag {
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
+.dot-indicator {
+  width: 5px;
+  height: 5px;
+  background-color: var(--brand-highlight);
+  border-radius: 50%;
+  position: absolute;
+  bottom: 8px;
+  box-shadow: 0 0 8px var(--brand-highlight);
+}
+
+.date-card.active .dot-indicator {
+  background-color: #ffffff;
+  box-shadow: 0 0 8px #ffffff;
+}
+
+/* Day Restriction Alert */
+.day-restriction-banner {
+  background: rgba(129, 140, 248, 0.12);
+  border: 1px solid var(--surface-border);
+  border-left: 4px solid var(--secondary-accent);
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+}
+
+/* Filter Dropdown */
+.filter-dropdown-dark {
+  background: rgba(14, 19, 38, 0.65);
+  border: 1px solid var(--surface-border);
+  border-radius: 0.85rem;
+  transition: border-color 0.2s ease;
+}
+
+.filter-dropdown-dark:focus-within {
+  border-color: var(--secondary-accent);
+  box-shadow: 0 0 12px rgba(129, 140, 248, 0.25);
+}
+
+.filter-dropdown-dark select {
+  background: transparent !important;
+  color: var(--text-primary) !important;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.filter-dropdown-dark select option {
+  background-color: #1A203B;
+  color: #ffffff;
+}
+
+/* Clase Cards */
+.clase-card {
+  background: rgba(26, 32, 59, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--surface-border);
+  border-left: 5px solid var(--primary-accent);
+  border-radius: 1.1rem;
+  overflow: hidden;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.clase-card:hover {
+  background: rgba(32, 39, 72, 0.85);
+  border-color: var(--secondary-accent);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+}
+
+.clase-card.border-indigo {
+  border-left-color: var(--primary-accent);
+}
+
+.clase-card.border-lavender {
+  border-left-color: var(--brand-highlight);
+}
+
+.clase-card.border-cyan {
+  border-left-color: #06b6d4;
+}
+
+.clase-card.card-reservado {
+  border-left-color: #10b981;
+  background: rgba(16, 185, 129, 0.08);
+  border-color: rgba(16, 185, 129, 0.35);
+}
+
+.clase-card.card-lleno {
+  opacity: 0.75;
+  border-left-color: var(--destructive-accent);
+}
+
+/* Time & Tag */
+.time-tag {
+  background: linear-gradient(135deg, var(--primary-accent) 0%, #6366f1 100%) !important;
+  color: #ffffff;
+  font-size: 0.95rem;
+  letter-spacing: 0.3px;
+  box-shadow: 0 2px 8px rgba(88, 86, 240, 0.35);
+}
+
+.coins-tag {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--surface-border) !important;
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+}
+
+/* Professor Icon */
+.profesor-icon {
+  background: rgba(129, 140, 248, 0.15) !important;
+  color: var(--secondary-accent);
+  border: 1px solid rgba(129, 140, 248, 0.2);
+}
+
+/* Real Cupos Progress Bar */
+.progress-bar-bg {
+  background-color: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  height: 7px;
+  width: 55px;
+}
+
+.progress-bar-fill {
+  transition: width 0.4s ease, background 0.4s ease;
+  height: 100%;
+}
+
+.progress-bar-fill.fill-available {
+  background: linear-gradient(90deg, #10b981, #06b6d4);
+}
+
+.progress-bar-fill.fill-warning {
+  background: linear-gradient(90deg, #f59e0b, #f97316);
+}
+
+.progress-bar-fill.fill-full {
+  background: linear-gradient(90deg, #ef4444, var(--destructive-accent));
+}
+
+/* Location Footer */
+.location-footer {
+  border-color: rgba(129, 140, 248, 0.12) !important;
+}
+
+/* Reserva Confirmation Modal */
+.reserva-detail-box {
+  background: rgba(14, 19, 38, 0.6);
+  border: 1px solid var(--surface-border);
+  border-radius: 0.85rem;
+}
+
+.reserva-detail-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+
+.reserva-detail-item svg {
+  color: var(--secondary-accent);
+  flex-shrink: 0;
+}
