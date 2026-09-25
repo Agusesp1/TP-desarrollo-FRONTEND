@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import './WhatsAppButton.css';
 
 const WhatsAppButton = ({ 
@@ -7,6 +8,12 @@ const WhatsAppButton = ({
   tooltipText = "¿Tenés dudas? ¡Escribinos!" 
 }) => {
   const [showTooltip, setShowTooltip] = useState(true);
+  const location = useLocation();
+
+  // Ocultar botón de WhatsApp en la sección de administración (/admin)
+  if (location.pathname.startsWith('/admin')) {
+    return null;
+  }
 
   const encodedMessage = encodeURIComponent(message);
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;

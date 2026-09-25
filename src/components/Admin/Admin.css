@@ -310,3 +310,34 @@
   }
 }
 
+/* Custom Admin Pagination */
+.custom-admin-pagination .page-link {
+  background-color: #161B33 !important;
+  border-color: #2C3558 !important;
+  color: #818CF8 !important;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  border-radius: 0.5rem !important;
+  margin: 0 3px;
+  padding: 0.4rem 0.85rem;
+}
+
+.custom-admin-pagination .page-link:hover {
+  background-color: #5856F0 !important;
+  color: #FFFFFF !important;
+  border-color: #5856F0 !important;
+}
+
+.custom-admin-pagination .page-item.active .page-link {
+  background-color: #5856F0 !important;
+  border-color: #5856F0 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 12px rgba(88, 86, 240, 0.4);
+}
+
+.custom-admin-pagination .page-item.disabled .page-link {
+  background-color: rgba(22, 27, 51, 0.5) !important;
+  border-color: rgba(44, 53, 88, 0.5) !important;
+  color: #475569 !important;
+}
+

@@ -190,7 +190,7 @@ const Admin = () => {
           <Card.Body>
             <div className="mb-3 text-white">
               <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" viewBox="0 0 16 16">
-                <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
               </svg>
             </div>
             <h3 className="fw-bold mb-3">Acceso Restringido</h3>
@@ -323,7 +323,7 @@ const Admin = () => {
                 <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
                 <path d="M16 3.13a4 4 0 0 1 0 7.75" />
               </svg>
-              Socios / Clientes
+              Usuarios
             </Nav.Link>
           </Nav.Item>
 
@@ -373,7 +373,10 @@ const Admin = () => {
             sedes={sedes}
             profesores={profesores}
             cargando={cargandoActividades}
-            onRecargar={cargarActividades}
+            onRecargar={() => {
+              cargarActividades();
+              cargarTurnos();
+            }}
             onMostrarAlerta={mostrarAlerta}
             onPedirEliminar={handlePedirEliminar}
             apiBase={API_BASE}
