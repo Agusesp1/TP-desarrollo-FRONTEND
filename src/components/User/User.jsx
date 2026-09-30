@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Container, Card, Row, Col, Button, Nav, Badge, Alert } from 'react-bootstrap';
+import { useState } from 'react';
+import { Container, Card, Row, Col, Button, Nav, Badge } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import './User.css';
@@ -17,11 +17,11 @@ const User = () => {
   const esAdmin = user && (user.rol === 'admin' || user.email === 'administraciongymfit@gmail.com');
   const esProfesor = user && user.rol === 'profesor';
 
-  useEffect(() => {
-    if (user?.rol === 'profesor') {
-      setActiveTab((prev) => (prev === 'perfil' || prev === 'cuotas' || prev === 'turnos' ? 'agenda' : prev));
-    }
-  }, [user?.rol]);
+  if (esProfesor && (activeTab === 'cuotas' || activeTab === 'turnos')) {
+    setActiveTab('agenda');
+  } else if (esAdmin && activeTab === 'cuotas') {
+    setActiveTab('perfil');
+  }
 
   return (
     <div className="user-page py-4">

@@ -1,312 +1,441 @@
-import React, { useState } from 'react';
-import { Card, Table, Badge, Button, Modal, Form, Row, Col, Spinner, Alert } from 'react-bootstrap';
+import { useState, useEffect, useCallback } from 'react';
+import { Card, Spinner, Alert, Button } from 'react-bootstrap';
+import { useAuth } from '../../../context/AuthContext';
+
+// Módulos y submódulos de cuotas
+import { generarComprobanteFallback, generarPaymentIdMP } from './cuotas/helpers';
+import CuotasHeader from './cuotas/CuotasHeader';
+import ResumenCards from './cuotas/ResumenCards';
+import CuotasTable from './cuotas/CuotasTable';
+import ModalPago from './cuotas/ModalPago';
+import ModalHistorial from './cuotas/ModalHistorial';
+import ModalRecibo from './cuotas/ModalRecibo';
+
+const API_BASE = 'http://localhost:3000/api';
 
 const CuotasTab = ({ user }) => {
-  // Cuotas pendientes
-  const [cuotas, setCuotas] = useState([
-    { id: 1, concepto: 'Pase Premium Julio 2026', monto: 18000, fechaVenc: '15/07/2026', estado: 'Pendiente' },
-    { id: 2, concepto: 'Pase Premium Junio 2026', monto: 17000, fechaVenc: '15/06/2026', estado: 'Pendiente' },
-  ]);
+  const { user: authUser } = useAuth();
+  const currentUser = user || authUser;
+  const esRolExcluido = currentUser?.rol === 'admin' || currentUser?.rol === 'profesor';
+  const usuarioId = currentUser?.id || currentUser?.usuario_id || 1;
 
-  // Historial de pagos
-  const [historial, setHistorial] = useState([
-    { id: 101, concepto: 'Pase Premium Mayo 2026', monto: 16000, fechaPago: '12/05/2026', metodo: 'Tarjeta de Crédito', comprobante: 'COMP-8921' },
-    { id: 102, concepto: 'Pase Premium Abril 2026', monto: 16000, fechaPago: '10/04/2026', metodo: 'Mercado Pago', comprobante: 'COMP-7432' },
-    { id: 103, concepto: 'Pase Premium Marzo 2026', monto: 15000, fechaPago: '14/03/2026', metodo: 'Transferencia', comprobante: 'COMP-6190' },
-    { id: 104, concepto: 'Matrícula de Inscripción 2026', monto: 10000, fechaPago: '01/03/2026', metodo: 'Tarjeta de Débito', comprobante: 'COMP-5012' },
-  ]);
+  // Estados de datos
+  const [cuotas, setCuotas] = useState([]);
+  const [mostrarTodasCuotas, setMostrarTodasCuotas] = useState(false);
+  const [historial, setHistorial] = useState([]);
+  const [resumen, setResumen] = useState({
+    totalPendientes: 0,
+    totalEnDemora: 0,
+    totalNoPagadas: 0,
+    totalPagadas: 0,
+    proximaVencimiento: '-'
+  });
+  const [cargando, setCargando] = useState(true);
+  const [errorCarga, setErrorCarga] = useState(null);
+  const [alertaFeedback, setAlertaFeedback] = useState(null);
 
-  // Modales
+  // Estados de modales
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [showHistoryModal, setShowHistoryModal] = useState(false);
   const [selectedCuota, setSelectedCuota] = useState(null);
-  const [metodoPago, setMetodoPago] = useState('tarjeta');
   const [procesandoPago, setProcesandoPago] = useState(false);
   const [pagoExitosoMsg, setPagoExitosoMsg] = useState(null);
 
-  const handleAbrirPago = (cuota) => {
+  // Estado para la preferencia de Mercado Pago
+  const [cargandoMP, setCargandoMP] = useState(false);
+  const [mpPreference, setMpPreference] = useState(null);
+
+  // Estado para ver detalle de comprobante individual
+  const [reciboSeleccionado, setReciboSeleccionado] = useState(null);
+  const [showReceiptModal, setShowReceiptModal] = useState(false);
+
+  // Mostrar alertas temporales
+  const mostrarFeedback = (texto, tipo = 'success') => {
+    setAlertaFeedback({ texto, tipo });
+    setTimeout(() => setAlertaFeedback(null), 5000);
+  };
+
+  // Cargar cuotas desde la API a demanda
+  const obtenerCuotas = useCallback(async () => {
+    if (!usuarioId || esRolExcluido) return;
+    setCargando(true);
+    setErrorCarga(null);
+
+    try {
+      const res = await fetch(`${API_BASE}/cuotas/mis-cuotas?usuario_id=${usuarioId}`);
+      const data = await res.json();
+
+      if (res.ok && data.exito) {
+        const todasCuotas = data.cuotas || [];
+        const pagadas = data.historial || todasCuotas.filter((c) => c.estado === 'pagado');
+        const impagas = data.pendientes || todasCuotas.filter((c) => c.estado !== 'pagado');
+
+        setCuotas(impagas);
+        setHistorial(pagadas);
+
+        const pendientes = impagas.filter((c) => c.estado === 'pendiente').length;
+        const enDemora = impagas.filter((c) => c.estado === 'en demora').length;
+        const noPagadas = impagas.filter((c) => c.estado === 'no pagado').length;
+        const primerVenc = impagas.length > 0 ? (impagas[0].fechaVenc || impagas[0].fecha_vencimiento) : 'Al día';
+
+        setResumen(
+          data.resumen || {
+            totalPendientes: pendientes,
+            totalEnDemora: enDemora,
+            totalNoPagadas: noPagadas,
+            totalPagadas: pagadas.length,
+            proximaVencimiento: primerVenc
+          }
+        );
+      } else {
+        setErrorCarga(data.mensaje || 'No se pudieron obtener las cuotas del usuario.');
+      }
+    } catch (err) {
+      console.error('Error al consultar cuotas:', err);
+      setErrorCarga('Error de conexión con el servidor. Verifique su red.');
+    } finally {
+      setCargando(false);
+    }
+  }, [usuarioId, esRolExcluido]);
+
+  useEffect(() => {
+    if (!usuarioId || esRolExcluido) {
+      return;
+    }
+
+    let ignore = false;
+    fetch(`${API_BASE}/cuotas/mis-cuotas?usuario_id=${usuarioId}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (ignore) return;
+        if (data.exito) {
+          const todasCuotas = data.cuotas || [];
+          const pagadas = data.historial || todasCuotas.filter((c) => c.estado === 'pagado');
+          const impagas = data.pendientes || todasCuotas.filter((c) => c.estado !== 'pagado');
+
+          setCuotas(impagas);
+          setHistorial(pagadas);
+
+          const pendientes = impagas.filter((c) => c.estado === 'pendiente').length;
+          const enDemora = impagas.filter((c) => c.estado === 'en demora').length;
+          const noPagadas = impagas.filter((c) => c.estado === 'no pagado').length;
+          const primerVenc = impagas.length > 0 ? (impagas[0].fechaVenc || impagas[0].fecha_vencimiento) : 'Al día';
+
+          setResumen(
+            data.resumen || {
+              totalPendientes: pendientes,
+              totalEnDemora: enDemora,
+              totalNoPagadas: noPagadas,
+              totalPagadas: pagadas.length,
+              proximaVencimiento: primerVenc
+            }
+          );
+        } else {
+          setErrorCarga(data.mensaje || 'No se pudieron obtener las cuotas del usuario.');
+        }
+      })
+      .catch((err) => {
+        if (!ignore) {
+          console.error('Error al inicializar cuotas:', err);
+          setErrorCarga('Error de conexión con el servidor. Verifique su red.');
+        }
+      })
+      .finally(() => {
+        if (!ignore) setCargando(false);
+      });
+
+    return () => {
+      ignore = true;
+    };
+  }, [usuarioId, esRolExcluido]);
+
+  // Solicitar preferencia de Mercado Pago al backend
+  const inicializarMercadoPago = async (cuotaId) => {
+    setCargandoMP(true);
+    try {
+      const res = await fetch(`${API_BASE}/cuotas/${cuotaId}/preferencia-mp`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({})
+      });
+      const data = await res.json();
+      if (res.ok && data.exito) {
+        setMpPreference(data);
+      } else {
+        console.warn('No se pudo generar preferencia de Mercado Pago:', data.mensaje);
+      }
+    } catch (err) {
+      console.error('Error al generar preferencia MP:', err);
+    } finally {
+      setCargandoMP(false);
+    }
+  };
+
+  // Manejo de apertura del modal de pago
+  const handleAbrirPago = async (cuota) => {
     setSelectedCuota(cuota);
     setPagoExitosoMsg(null);
+    setMpPreference(null);
     setShowPaymentModal(true);
+
+    // Generar preferencia de Mercado Pago de antemano
+    await inicializarMercadoPago(cuota.id);
   };
 
-  const handleProcesarPago = (e) => {
-    e.preventDefault();
+  // Procesar pago con Mercado Pago (Simulación de Checkout Exitoso)
+  const handleCompletarPagoMP = async () => {
+    if (!selectedCuota) return;
     setProcesandoPago(true);
 
-    setTimeout(() => {
+    try {
+      const paymentId = generarPaymentIdMP();
+      const res = await fetch(`${API_BASE}/cuotas/mercadopago/exito`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          cuota_id: selectedCuota.id,
+          payment_id: paymentId,
+          preference_id: mpPreference?.preferenceId
+        })
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.exito) {
+        const cuotaPagada = data.cuota || {
+          ...selectedCuota,
+          estado: 'pagado',
+          metodo_pago: 'Mercado Pago',
+          metodo: 'Mercado Pago',
+          comprobante: data.comprobante || paymentId,
+          fecha_pago: new Date().toISOString(),
+          fechaPago: new Date().toLocaleDateString('es-AR')
+        };
+
+        // Actualizar cuotas localmente sin recargar página
+        setCuotas((prev) => prev.filter((c) => c.id !== selectedCuota.id));
+        setHistorial((prev) => [cuotaPagada, ...prev]);
+
+        // Actualizar resumen
+        setResumen((prev) => ({
+          ...prev,
+          totalPagadas: prev.totalPagadas + 1,
+          totalPendientes: selectedCuota.estado === 'pendiente' ? Math.max(0, prev.totalPendientes - 1) : prev.totalPendientes,
+          totalEnDemora: selectedCuota.estado === 'en demora' ? Math.max(0, prev.totalEnDemora - 1) : prev.totalEnDemora,
+          totalNoPagadas: selectedCuota.estado === 'no pagado' ? Math.max(0, prev.totalNoPagadas - 1) : prev.totalNoPagadas
+        }));
+
+        setPagoExitosoMsg(`¡Pago acreditado por Mercado Pago! Comprobante: ${cuotaPagada.comprobante}`);
+        mostrarFeedback(`¡Pago de ${selectedCuota.concepto || selectedCuota.periodo} acreditado exitosamente con Mercado Pago!`, 'success');
+
+        setTimeout(() => {
+          setShowPaymentModal(false);
+          setPagoExitosoMsg(null);
+        }, 1800);
+      } else {
+        setPagoExitosoMsg(`Error al procesar pago: ${data.mensaje || 'Intente nuevamente'}`);
+      }
+    } catch (err) {
+      console.error('Error al confirmar pago MP:', err);
+      setPagoExitosoMsg('Error de conexión al confirmar pago de Mercado Pago.');
+    } finally {
       setProcesandoPago(false);
-      // Actualizar cuota a Pagada
-      setCuotas((prev) => prev.filter((c) => c.id !== selectedCuota.id));
-      // Agregar al historial
-      const nuevoComprobante = {
-        id: Date.now(),
-        concepto: selectedCuota.concepto,
-        monto: selectedCuota.monto,
-        fechaPago: new Date().toLocaleDateString('es-AR'),
-        metodo: metodoPago === 'tarjeta' ? 'Tarjeta de Crédito/Débito' : (metodoPago === 'mp' ? 'Mercado Pago' : 'Transferencia'),
-        comprobante: `COMP-${Math.floor(1000 + Math.random() * 9000)}`
-      };
-      setHistorial((prev) => [nuevoComprobante, ...prev]);
-      setPagoExitosoMsg('¡Pago registrado con éxito! Tu cuota ha sido acreditada.');
-      setTimeout(() => {
-        setShowPaymentModal(false);
-        setPagoExitosoMsg(null);
-      }, 2000);
-    }, 1500);
+    }
   };
+
+  // Procesar pago alternativo (Tarjeta o Transferencia)
+  const handleProcesarPagoAlternativo = async (tipo, comprobanteManual) => {
+    if (!selectedCuota) return;
+    setProcesandoPago(true);
+
+    try {
+      const nombreMetodo =
+        tipo === 'tarjeta' ? 'Tarjeta de Crédito / Débito' : 'Transferencia Bancaria';
+
+      const numComprobante =
+        tipo === 'tarjeta'
+          ? generarComprobanteFallback('COMP-TC')
+          : (comprobanteManual && comprobanteManual.trim()) || generarComprobanteFallback('TRF');
+
+      const res = await fetch(`${API_BASE}/cuotas/${selectedCuota.id}/pagar`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          metodo_pago: nombreMetodo,
+          comprobante: numComprobante,
+          fecha_pago: new Date().toISOString()
+        })
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.exito) {
+        const cuotaPagada = data.cuota || {
+          ...selectedCuota,
+          estado: 'pagado',
+          metodo_pago: nombreMetodo,
+          metodo: nombreMetodo,
+          comprobante: numComprobante,
+          fecha_pago: new Date().toISOString(),
+          fechaPago: new Date().toLocaleDateString('es-AR')
+        };
+
+        // Actualizar cuotas localmente sin recargar página
+        setCuotas((prev) => prev.filter((c) => c.id !== selectedCuota.id));
+        setHistorial((prev) => [cuotaPagada, ...prev]);
+
+        // Actualizar resumen
+        setResumen((prev) => ({
+          ...prev,
+          totalPagadas: prev.totalPagadas + 1,
+          totalPendientes: selectedCuota.estado === 'pendiente' ? Math.max(0, prev.totalPendientes - 1) : prev.totalPendientes,
+          totalEnDemora: selectedCuota.estado === 'en demora' ? Math.max(0, prev.totalEnDemora - 1) : prev.totalEnDemora,
+          totalNoPagadas: selectedCuota.estado === 'no pagado' ? Math.max(0, prev.totalNoPagadas - 1) : prev.totalNoPagadas
+        }));
+
+        setPagoExitosoMsg(`¡Pago registrado con éxito! Comprobante: ${numComprobante}`);
+        mostrarFeedback(`¡Pago registrado con éxito! Cuota ${selectedCuota.concepto || selectedCuota.periodo} acreditada.`, 'success');
+
+        setTimeout(() => {
+          setShowPaymentModal(false);
+          setPagoExitosoMsg(null);
+        }, 1800);
+      } else {
+        setPagoExitosoMsg(`Error al registrar pago: ${data.mensaje || 'Intente nuevamente'}`);
+      }
+    } catch (err) {
+      console.error('Error al registrar pago:', err);
+      setPagoExitosoMsg('Error de conexión al procesar el pago.');
+    } finally {
+      setProcesandoPago(false);
+    }
+  };
+
+  // Abrir vista detallada de comprobante
+  const handleVerComprobante = (item) => {
+    setReciboSeleccionado(item);
+    setShowReceiptModal(true);
+  };
+
+  // Guard de rol: administradores y profesores no poseen cuotas
+  if (esRolExcluido) {
+    return (
+      <Card className="glass-card border-0 p-5 text-white text-center">
+        <div className="d-inline-flex p-3 rounded-circle bg-info bg-opacity-10 text-info mx-auto mb-3">
+          <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="16" x2="12" y2="12" />
+            <line x1="12" y1="8" x2="12.01" y2="8" />
+          </svg>
+        </div>
+        <h4 className="fw-bold mb-2">Apartado no disponible</h4>
+        <p className="text-secondary max-w-md mx-auto mb-0" style={{ maxWidth: '520px' }}>
+          Este apartado no está disponible para administradores ni profesores. Solo los socios activos poseen gestión de cuotas.
+        </p>
+      </Card>
+    );
+  }
+
+  const cuotasVisibles = mostrarTodasCuotas ? cuotas : cuotas.slice(0, 5);
 
   return (
     <Card className="glass-card border-0 p-4 text-white">
-      <div className="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
-        <div>
-          <h4 className="fw-bold mb-1 text-white">Estado de Cuotas y Membresía</h4>
-          <p className="text-light opacity-75 small mb-0">
-            Revisa tus vencimientos, efectúa pagos seguros o consulta el historial de recibos.
-          </p>
-        </div>
-
-        <Button
-          variant="outline-light"
-          className="rounded-pill px-3 py-2 fw-medium d-inline-flex align-items-center gap-2"
-          onClick={() => setShowHistoryModal(true)}
+      {/* Alerta de feedback general */}
+      {alertaFeedback && (
+        <Alert
+          variant={alertaFeedback.tipo}
+          dismissible
+          onClose={() => setAlertaFeedback(null)}
+          className="mb-4 text-center fw-medium border-0 shadow"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-            <polyline points="14 2 14 8 20 8" />
-            <line x1="16" y1="13" x2="8" y2="13" />
-            <line x1="16" y1="17" x2="8" y2="17" />
-          </svg>
-          Historial de Recibos
-        </Button>
-      </div>
+          {alertaFeedback.texto}
+        </Alert>
+      )}
 
-      <div className="table-responsive">
-        <Table hover variant="dark" className="align-middle admin-table mb-0">
-          <thead>
-            <tr>
-              <th>Concepto / Período</th>
-              <th>Monto</th>
-              <th>Vencimiento</th>
-              <th>Estado</th>
-              <th className="text-end">Acción</th>
-            </tr>
-          </thead>
-          <tbody>
-            {cuotas.length === 0 ? (
-              <tr>
-                <td colSpan="5" className="text-center py-4 text-success fw-medium">
-                  🎉 ¡Felicitaciones! Te encuentras al día con todas tus cuotas.
-                </td>
-              </tr>
-            ) : (
-              cuotas.map((cuota) => (
-                <tr key={cuota.id}>
-                  <td>
-                    <div className="fw-bold text-white">{cuota.concepto}</div>
-                    <small className="text-light opacity-75">Suscripción recurrente mensual</small>
-                  </td>
-                  <td>
-                    <span className="fw-bold text-white fs-6">
-                      ${cuota.monto.toLocaleString('es-AR')}
-                    </span>
-                  </td>
-                  <td>
-                    <span className="badge bg-secondary">{cuota.fechaVenc}</span>
-                  </td>
-                  <td>
-                    <Badge bg="warning" className="text-dark fw-bold">
-                      {cuota.estado}
-                    </Badge>
-                  </td>
-                  <td className="text-end">
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      className="hero-btn rounded-pill px-3 py-1 fw-bold"
-                      onClick={() => handleAbrirPago(cuota)}
-                    >
-                      Pagar Cuota
-                    </Button>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </Table>
-      </div>
+      {/* Header del Tab */}
+      <CuotasHeader
+        cargando={cargando}
+        onRecargar={obtenerCuotas}
+        onVerHistorial={() => setShowHistoryModal(true)}
+        totalHistorial={historial.length}
+      />
 
-      {/* Modal Pagar Cuota */}
-      <Modal
-        show={showPaymentModal}
-        onHide={() => !procesandoPago && setShowPaymentModal(false)}
-        centered
-        contentClassName="glass-card text-white border-secondary"
-      >
-        <Modal.Header closeButton closeVariant="white">
-          <Modal.Title className="fw-bold d-flex align-items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary">
-              <rect width="20" height="14" x="2" y="5" rx="2" />
-              <line x1="2" x2="22" y1="10" y2="10" />
-            </svg>
-            Pasarela de Pago FitApp
-          </Modal.Title>
-        </Modal.Header>
-        <Form onSubmit={handleProcesarPago}>
-          <Modal.Body>
-            {pagoExitosoMsg && (
-              <Alert variant="success" className="text-center py-2 mb-3">
-                {pagoExitosoMsg}
-              </Alert>
-            )}
+      {/* Tarjetas de Resumen Rápido */}
+      <ResumenCards resumen={resumen} />
 
-            <div className="payment-summary p-3 mb-3 rounded-3 bg-dark border border-secondary">
-              <div className="d-flex justify-content-between mb-1">
-                <span className="text-light opacity-75 small">Concepto:</span>
-                <span className="fw-medium text-white">{selectedCuota?.concepto}</span>
-              </div>
-              <div className="d-flex justify-content-between mb-1">
-                <span className="text-light opacity-75 small">Socio:</span>
-                <span className="text-white">{user?.nombre} {user?.apellido}</span>
-              </div>
-              <hr className="my-2 border-secondary" />
-              <div className="d-flex justify-content-between">
-                <span className="fw-bold text-white">Total a Pagar:</span>
-                <span className="fw-bold text-primary fs-5">
-                  ${selectedCuota?.monto.toLocaleString('es-AR')}
-                </span>
-              </div>
-            </div>
-
-            <Form.Group className="mb-3">
-              <Form.Label className="small text-light">Selecciona el Medio de Pago</Form.Label>
-              <Form.Select
-                value={metodoPago}
-                onChange={(e) => setMetodoPago(e.target.value)}
-                className="bg-transparent text-white border-secondary mb-3"
+      {/* Contenido Principal: Spinner, Error o Tabla */}
+      {cargando ? (
+        <div className="text-center py-5">
+          <Spinner animation="border" variant="primary" />
+          <p className="mt-3 text-light opacity-75">Cargando estado de tus cuotas...</p>
+        </div>
+      ) : errorCarga ? (
+        <Alert variant="danger" className="py-4 text-center border-0 shadow">
+          <p className="mb-2 fw-semibold">{errorCarga}</p>
+          <Button variant="outline-danger" size="sm" onClick={obtenerCuotas} className="rounded-pill px-3">
+            Reintentar Conexión
+          </Button>
+        </Alert>
+      ) : (
+        <>
+          <CuotasTable cuotas={cuotasVisibles} onAbrirPago={handleAbrirPago} />
+          {cuotas.length > 5 && (
+            <div className="text-center mt-3 pt-2">
+              <Button
+                variant="outline-primary"
+                className="btn-token-outline-primary rounded-pill px-4 py-2 fw-medium d-inline-flex align-items-center gap-2"
+                onClick={() => setMostrarTodasCuotas(!mostrarTodasCuotas)}
               >
-                <option value="tarjeta" className="bg-dark text-white">Tarjeta de Crédito / Débito</option>
-                <option value="mp" className="bg-dark text-white">Mercado Pago / Dinero en cuenta</option>
-                <option value="transferencia" className="bg-dark text-white">Transferencia Bancaria Inmediata</option>
-              </Form.Select>
-            </Form.Group>
+                {mostrarTodasCuotas ? (
+                  <>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="18 15 12 9 6 15" />
+                    </svg>
+                    Mostrar menos
+                  </>
+                ) : (
+                  <>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="6 9 12 15 18 9" />
+                    </svg>
+                    {`Mostrar más cuotas (${cuotas.length - 5} adicionales)`}
+                  </>
+                )}
+              </Button>
+            </div>
+          )}
+        </>
+      )}
 
-            {metodoPago === 'tarjeta' && (
-              <Row className="g-2">
-                <Col md={12}>
-                  <Form.Control
-                    type="text"
-                    required
-                    placeholder="Número de tarjeta (16 dígitos)"
-                    defaultValue="4509 •••• •••• 8912"
-                    className="bg-transparent text-white border-secondary"
-                  />
-                </Col>
-                <Col md={6}>
-                  <Form.Control
-                    type="text"
-                    required
-                    placeholder="MM/AA"
-                    defaultValue="08/29"
-                    className="bg-transparent text-white border-secondary"
-                  />
-                </Col>
-                <Col md={6}>
-                  <Form.Control
-                    type="password"
-                    required
-                    maxLength="4"
-                    placeholder="CVC / CVV"
-                    defaultValue="782"
-                    className="bg-transparent text-white border-secondary"
-                  />
-                </Col>
-              </Row>
-            )}
-          </Modal.Body>
-          <Modal.Footer className="border-secondary">
-            <Button
-              variant="outline-light"
-              onClick={() => setShowPaymentModal(false)}
-              disabled={procesandoPago}
-              className="rounded-pill px-3"
-            >
-              Cancelar
-            </Button>
-            <Button
-              variant="primary"
-              type="submit"
-              disabled={procesandoPago}
-              className="hero-btn rounded-pill px-4 fw-bold"
-            >
-              {procesandoPago ? (
-                <>
-                  <Spinner animation="border" size="sm" className="me-2" />
-                  Acreditando Pago...
-                </>
-              ) : (
-                `Abonar $${selectedCuota?.monto.toLocaleString('es-AR')}`
-              )}
-            </Button>
-          </Modal.Footer>
-        </Form>
-      </Modal>
+      {/* Modal Pasarela de Pago */}
+      <ModalPago
+        show={showPaymentModal}
+        onHide={() => setShowPaymentModal(false)}
+        selectedCuota={selectedCuota}
+        currentUser={currentUser}
+        cargandoMP={cargandoMP}
+        mpPreference={mpPreference}
+        procesandoPago={procesandoPago}
+        pagoExitosoMsg={pagoExitosoMsg}
+        onPagarMP={handleCompletarPagoMP}
+        onPagarAlternativo={handleProcesarPagoAlternativo}
+      />
 
-      {/* Modal Historial de Comprobantes */}
-      <Modal
+      {/* Modal Historial de Pagos y Comprobantes */}
+      <ModalHistorial
         show={showHistoryModal}
         onHide={() => setShowHistoryModal(false)}
-        size="lg"
-        centered
-        contentClassName="glass-card text-white border-secondary"
-      >
-        <Modal.Header closeButton closeVariant="white">
-          <Modal.Title className="fw-bold d-flex align-items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-              <polyline points="14 2 14 8 20 8" />
-              <line x1="16" y1="13" x2="8" y2="13" />
-              <line x1="16" y1="17" x2="8" y2="17" />
-            </svg>
-            Historial de Pagos y Comprobantes
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <div className="table-responsive">
-            <Table hover variant="dark" className="align-middle mb-0">
-              <thead>
-                <tr>
-                  <th>N° Comprobante</th>
-                  <th>Concepto</th>
-                  <th>Fecha de Pago</th>
-                  <th>Método</th>
-                  <th>Monto</th>
-                </tr>
-              </thead>
-              <tbody>
-                {historial.map((item) => (
-                  <tr key={item.id}>
-                    <td>
-                      <span className="badge bg-dark border border-secondary text-primary font-monospace">
-                        {item.comprobante}
-                      </span>
-                    </td>
-                    <td>{item.concepto}</td>
-                    <td>{item.fechaPago}</td>
-                    <td><small className="text-light opacity-75">{item.metodo}</small></td>
-                    <td className="fw-bold text-success">${item.monto.toLocaleString('es-AR')}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
-          </div>
-        </Modal.Body>
-        <Modal.Footer className="border-secondary">
-          <Button variant="outline-light" onClick={() => setShowHistoryModal(false)} className="rounded-pill px-4">
-            Cerrar
-          </Button>
-        </Modal.Footer>
-      </Modal>
+        historial={historial}
+        onVerComprobante={handleVerComprobante}
+      />
+
+      {/* Modal Detalle de Comprobante / Recibo Imprimible */}
+      <ModalRecibo
+        show={showReceiptModal}
+        onHide={() => setShowReceiptModal(false)}
+        recibo={reciboSeleccionado}
+        currentUser={currentUser}
+      />
     </Card>
   );
 };

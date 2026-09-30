@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Container, Card, Row, Col, Button, Badge, Nav, Alert } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
@@ -12,13 +12,14 @@ import ActividadesManager from './modules/ActividadesManager';
 import TurnosManager from './modules/TurnosManager';
 import ClientesManager from './modules/ClientesManager';
 import CalendarioAdmin from './modules/CalendarioAdmin';
+import CuotasAdminManager from './modules/CuotasAdminManager';
 
 const API_BASE = 'http://localhost:3000/api';
 
 const Admin = () => {
   const { user } = useAuth();
 
-  // Active Tab: profesores | sedes | actividades | turnos | clientes
+  // Active Tab: profesores | sedes | actividades | turnos | clientes | cuotas | calendario
   const [activeTab, setActiveTab] = useState('profesores');
 
   // Stats State
@@ -176,7 +177,7 @@ const Admin = () => {
       } else {
         mostrarAlerta(data.mensaje || 'Error al eliminar registro', 'danger');
       }
-    } catch (error) {
+    } catch {
       mostrarAlerta('Error de conexión con el servidor', 'danger');
     } finally {
       setEliminando(false);
@@ -329,6 +330,20 @@ const Admin = () => {
 
           <Nav.Item>
             <Nav.Link
+              className={activeTab === 'cuotas' ? 'active' : ''}
+              onClick={() => setActiveTab('cuotas')}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect width="20" height="14" x="2" y="5" rx="2" />
+                <line x1="2" x2="22" y1="10" strokeWidth="2" />
+                <line x1="6" y1="15" x2="8" y2="15" strokeWidth="2" />
+              </svg>
+              Cuotas & Precios
+            </Nav.Link>
+          </Nav.Item>
+
+          <Nav.Item>
+            <Nav.Link
               className={activeTab === 'calendario' ? 'active' : ''}
               onClick={() => setActiveTab('calendario')}
             >
@@ -399,6 +414,13 @@ const Admin = () => {
 
         {activeTab === 'clientes' && (
           <ClientesManager
+            onMostrarAlerta={mostrarAlerta}
+            apiBase={API_BASE}
+          />
+        )}
+
+        {activeTab === 'cuotas' && (
+          <CuotasAdminManager
             onMostrarAlerta={mostrarAlerta}
             apiBase={API_BASE}
           />

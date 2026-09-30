@@ -106,6 +106,14 @@
   border-radius: 0.5rem;
 }
 
+.admin-page .form-control::placeholder,
+.admin-page .form-control::-webkit-input-placeholder,
+.modal-content .form-control::placeholder,
+.modal-content .form-control::-webkit-input-placeholder {
+  color: rgba(255, 255, 255, 0.85) !important;
+  opacity: 1 !important;
+}
+
 .admin-page .form-control:focus,
 .admin-page .form-select:focus,
 .modal-content .form-control:focus,
