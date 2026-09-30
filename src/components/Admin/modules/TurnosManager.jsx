@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { Card, Button, Row, Col, Table, Form, Modal, Spinner } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { Card, Button, Row, Col, Table, Form, Modal, Spinner, Pagination } from 'react-bootstrap';
 
 const TurnosManager = ({
-  turnos,
-  actividades,
-  profesores,
-  sedes,
+  turnos = [],
+  actividades = [],
+  profesores = [],
+  sedes = [],
   cargando,
   onRecargar,
   onMostrarAlerta,
@@ -15,6 +15,14 @@ const TurnosManager = ({
   const [filtroActividad, setFiltroActividad] = useState('todas');
   const [filtroDia, setFiltroDia] = useState('todos');
   const [filtroSede, setFiltroSede] = useState('');
+
+  // Paginación
+  const [paginaActual, setPaginaActual] = useState(1);
+  const elementosPorPagina = 8;
+
+  useEffect(() => {
+    setPaginaActual(1);
+  }, [filtroActividad, filtroDia, filtroSede]);
 
   // Modal State
   const [showModal, setShowModal] = useState(false);
@@ -42,13 +50,14 @@ const TurnosManager = ({
       });
     } else {
       setTurnoEditando(null);
+      const primeraAct = actividades.length > 0 ? actividades[0] : null;
       setFormData({
-        actividad_id: actividades.length > 0 ? actividades[0].id : '',
+        actividad_id: primeraAct ? primeraAct.id : '',
         horarioInicio: '07:00',
         horaFin: '09:00',
         dia_semana: 'Lunes a Sábado',
-        profesor_id: profesores.length > 0 ? profesores[0].id : '',
-        sede_id: sedes.length > 0 ? sedes[0].id : ''
+        profesor_id: primeraAct?.profesor_id ? primeraAct.profesor_id.toString() : (profesores.length > 0 ? profesores[0].id : ''),
+        sede_id: primeraAct?.sede_id ? primeraAct.sede_id.toString() : (sedes.length > 0 ? sedes[0].id : '')
       });
     }
     setShowModal(true);
@@ -56,6 +65,33 @@ const TurnosManager = ({
 
   const handleGuardar = async (e) => {
     e.preventDefault();
+
+    // Validar coincidencia de sede entre el Profesor y la Sede de la actividad/turno
+    if (formData.profesor_id) {
+      const prof = profesores.find((p) => p.id?.toString() === formData.profesor_id.toString());
+      
+      // Determinar la sede efectiva del turno
+      let effectiveSedeId = formData.sede_id;
+      if (!effectiveSedeId && formData.actividad_id) {
+        const act = actividades.find((a) => a.id?.toString() === formData.actividad_id.toString());
+        if (act && act.sede_id) effectiveSedeId = act.sede_id.toString();
+      }
+
+      if (prof && prof.sede_id && effectiveSedeId && prof.sede_id.toString() !== effectiveSedeId.toString()) {
+        const sedeProfObj = sedes.find((s) => s.id?.toString() === prof.sede_id.toString());
+        const sedeTurnoObj = sedes.find((s) => s.id?.toString() === effectiveSedeId.toString());
+
+        const nomSedeProf = sedeProfObj ? sedeProfObj.nombre : `Sede #${prof.sede_id}`;
+        const nomSedeTurno = sedeTurnoObj ? sedeTurnoObj.nombre : `Sede #${effectiveSedeId}`;
+
+        onMostrarAlerta(
+          `El profesor ${prof.nombre} ${prof.apellido} está asignado a ${nomSedeProf} y no puede dictar clases en ${nomSedeTurno}.`,
+          'danger'
+        );
+        return;
+      }
+    }
+
     setGuardando(true);
 
     try {
@@ -117,6 +153,15 @@ const TurnosManager = ({
 
     return coincideActividad && coincideDia && coincideSede;
   });
+
+  // Cálculo de paginación
+  const totalPaginas = Math.ceil(turnosFiltrados.length / elementosPorPagina) || 1;
+  const indiceInicio = (paginaActual - 1) * elementosPorPagina;
+  const turnosPaginados = turnosFiltrados.slice(indiceInicio, indiceInicio + elementosPorPagina);
+
+  // Sede efectiva seleccionada en el formulario
+  const selectedActividad = actividades.find((a) => a.id?.toString() === formData.actividad_id.toString());
+  const effectiveSedeForm = formData.sede_id || (selectedActividad?.sede_id ? selectedActividad.sede_id.toString() : '');
 
   return (
     <Card className="glass-card border-0 p-4 text-white">
@@ -205,93 +250,124 @@ const TurnosManager = ({
           <p className="mb-0">No se encontraron turnos con los filtros seleccionados.</p>
         </div>
       ) : (
-        <div className="table-responsive">
-          <Table className="admin-table align-middle mb-0">
-            <thead>
-              <tr>
-                <th>Actividad</th>
-                <th>Horario</th>
-                <th>Días</th>
-                <th>Profesor a Cargo</th>
-                <th>Sede</th>
-                <th>Estado</th>
-                <th className="text-end">Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {turnosFiltrados.map((t) => (
-                <tr key={t.id}>
-                  <td>
-                    <div className="fw-bold text-white">
-                      {t.actividad?.nombre || 'Actividad sin asignar'}
-                    </div>
-                  </td>
-                  <td>
-                    <span className="badge-token-accent">
-                      {t.horarioInicio} - {t.horaFin} hs
-                    </span>
-                  </td>
-                  <td>
-                    <span className="text-white small">{t.dia_semana}</span>
-                  </td>
-                  <td>
-                    {t.profesor ? (
-                      <span className="fw-medium text-white small">
-                        {t.profesor.nombre} {t.profesor.apellido}
-                      </span>
-                    ) : (
-                      <span className="text-secondary small">Sin profesor</span>
-                    )}
-                  </td>
-                  <td>
-                    {t.sede ? (
-                      <span className="small text-white">{t.sede.nombre}</span>
-                    ) : (
-                      <span className="text-secondary small">General</span>
-                    )}
-                  </td>
-                  <td>
-                    <span className={t.estado ? 'badge-status-active' : 'badge-status-inactive'}>
-                      {t.estado ? 'Disponible' : 'Pausado'}
-                    </span>
-                  </td>
-                  <td className="text-end">
-                    <div className="d-inline-flex gap-2">
-                      <Button
-                        size="sm"
-                        className="btn-token-outline-warning rounded-pill px-3 py-1"
-                        onClick={() => handleToggleEstado(t.id)}
-                        title={t.estado ? 'Pausar turno' : 'Habilitar turno'}
-                      >
-                        {t.estado ? 'Pausar' : 'Habilitar'}
-                      </Button>
-                      <Button
-                        size="sm"
-                        className="btn-token-outline-primary rounded-pill px-3 py-1"
-                        onClick={() => handleAbrirModal(t)}
-                        title="Editar turno"
-                      >
-                        Editar
-                      </Button>
-                      <Button
-                        size="sm"
-                        className="btn-token-outline-danger rounded-pill px-3 py-1"
-                        onClick={() => onPedirEliminar({
-                          type: 'turno',
-                          id: t.id,
-                          nombre: `${t.actividad?.nombre || 'Turno'} (${t.horarioInicio} - ${t.horaFin})`
-                        })}
-                        title="Eliminar permanentemente"
-                      >
-                        Eliminar
-                      </Button>
-                    </div>
-                  </td>
+        <>
+          <div className="table-responsive">
+            <Table className="admin-table align-middle mb-0">
+              <thead>
+                <tr>
+                  <th>Actividad</th>
+                  <th>Horario</th>
+                  <th>Días</th>
+                  <th>Profesor a Cargo</th>
+                  <th>Sede</th>
+                  <th>Estado</th>
+                  <th className="text-end">Acciones</th>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
-        </div>
+              </thead>
+              <tbody>
+                {turnosPaginados.map((t) => (
+                  <tr key={t.id}>
+                    <td>
+                      <div className="fw-bold text-white">
+                        {t.actividad?.nombre || 'Actividad sin asignar'}
+                      </div>
+                    </td>
+                    <td>
+                      <span className="badge-token-accent">
+                        {t.horarioInicio} - {t.horaFin} hs
+                      </span>
+                    </td>
+                    <td>
+                      <span className="text-white small">{t.dia_semana}</span>
+                    </td>
+                    <td>
+                      {t.profesor ? (
+                        <span className="fw-medium text-white small">
+                          {t.profesor.nombre} {t.profesor.apellido}
+                        </span>
+                      ) : (
+                        <span className="text-secondary small">Sin profesor</span>
+                      )}
+                    </td>
+                    <td>
+                      {t.sede ? (
+                        <span className="small text-white">{t.sede.nombre}</span>
+                      ) : (
+                        <span className="text-secondary small">General</span>
+                      )}
+                    </td>
+                    <td>
+                      <span className={t.estado ? 'badge-status-active' : 'badge-status-inactive'}>
+                        {t.estado ? 'Disponible' : 'Pausado'}
+                      </span>
+                    </td>
+                    <td className="text-end">
+                      <div className="d-inline-flex gap-2">
+                        <Button
+                          size="sm"
+                          className="btn-token-outline-warning rounded-pill px-3 py-1"
+                          onClick={() => handleToggleEstado(t.id)}
+                          title={t.estado ? 'Pausar turno' : 'Habilitar turno'}
+                        >
+                          {t.estado ? 'Pausar' : 'Habilitar'}
+                        </Button>
+                        <Button
+                          size="sm"
+                          className="btn-token-outline-primary rounded-pill px-3 py-1"
+                          onClick={() => handleAbrirModal(t)}
+                          title="Editar turno"
+                        >
+                          Editar
+                        </Button>
+                        <Button
+                          size="sm"
+                          className="btn-token-outline-danger rounded-pill px-3 py-1"
+                          onClick={() => onPedirEliminar({
+                            type: 'turno',
+                            id: t.id,
+                            nombre: `${t.actividad?.nombre || 'Turno'} (${t.horarioInicio} - ${t.horaFin})`
+                          })}
+                          title="Eliminar permanentemente"
+                        >
+                          Eliminar
+                        </Button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </div>
+
+          {/* Controls de Paginación */}
+          {totalPaginas > 1 && (
+            <div className="d-flex justify-content-between align-items-center flex-wrap gap-2 mt-4 pt-3 border-top border-secondary">
+              <span className="small text-secondary">
+                Mostrando turnos {indiceInicio + 1} a {Math.min(indiceInicio + elementosPorPagina, turnosFiltrados.length)} de {turnosFiltrados.length}
+              </span>
+
+              <Pagination className="mb-0 admin-pagination">
+                <Pagination.Prev
+                  disabled={paginaActual === 1}
+                  onClick={() => setPaginaActual((prev) => Math.max(1, prev - 1))}
+                />
+                {[...Array(totalPaginas)].map((_, i) => (
+                  <Pagination.Item
+                    key={i + 1}
+                    active={paginaActual === i + 1}
+                    onClick={() => setPaginaActual(i + 1)}
+                  >
+                    {i + 1}
+                  </Pagination.Item>
+                ))}
+                <Pagination.Next
+                  disabled={paginaActual === totalPaginas}
+                  onClick={() => setPaginaActual((prev) => Math.min(totalPaginas, prev + 1))}
+                />
+              </Pagination>
+            </div>
+          )}
+        </>
       )}
 
       {/* Modal Crear / Editar Turno */}
@@ -371,22 +447,6 @@ const TurnosManager = ({
               </Col>
               <Col md={6}>
                 <Form.Group>
-                  <Form.Label>Profesor a Cargo</Form.Label>
-                  <Form.Select
-                    value={formData.profesor_id}
-                    onChange={(e) => setFormData({ ...formData, profesor_id: e.target.value })}
-                  >
-                    <option value="">-- Sin profesor asignado --</option>
-                    {profesores.map((p) => (
-                      <option key={p.id} value={p.id}>
-                        {p.nombre} {p.apellido} ({p.especialidad})
-                      </option>
-                    ))}
-                  </Form.Select>
-                </Form.Group>
-              </Col>
-              <Col md={6}>
-                <Form.Group>
                   <Form.Label>Sede</Form.Label>
                   <Form.Select
                     value={formData.sede_id}
@@ -398,6 +458,27 @@ const TurnosManager = ({
                         {s.nombre} ({s.ciudad})
                       </option>
                     ))}
+                  </Form.Select>
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group>
+                  <Form.Label>Profesor a Cargo</Form.Label>
+                  <Form.Select
+                    value={formData.profesor_id}
+                    onChange={(e) => setFormData({ ...formData, profesor_id: e.target.value })}
+                  >
+                    <option value="">-- Sin profesor asignado --</option>
+                    {profesores.map((p) => {
+                      const sedeProfObj = sedes.find((s) => s.id?.toString() === p.sede_id?.toString());
+                      const esMismaSede = !effectiveSedeForm || !p.sede_id || p.sede_id.toString() === effectiveSedeForm.toString();
+
+                      return (
+                        <option key={p.id} value={p.id} disabled={!esMismaSede}>
+                          {p.nombre} {p.apellido} ({p.especialidad}){sedeProfObj ? ` • ${sedeProfObj.nombre}` : ''}{!esMismaSede ? ' [Sede incompatible]' : ''}
+                        </option>
+                      );
+                    })}
                   </Form.Select>
                 </Form.Group>
               </Col>

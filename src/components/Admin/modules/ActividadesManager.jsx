@@ -78,6 +78,25 @@ const ActividadesManager = ({
 
   const handleGuardar = async (e) => {
     e.preventDefault();
+
+    // Validar coincidencia de sede entre el profesor y la actividad
+    if (formData.profesor_id && formData.sede_id) {
+      const prof = profesores.find((p) => p.id?.toString() === formData.profesor_id.toString());
+      if (prof && prof.sede_id && prof.sede_id.toString() !== formData.sede_id.toString()) {
+        const sedeProfObj = sedes.find((s) => s.id?.toString() === prof.sede_id.toString());
+        const sedeActObj = sedes.find((s) => s.id?.toString() === formData.sede_id.toString());
+
+        const nomSedeProf = sedeProfObj ? sedeProfObj.nombre : `Sede #${prof.sede_id}`;
+        const nomSedeAct = sedeActObj ? sedeActObj.nombre : `Sede #${formData.sede_id}`;
+
+        onMostrarAlerta(
+          `El profesor ${prof.nombre} ${prof.apellido} está asignado a ${nomSedeProf} y no puede dictar actividades en ${nomSedeAct}.`,
+          'danger'
+        );
+        return;
+      }
+    }
+
     setGuardando(true);
 
     try {
@@ -601,11 +620,16 @@ const ActividadesManager = ({
                     onChange={(e) => setFormData({ ...formData, profesor_id: e.target.value })}
                   >
                     <option value="">-- Sin profesor asignado --</option>
-                    {profesores && profesores.map(prof => (
-                      <option key={prof.id} value={prof.id}>
-                        {prof.nombre} {prof.apellido} ({prof.especialidad})
-                      </option>
-                    ))}
+                    {profesores && profesores.map(prof => {
+                      const sedeProfObj = sedes && sedes.find(s => s.id?.toString() === prof.sede_id?.toString());
+                      const esMismaSede = !formData.sede_id || !prof.sede_id || prof.sede_id.toString() === formData.sede_id.toString();
+
+                      return (
+                        <option key={prof.id} value={prof.id} disabled={!esMismaSede}>
+                          {prof.nombre} {prof.apellido} ({prof.especialidad}){sedeProfObj ? ` • ${sedeProfObj.nombre}` : ''}{!esMismaSede ? ' [Sede incompatible]' : ''}
+                        </option>
+                      );
+                    })}
                   </Form.Select>
                 </Form.Group>
               </Col>
