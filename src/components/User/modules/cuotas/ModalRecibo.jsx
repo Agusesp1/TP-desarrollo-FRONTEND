@@ -1,14 +1,24 @@
 import React from 'react';
 import { Modal, Row, Col, Badge, Button } from 'react-bootstrap';
-import { formatMonto } from './helpers';
+import { formatMonto, formatearFechaSegura } from './helpers';
 
 const ModalRecibo = ({ show, onHide, recibo, currentUser }) => {
-  if (!recibo) return null;
+  const dataRecibo = recibo || {};
+
+  const limpiarModal = () => {
+    setTimeout(() => {
+      document.body.classList.remove('modal-open');
+      document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
+      document.querySelectorAll('.modal-backdrop').forEach((b) => b.remove());
+    }, 150);
+  };
 
   return (
     <Modal
       show={show}
       onHide={onHide}
+      onExited={limpiarModal}
       centered
       contentClassName="glass-card text-white border-secondary"
     >
@@ -30,7 +40,7 @@ const ModalRecibo = ({ show, onHide, recibo, currentUser }) => {
           <div className="mb-2">
             <span className="text-light opacity-75 small">N° de Comprobante:</span>
             <div className="fw-bold font-monospace text-warning fs-5">
-              {recibo.comprobante || `REC-${recibo.id}`}
+              {dataRecibo.comprobante || (dataRecibo.id ? `REC-${dataRecibo.id}` : '-')}
             </div>
           </div>
 
@@ -50,31 +60,31 @@ const ModalRecibo = ({ show, onHide, recibo, currentUser }) => {
             <Col xs={6}>
               <span className="text-light opacity-75 d-block">Concepto:</span>
               <strong className="text-white">
-                {recibo.concepto || `Cuota #${recibo.numero_cuota} - ${recibo.periodo}`}
+                {dataRecibo.concepto || (dataRecibo.numero_cuota ? `Cuota #${dataRecibo.numero_cuota} - ${dataRecibo.periodo}` : '-')}
               </strong>
             </Col>
             <Col xs={6} className="text-end">
               <span className="text-light opacity-75 d-block">Fecha de Pago:</span>
               <strong className="text-white">
-                {recibo.fechaPago || recibo.fecha_pago?.substring(0, 10) || '-'}
+                {dataRecibo.fechaPago || formatearFechaSegura(dataRecibo.fecha_pago)}
               </strong>
             </Col>
             <Col xs={6}>
               <span className="text-light opacity-75 d-block">Método Utilizado:</span>
               <strong className="text-white">
-                {recibo.metodo || recibo.metodo_pago || 'Mercado Pago'}
+                {dataRecibo.metodo || dataRecibo.metodo_pago || 'Mercado Pago'}
               </strong>
             </Col>
             <Col xs={6} className="text-end">
               <span className="text-light opacity-75 d-block">Total Acreditado:</span>
               <strong className="text-success fs-6">
-                ${formatMonto(recibo.monto)}
+                ${formatMonto(dataRecibo.monto)}
               </strong>
             </Col>
           </Row>
 
           <div className="p-2 rounded bg-black bg-opacity-50 text-center small text-light opacity-75 font-monospace">
-            Verificación Hash: FIT-{recibo.id || '01'}-SECURE-AUTH
+            Verificación Hash: FIT-{dataRecibo.id || '01'}-SECURE-AUTH
           </div>
         </div>
       </Modal.Body>

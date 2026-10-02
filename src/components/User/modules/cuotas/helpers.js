@@ -6,3 +6,16 @@ export const generarPaymentIdMP = () =>
 
 export const formatMonto = (monto) =>
   Number(monto || 0).toLocaleString('es-AR');
+
+export const formatearFechaSegura = (fecha) => {
+  if (!fecha) return '-';
+  if (typeof fecha === 'string') return fecha.substring(0, 10);
+  try {
+    const d = new Date(fecha);
+    if (isNaN(d.getTime())) return '-';
+    return d.toISOString().substring(0, 10);
+  } catch (e) {
+    return '-';
+  }
+};
+

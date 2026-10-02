@@ -1,34 +1,43 @@
 import React from 'react';
 import { Modal, Row, Col, Badge, Button } from 'react-bootstrap';
-import { formatMonto } from './helpers';
+import { formatMonto, formatearFechaSegura } from './helpers';
 
 const ModalComprobanteMP = ({ show, onHide, cuota, currentUser }) => {
-  if (!cuota) return null;
+  const safeCuota = cuota || {};
+
+  const limpiarModal = () => {
+    setTimeout(() => {
+      document.body.classList.remove('modal-open');
+      document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
+      document.querySelectorAll('.modal-backdrop').forEach((b) => b.remove());
+    }, 150);
+  };
 
   const nombreSocio = currentUser
     ? `${currentUser.nombre} ${currentUser.apellido}`.trim()
-    : cuota.usuario
-    ? `${cuota.usuario.nombre} ${cuota.usuario.apellido}`.trim()
+    : safeCuota.usuario
+    ? `${safeCuota.usuario.nombre} ${safeCuota.usuario.apellido}`.trim()
     : 'Socio Titular';
 
-  const dniSocio = currentUser?.dni || cuota?.usuario?.dni || 'Registrado';
+  const dniSocio = currentUser?.dni || safeCuota?.usuario?.dni || 'Registrado';
 
   const numeroComprobante =
-    cuota.comprobante ||
-    (cuota.mp_payment_id ? `MP-${cuota.mp_payment_id}` : `MP-${cuota.id || Date.now()}`);
+    safeCuota.comprobante ||
+    (safeCuota.mp_payment_id ? `MP-${safeCuota.mp_payment_id}` : `MP-${safeCuota.id || Date.now()}`);
 
   const conceptoPeriodo =
-    cuota.concepto ||
-    (cuota.numero_cuota ? `Cuota #${cuota.numero_cuota} - ${cuota.periodo}` : (cuota.periodo || 'Cuota Gimnasio'));
+    safeCuota.concepto ||
+    (safeCuota.numero_cuota ? `Cuota #${safeCuota.numero_cuota} - ${safeCuota.periodo}` : (safeCuota.periodo || 'Cuota Gimnasio'));
 
   // Formato de fecha y hora del pago
   const obtenerFechaHoraPago = () => {
-    if (cuota.fechaPago && cuota.fechaPago.includes(':')) {
-      return cuota.fechaPago;
+    if (typeof safeCuota.fechaPago === 'string' && safeCuota.fechaPago.includes(':')) {
+      return safeCuota.fechaPago;
     }
-    const fechaObj = cuota.fecha_pago ? new Date(cuota.fecha_pago) : new Date();
+    const fechaObj = safeCuota.fecha_pago ? new Date(safeCuota.fecha_pago) : new Date();
     if (isNaN(fechaObj.getTime())) {
-      return cuota.fechaPago || new Date().toLocaleDateString('es-AR');
+      return safeCuota.fechaPago || new Date().toLocaleDateString('es-AR');
     }
     return `${fechaObj.toLocaleDateString('es-AR')} ${fechaObj.toLocaleTimeString('es-AR', {
       hour: '2-digit',
@@ -44,6 +53,7 @@ const ModalComprobanteMP = ({ show, onHide, cuota, currentUser }) => {
     <Modal
       show={show}
       onHide={onHide}
+      onExited={limpiarModal}
       centered
       size="md"
       contentClassName="glass-card text-white border-success shadow-lg"
@@ -146,7 +156,7 @@ const ModalComprobanteMP = ({ show, onHide, cuota, currentUser }) => {
               Monto Total Abonado
             </span>
             <div className="fw-bold text-white display-6 my-1">
-              ${formatMonto(cuota.monto)}
+              ${formatMonto(safeCuota.monto)}
             </div>
             <span
               className="badge px-2 py-1 text-white fw-medium"
@@ -199,7 +209,7 @@ const ModalComprobanteMP = ({ show, onHide, cuota, currentUser }) => {
 
           {/* Pie de seguridad del Comprobante */}
           <div className="p-2 rounded bg-black bg-opacity-40 text-center small text-light opacity-75 font-monospace mt-3" style={{ fontSize: '0.7rem' }}>
-            ID Transacción: {cuota.mp_preference_id || cuota.mp_payment_id || `AUTH-${cuota.id || 'MP'}-SECURE`}
+            ID Transacción: {safeCuota.mp_preference_id || safeCuota.mp_payment_id || `AUTH-${safeCuota.id || 'MP'}-SECURE`}
           </div>
         </div>
       </Modal.Body>

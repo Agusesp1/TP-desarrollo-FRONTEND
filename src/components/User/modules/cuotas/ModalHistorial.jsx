@@ -1,12 +1,22 @@
 import React from 'react';
 import { Modal, Table, Button } from 'react-bootstrap';
-import { formatMonto } from './helpers';
+import { formatMonto, formatearFechaSegura } from './helpers';
 
 const ModalHistorial = ({ show, onHide, historial = [], onVerComprobante }) => {
+  const limpiarModal = () => {
+    setTimeout(() => {
+      document.body.classList.remove('modal-open');
+      document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
+      document.querySelectorAll('.modal-backdrop').forEach((b) => b.remove());
+    }, 150);
+  };
+
   return (
     <Modal
       show={show}
       onHide={onHide}
+      onExited={limpiarModal}
       size="lg"
       centered
       contentClassName="glass-card text-white border-secondary"
@@ -56,7 +66,7 @@ const ModalHistorial = ({ show, onHide, historial = [], onVerComprobante }) => {
                     </td>
                     <td>
                       <span className="small text-light">
-                        {item.fechaPago || item.fecha_pago?.substring(0, 10) || '-'}
+                        {item.fechaPago || formatearFechaSegura(item.fecha_pago)}
                       </span>
                     </td>
                     <td>

@@ -58,10 +58,20 @@ const ModalPago = ({
     if (onPagarMP) onPagarMP();
   };
 
+  const limpiarModal = () => {
+    setTimeout(() => {
+      document.body.classList.remove('modal-open');
+      document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
+      document.querySelectorAll('.modal-backdrop').forEach((b) => b.remove());
+    }, 150);
+  };
+
   return (
     <Modal
       show={show}
       onHide={() => !procesandoPago && onHide()}
+      onExited={limpiarModal}
       size="lg"
       centered
       contentClassName="glass-card text-white border-secondary"

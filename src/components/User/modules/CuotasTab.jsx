@@ -482,14 +482,7 @@ const CuotasTab = ({ user }) => {
       {/* Modal / Cartel Destacado de Pago Acreditado con Mini Comprobante (Mercado Pago) */}
       <ModalComprobanteMP
         show={showModalComprobanteMP}
-        onHide={() => {
-          setShowModalComprobanteMP(false);
-          document.body.classList.remove('modal-open');
-          document.body.style.overflow = '';
-          document.body.style.paddingRight = '';
-          const backdrops = document.querySelectorAll('.modal-backdrop');
-          backdrops.forEach((b) => b.remove());
-        }}
+        onHide={() => setShowModalComprobanteMP(false)}
         cuota={comprobanteMP}
         currentUser={currentUser}
       />
