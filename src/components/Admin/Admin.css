@@ -106,6 +106,56 @@
   border-radius: 0.5rem;
 }
 
+/* Estilos claros y sin opacidad para inputs de horario (type="time") */
+.admin-page input[type="time"],
+.modal-content input[type="time"],
+.custom-time-input {
+  color-scheme: dark;
+  color: #FFFFFF !important;
+  background-color: #1A203B !important;
+  border: 1px solid rgba(129, 140, 248, 0.4) !important;
+  font-weight: 600 !important;
+  font-size: 0.95rem !important;
+  opacity: 1 !important;
+  min-height: 42px;
+  min-width: 140px;
+  padding: 0.375rem 0.75rem !important;
+  display: block;
+  width: 100%;
+}
+
+.admin-page input[type="time"]::-webkit-datetime-edit,
+.admin-page input[type="time"]::-webkit-datetime-edit-fields-wrapper,
+.admin-page input[type="time"]::-webkit-datetime-edit-text,
+.admin-page input[type="time"]::-webkit-datetime-edit-hour-field,
+.admin-page input[type="time"]::-webkit-datetime-edit-minute-field,
+.admin-page input[type="time"]::-webkit-datetime-edit-ampm-field,
+.modal-content input[type="time"]::-webkit-datetime-edit,
+.modal-content input[type="time"]::-webkit-datetime-edit-fields-wrapper,
+.modal-content input[type="time"]::-webkit-datetime-edit-text,
+.modal-content input[type="time"]::-webkit-datetime-edit-hour-field,
+.modal-content input[type="time"]::-webkit-datetime-edit-minute-field,
+.modal-content input[type="time"]::-webkit-datetime-edit-ampm-field,
+.custom-time-input::-webkit-datetime-edit,
+.custom-time-input::-webkit-datetime-edit-fields-wrapper,
+.custom-time-input::-webkit-datetime-edit-text,
+.custom-time-input::-webkit-datetime-edit-hour-field,
+.custom-time-input::-webkit-datetime-edit-minute-field,
+.custom-time-input::-webkit-datetime-edit-ampm-field {
+  color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+.admin-page input[type="time"]::-webkit-calendar-picker-indicator,
+.modal-content input[type="time"]::-webkit-calendar-picker-indicator,
+.custom-time-input::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator {
+  filter: brightness(0) invert(1) contrast(200%) !important;
+  opacity: 1 !important;
+  cursor: pointer;
+  margin-left: auto;
+}
+
 .admin-page .form-control::placeholder,
 .admin-page .form-control::-webkit-input-placeholder,
 .modal-content .form-control::placeholder,

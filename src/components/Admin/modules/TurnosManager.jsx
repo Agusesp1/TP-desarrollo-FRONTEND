@@ -37,6 +37,14 @@ const TurnosManager = ({
     sede_id: ''
   });
 
+  const esHoraValida = (hora) => /^([01]\d|2[0-3]):([0-5]\d)$/.test(hora?.trim() || '');
+
+  const convertirHoraAMin = (hora) => {
+    if (!esHoraValida(hora)) return null;
+    const [h, m] = hora.trim().split(':').map(Number);
+    return h * 60 + m;
+  };
+
   const handleAbrirModal = (turno = null) => {
     if (turno) {
       setTurnoEditando(turno);
@@ -65,6 +73,22 @@ const TurnosManager = ({
 
   const handleGuardar = async (e) => {
     e.preventDefault();
+
+    // Validar formato y coherencia de horarios reales
+    if (!esHoraValida(formData.horarioInicio)) {
+      onMostrarAlerta('Debe ingresar un horario de inicio válido entre 00:00 y 23:59.', 'danger');
+      return;
+    }
+    if (!esHoraValida(formData.horaFin)) {
+      onMostrarAlerta('Debe ingresar un horario de fin válido entre 00:00 y 23:59.', 'danger');
+      return;
+    }
+    const minInicio = convertirHoraAMin(formData.horarioInicio);
+    const minFin = convertirHoraAMin(formData.horaFin);
+    if (minFin <= minInicio) {
+      onMostrarAlerta(`El horario de fin (${formData.horaFin}) debe ser posterior al horario de inicio (${formData.horarioInicio}).`, 'danger');
+      return;
+    }
 
     // Validar coincidencia de sede entre el Profesor y la Sede de la actividad/turno
     if (formData.profesor_id) {
@@ -389,12 +413,21 @@ const TurnosManager = ({
                     onChange={(e) => {
                       const selectedId = e.target.value;
                       const act = actividades.find((a) => a.id?.toString() === selectedId);
-                      setFormData((prev) => ({
-                        ...prev,
-                        actividad_id: selectedId,
-                        profesor_id: act?.profesor_id ? act.profesor_id.toString() : (act?.profesor?.id ? act.profesor.id.toString() : prev.profesor_id),
-                        sede_id: act?.sede_id ? act.sede_id.toString() : (act?.sede?.id ? act.sede.id.toString() : prev.sede_id)
-                      }));
+                      setFormData((prev) => {
+                        let nuevaHoraFin = prev.horaFin;
+                        if (act?.duracion && esHoraValida(prev.horarioInicio)) {
+                          const [h, m] = prev.horarioInicio.split(':').map(Number);
+                          const total = Math.min(23 * 60 + 59, h * 60 + m + act.duracion);
+                          nuevaHoraFin = `${String(Math.floor(total / 60)).padStart(2, '0')}:${String(total % 60).padStart(2, '0')}`;
+                        }
+                        return {
+                          ...prev,
+                          actividad_id: selectedId,
+                          profesor_id: act?.profesor_id ? act.profesor_id.toString() : (act?.profesor?.id ? act.profesor.id.toString() : prev.profesor_id),
+                          sede_id: act?.sede_id ? act.sede_id.toString() : (act?.sede?.id ? act.sede.id.toString() : prev.sede_id),
+                          horaFin: nuevaHoraFin
+                        };
+                      });
                     }}
                   >
                     <option value="">-- Seleccionar Actividad --</option>
@@ -408,28 +441,62 @@ const TurnosManager = ({
               </Col>
               <Col md={6}>
                 <Form.Group>
-                  <Form.Label>Horario de Inicio * (HH:MM)</Form.Label>
+                  <Form.Label className="d-flex align-items-center gap-1 text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white">
+                      <circle cx="12" cy="12" r="10" />
+                      <polyline points="12 6 12 12 16 14" />
+                    </svg>
+                    Horario de Inicio *
+                  </Form.Label>
                   <Form.Control
-                    type="text"
+                    type="time"
                     required
-                    placeholder="07:00"
+                    step="60"
+                    className="custom-time-input"
                     value={formData.horarioInicio}
-                    onChange={(e) => setFormData({ ...formData, horarioInicio: e.target.value })}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setFormData((prev) => {
+                        const act = actividades.find((a) => a.id?.toString() === prev.actividad_id?.toString());
+                        const dur = act?.duracion || 60;
+                        let nuevaHoraFin = prev.horaFin;
+                        if (esHoraValida(val)) {
+                          const [h, m] = val.split(':').map(Number);
+                          const total = Math.min(23 * 60 + 59, h * 60 + m + dur);
+                          nuevaHoraFin = `${String(Math.floor(total / 60)).padStart(2, '0')}:${String(total % 60).padStart(2, '0')}`;
+                        }
+                        return { ...prev, horarioInicio: val, horaFin: nuevaHoraFin };
+                      });
+                    }}
                   />
                 </Form.Group>
               </Col>
               <Col md={6}>
                 <Form.Group>
-                  <Form.Label>Horario de Fin * (HH:MM)</Form.Label>
+                  <Form.Label className="d-flex align-items-center gap-1 text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white">
+                      <circle cx="12" cy="12" r="10" />
+                      <polyline points="12 6 12 12 16 14" />
+                    </svg>
+                    Horario de Fin *
+                  </Form.Label>
                   <Form.Control
-                    type="text"
+                    type="time"
                     required
-                    placeholder="09:00"
+                    step="60"
+                    className="custom-time-input"
                     value={formData.horaFin}
                     onChange={(e) => setFormData({ ...formData, horaFin: e.target.value })}
                   />
                 </Form.Group>
               </Col>
+              {esHoraValida(formData.horarioInicio) && esHoraValida(formData.horaFin) && convertirHoraAMin(formData.horaFin) <= convertirHoraAMin(formData.horarioInicio) && (
+                <Col md={12}>
+                  <div className="alert alert-danger py-1 px-2 small mb-0 d-flex align-items-center gap-1">
+                    <span>⚠️ El horario de fin ({formData.horaFin}) debe ser posterior al inicio ({formData.horarioInicio}).</span>
+                  </div>
+                </Col>
+              )}
               <Col md={12}>
                 <Form.Group>
                   <Form.Label>Días de la Semana *</Form.Label>

@@ -105,3 +105,14 @@ body {
 .feature-card:hover .feature-icon-svg {
   stroke: var(--brand-highlight);
 }
+
+/* Color blanco únicamente para los placeholders del módulo de Seguridad y Contraseña del Usuario */
+.security-tab .form-control::placeholder,
+.security-tab .form-control::-webkit-input-placeholder,
+.security-tab .form-control::-moz-placeholder,
+.security-tab .form-control:-ms-input-placeholder {
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+
