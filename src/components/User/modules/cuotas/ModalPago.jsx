@@ -47,6 +47,17 @@ const ModalPago = ({
     onPagarAlternativo('transferencia', comprobanteTransferencia);
   };
 
+  const handlePagarMP = () => {
+    // Desmontar el modal de Bootstrap y limpiar scroll de body antes de redirigir a Mercado Pago
+    if (onHide) onHide();
+    document.body.classList.remove('modal-open');
+    document.body.style.overflow = '';
+    document.body.style.paddingRight = '';
+    const backdrops = document.querySelectorAll('.modal-backdrop');
+    backdrops.forEach((b) => b.remove());
+    if (onPagarMP) onPagarMP();
+  };
+
   return (
     <Modal
       show={show}
@@ -183,6 +194,12 @@ const ModalPago = ({
                           href={mpPreference.init_point}
                           target="_blank"
                           rel="noopener noreferrer"
+                          onClick={() => {
+                            if (onHide) onHide();
+                            document.body.classList.remove('modal-open');
+                            document.body.style.overflow = '';
+                            document.body.style.paddingRight = '';
+                          }}
                         >
                           Abrir Checkout MP en pestaña nueva
                         </Button>
@@ -191,7 +208,7 @@ const ModalPago = ({
                         variant="info"
                         className="rounded-pill px-4 fw-bold text-white shadow d-inline-flex align-items-center gap-2"
                         style={{ backgroundColor: '#009EE3', borderColor: '#009EE3' }}
-                        onClick={onPagarMP}
+                        onClick={handlePagarMP}
                         disabled={procesandoPago}
                       >
                         {procesandoPago ? (

@@ -3,13 +3,17 @@
    ========================================================================== */
 
 .user-page {
-  min-height: calc(100vh - 80px);
+  height: auto;
+  min-height: 100vh;
+  overflow-y: visible;
   background: radial-gradient(circle at 10% 20%, rgba(11, 15, 29, 0.98) 0%, rgba(22, 27, 51, 0.98) 90%),
     radial-gradient(circle at 90% 80%, rgba(88, 86, 240, 0.15) 0%, transparent 60%);
 }
 
 .user-container {
-  min-height: calc(100vh - 120px);
+  height: auto;
+  min-height: 100vh;
+  overflow-y: visible;
   max-width: 1400px;
   animation: fadeIn 0.4s ease-out forwards;
 }

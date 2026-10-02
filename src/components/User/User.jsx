@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Container, Card, Row, Col, Button, Nav, Badge } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import './User.css';
 
@@ -12,16 +12,57 @@ import ProfesorAgendaTab from './modules/ProfesorAgendaTab';
 
 const User = () => {
   const { user, updateUser, logout } = useAuth();
-  const [activeTab, setActiveTab] = useState(user?.rol === 'profesor' ? 'agenda' : 'perfil');
+  const [searchParams] = useSearchParams();
 
   const esAdmin = user && (user.rol === 'admin' || user.email === 'administraciongymfit@gmail.com');
   const esProfesor = user && user.rol === 'profesor';
 
-  if (esProfesor && (activeTab === 'cuotas' || activeTab === 'turnos')) {
-    setActiveTab('agenda');
-  } else if (esAdmin && activeTab === 'cuotas') {
-    setActiveTab('perfil');
-  }
+  const hasCuotasParam =
+    searchParams.get('tab') === 'cuotas' ||
+    searchParams.has('pago') ||
+    searchParams.has('status') ||
+    searchParams.has('collection_status');
+
+  const [activeTab, setActiveTab] = useState(() => {
+    if (hasCuotasParam && !esProfesor && !esAdmin) {
+      return 'cuotas';
+    }
+    return user?.rol === 'profesor' ? 'agenda' : 'perfil';
+  });
+
+  // Si en la URL vienen parámetros como tab=cuotas, pago, status, o collection_status, activar automáticamente cuotas
+  useEffect(() => {
+    if (hasCuotasParam && !esProfesor && !esAdmin) {
+      setActiveTab('cuotas');
+    }
+  }, [hasCuotasParam, esProfesor, esAdmin]);
+
+  // Limpiar de forma preventiva cualquier clase modal-open o estilo overflow/padding-right residual y backdrops huérfanos
+  useEffect(() => {
+    const limpiarResiduosModal = () => {
+      document.body.classList.remove('modal-open');
+      document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
+      const backdrops = document.querySelectorAll('.modal-backdrop');
+      backdrops.forEach((b) => b.remove());
+    };
+
+    limpiarResiduosModal();
+
+    return () => {
+      limpiarResiduosModal();
+    };
+  }, [activeTab]);
+
+  // Control de acceso por rol
+  useEffect(() => {
+    if (esProfesor && (activeTab === 'cuotas' || activeTab === 'turnos')) {
+      setActiveTab('agenda');
+    } else if (esAdmin && activeTab === 'cuotas') {
+      setActiveTab('perfil');
+    }
+  }, [esProfesor, esAdmin, activeTab]);
+
 
   return (
     <div className="user-page py-4">

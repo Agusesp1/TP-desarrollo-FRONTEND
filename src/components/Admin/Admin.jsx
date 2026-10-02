@@ -374,8 +374,13 @@ const Admin = () => {
         {activeTab === 'sedes' && (
           <SedesManager
             sedes={sedes}
+            profesores={profesores}
             cargando={cargandoSedes}
-            onRecargar={cargarSedes}
+            onRecargar={() => {
+              cargarSedes();
+              cargarActividades();
+              cargarTurnos();
+            }}
             onMostrarAlerta={mostrarAlerta}
             onPedirEliminar={handlePedirEliminar}
             apiBase={API_BASE}

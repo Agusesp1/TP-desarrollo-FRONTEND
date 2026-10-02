@@ -115,4 +115,12 @@ body {
   opacity: 1 !important;
 }
 
+/* Asegurar que las vistas de usuario nunca recorten contenido ni barra de desplazamiento */
+.user-page,
+.user-container {
+  height: auto;
+  min-height: 100vh;
+  overflow-y: visible;
+}
+
 

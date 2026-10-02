@@ -1,5 +1,6 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Card, Spinner, Alert, Button } from 'react-bootstrap';
+import { useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 
 // Módulos y submódulos de cuotas
@@ -10,6 +11,7 @@ import CuotasTable from './cuotas/CuotasTable';
 import ModalPago from './cuotas/ModalPago';
 import ModalHistorial from './cuotas/ModalHistorial';
 import ModalRecibo from './cuotas/ModalRecibo';
+import ModalComprobanteMP from './cuotas/ModalComprobanteMP';
 
 const API_BASE = 'http://localhost:3000/api';
 
@@ -48,6 +50,12 @@ const CuotasTab = ({ user }) => {
   // Estado para ver detalle de comprobante individual
   const [reciboSeleccionado, setReciboSeleccionado] = useState(null);
   const [showReceiptModal, setShowReceiptModal] = useState(false);
+
+  // Estado para el cartel / modal destacado de Pago Acreditado con Mini Comprobante
+  const [comprobanteMP, setComprobanteMP] = useState(null);
+  const [showModalComprobanteMP, setShowModalComprobanteMP] = useState(false);
+  const mpConfirmadoRef = useRef(false);
+  const [searchParams] = useSearchParams();
 
   // Mostrar alertas temporales
   const mostrarFeedback = (texto, tipo = 'success') => {
@@ -149,18 +157,92 @@ const CuotasTab = ({ user }) => {
     };
   }, [usuarioId, esRolExcluido]);
 
+  // Detección del retorno de Mercado Pago, confirmación con el backend y apertura de mini comprobante
+  useEffect(() => {
+    const status = searchParams.get('status');
+    const collection_status = searchParams.get('collection_status');
+    const pago = searchParams.get('pago');
+    const payment_id = searchParams.get('payment_id');
+    const collection_id = searchParams.get('collection_id');
+    const external_reference = searchParams.get('external_reference');
+    const preference_id = searchParams.get('preference_id');
+
+    const esPagoAprobado = status === 'approved' || collection_status === 'approved' || pago === 'success';
+
+    if (esPagoAprobado && !mpConfirmadoRef.current) {
+      mpConfirmadoRef.current = true;
+
+      const confirmarPagoRetornoMP = async () => {
+        try {
+          const res = await fetch(`${API_BASE}/cuotas/mercadopago/confirmar`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              cuota_id: external_reference,
+              payment_id: payment_id || collection_id,
+              status: 'approved',
+              preference_id
+            })
+          });
+
+          const data = await res.json();
+
+          if (res.ok && data.exito && data.cuota) {
+            // 1. Eliminar de inmediato dicha cuota de cuotas pendientes
+            setCuotas((prev) => prev.filter((c) => c.id !== data.cuota.id));
+
+            // 2. Agregar al historial
+            setHistorial((prev) => [data.cuota, ...prev.filter((c) => c.id !== data.cuota.id)]);
+
+            // 3. Actualizar las tarjetas de resumen
+            setResumen((prev) => ({
+              ...prev,
+              totalPagadas: prev.totalPagadas + 1,
+              totalPendientes: Math.max(0, prev.totalPendientes - 1),
+              totalEnDemora: Math.max(0, prev.totalEnDemora - (data.cuota.estado_anterior === 'en demora' ? 1 : 0))
+            }));
+
+            // 4. Abrir un cartel / modal destacado de Pago Acreditado con Mini Comprobante
+            setComprobanteMP(data.cuota);
+            setShowModalComprobanteMP(true);
+
+            mostrarFeedback(`¡Pago acreditado con éxito! Comprobante: ${data.cuota.comprobante || payment_id || collection_id}`, 'success');
+          } else {
+            console.warn('La confirmación de Mercado Pago no devolvió cuota exitosa:', data);
+            obtenerCuotas();
+          }
+        } catch (err) {
+          console.error('Error al confirmar retorno de Mercado Pago:', err);
+          mostrarFeedback('Error al confirmar la acreditación del pago con el servidor.', 'danger');
+        } finally {
+          // Limpiar la URL usando replaceState para que al recargar la página no vuelva a saltar el procesamiento
+          window.history.replaceState({}, document.title, window.location.pathname + '?tab=cuotas');
+        }
+      };
+
+      confirmarPagoRetornoMP();
+    } else if (pago === 'failure' || status === 'rejected') {
+      mostrarFeedback('El pago a través de Mercado Pago no fue completado o fue rechazado.', 'warning');
+      window.history.replaceState({}, document.title, window.location.pathname + '?tab=cuotas');
+    }
+  }, [searchParams, obtenerCuotas]);
+
   // Solicitar preferencia de Mercado Pago al backend
   const inicializarMercadoPago = async (cuotaId) => {
     setCargandoMP(true);
     try {
-      const res = await fetch(`${API_BASE}/cuotas/${cuotaId}/preferencia-mp`, {
+      const res = await fetch(`${API_BASE}/pagos/create-preference`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({})
+        body: JSON.stringify({ cuota_id: cuotaId })
       });
       const data = await res.json();
       if (res.ok && data.exito) {
         setMpPreference(data);
+        if (data.cuota) {
+          setSelectedCuota(data.cuota);
+          setCuotas(prev => prev.map(c => c.id === data.cuota.id ? { ...c, monto: data.cuota.monto } : c));
+        }
       } else {
         console.warn('No se pudo generar preferencia de Mercado Pago:', data.mensaje);
       }
@@ -182,66 +264,26 @@ const CuotasTab = ({ user }) => {
     await inicializarMercadoPago(cuota.id);
   };
 
-  // Procesar pago con Mercado Pago (Simulación de Checkout Exitoso)
+  // Redirigir a Mercado Pago (Checkout Pro)
   const handleCompletarPagoMP = async () => {
-    if (!selectedCuota) return;
-    setProcesandoPago(true);
-
-    try {
-      const paymentId = generarPaymentIdMP();
-      const res = await fetch(`${API_BASE}/cuotas/mercadopago/exito`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          cuota_id: selectedCuota.id,
-          payment_id: paymentId,
-          preference_id: mpPreference?.preferenceId
-        })
-      });
-
-      const data = await res.json();
-
-      if (res.ok && data.exito) {
-        const cuotaPagada = data.cuota || {
-          ...selectedCuota,
-          estado: 'pagado',
-          metodo_pago: 'Mercado Pago',
-          metodo: 'Mercado Pago',
-          comprobante: data.comprobante || paymentId,
-          fecha_pago: new Date().toISOString(),
-          fechaPago: new Date().toLocaleDateString('es-AR')
-        };
-
-        // Actualizar cuotas localmente sin recargar página
-        setCuotas((prev) => prev.filter((c) => c.id !== selectedCuota.id));
-        setHistorial((prev) => [cuotaPagada, ...prev]);
-
-        // Actualizar resumen
-        setResumen((prev) => ({
-          ...prev,
-          totalPagadas: prev.totalPagadas + 1,
-          totalPendientes: selectedCuota.estado === 'pendiente' ? Math.max(0, prev.totalPendientes - 1) : prev.totalPendientes,
-          totalEnDemora: selectedCuota.estado === 'en demora' ? Math.max(0, prev.totalEnDemora - 1) : prev.totalEnDemora,
-          totalNoPagadas: selectedCuota.estado === 'no pagado' ? Math.max(0, prev.totalNoPagadas - 1) : prev.totalNoPagadas
-        }));
-
-        setPagoExitosoMsg(`¡Pago acreditado por Mercado Pago! Comprobante: ${cuotaPagada.comprobante}`);
-        mostrarFeedback(`¡Pago de ${selectedCuota.concepto || selectedCuota.periodo} acreditado exitosamente con Mercado Pago!`, 'success');
-
-        setTimeout(() => {
-          setShowPaymentModal(false);
-          setPagoExitosoMsg(null);
-        }, 1800);
-      } else {
-        setPagoExitosoMsg(`Error al procesar pago: ${data.mensaje || 'Intente nuevamente'}`);
-      }
-    } catch (err) {
-      console.error('Error al confirmar pago MP:', err);
-      setPagoExitosoMsg('Error de conexión al confirmar pago de Mercado Pago.');
-    } finally {
-      setProcesandoPago(false);
+    if (!mpPreference || (!mpPreference.init_point && !mpPreference.sandbox_init_point)) {
+      setPagoExitosoMsg('Error: No se pudo generar la preferencia de pago de Mercado Pago.');
+      return;
     }
+    
+    // Desmontar el modal de Bootstrap y limpiar el scroll de body antes de redirigir
+    setShowPaymentModal(false);
+    document.body.classList.remove('modal-open');
+    document.body.style.overflow = '';
+    document.body.style.paddingRight = '';
+    const backdrops = document.querySelectorAll('.modal-backdrop');
+    backdrops.forEach((b) => b.remove());
+
+    // Redirigir al usuario al flujo de Checkout Pro de Mercado Pago
+    // Como es un entorno de desarrollo/pruebas, priorizamos sandbox_init_point
+    window.location.href = mpPreference.sandbox_init_point || mpPreference.init_point;
   };
+
 
   // Procesar pago alternativo (Tarjeta o Transferencia)
   const handleProcesarPagoAlternativo = async (tipo, comprobanteManual) => {
@@ -434,6 +476,21 @@ const CuotasTab = ({ user }) => {
         show={showReceiptModal}
         onHide={() => setShowReceiptModal(false)}
         recibo={reciboSeleccionado}
+        currentUser={currentUser}
+      />
+
+      {/* Modal / Cartel Destacado de Pago Acreditado con Mini Comprobante (Mercado Pago) */}
+      <ModalComprobanteMP
+        show={showModalComprobanteMP}
+        onHide={() => {
+          setShowModalComprobanteMP(false);
+          document.body.classList.remove('modal-open');
+          document.body.style.overflow = '';
+          document.body.style.paddingRight = '';
+          const backdrops = document.querySelectorAll('.modal-backdrop');
+          backdrops.forEach((b) => b.remove());
+        }}
+        cuota={comprobanteMP}
         currentUser={currentUser}
       />
     </Card>
