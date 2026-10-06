@@ -6,34 +6,34 @@ import './User.css';
 
 import ProfileTab from './modules/ProfileTab';
 import SecurityTab from './modules/SecurityTab';
-import CuotasTab from './modules/CuotasTab';
-import TurnosTab from './modules/TurnosTab';
-import ProfesorAgendaTab from './modules/ProfesorAgendaTab';
+import QuotasTab from './modules/QuotasTab';
+import ShiftsTab from './modules/ShiftsTab';
+import TeacherAgendaTab from './modules/TeacherAgendaTab';
 
 const User = () => {
   const { user, updateUser, logout } = useAuth();
   const [searchParams] = useSearchParams();
 
-  const esAdmin = user && (user.rol === 'admin' || user.email === 'administraciongymfit@gmail.com');
-  const esProfesor = user && user.rol === 'profesor';
+  const esAdmin = user && (user.role === 'admin' || user.email === 'administraciongymfit@gmail.com');
+  const esProfesor = user && user.role === 'teacher';
 
   const hasCuotasParam =
-    searchParams.get('tab') === 'cuotas' ||
-    searchParams.has('pago') ||
+    searchParams.get('tab') === 'quotas' ||
+    searchParams.has('payment') ||
     searchParams.has('status') ||
     searchParams.has('collection_status');
 
   const [activeTab, setActiveTab] = useState(() => {
     if (hasCuotasParam && !esProfesor && !esAdmin) {
-      return 'cuotas';
+      return 'quotas';
     }
-    return user?.rol === 'profesor' ? 'agenda' : 'perfil';
+    return user?.role === 'teacher' ? 'agenda' : 'profile';
   });
 
-  // Si en la URL vienen parámetros como tab=cuotas, pago, status, o collection_status, activar automáticamente cuotas
+  // Si en la URL vienen parámetros como tab=quotas, payment, status, o collection_status, activar automáticamente quotas
   useEffect(() => {
     if (hasCuotasParam && !esProfesor && !esAdmin) {
-      setActiveTab('cuotas');
+      setActiveTab('quotas');
     }
   }, [hasCuotasParam, esProfesor, esAdmin]);
 
@@ -54,12 +54,12 @@ const User = () => {
     };
   }, [activeTab]);
 
-  // Control de acceso por rol
+  // Control de acceso por role
   useEffect(() => {
-    if (esProfesor && (activeTab === 'cuotas' || activeTab === 'turnos')) {
+    if (esProfesor && (activeTab === 'quotas' || activeTab === 'shifts')) {
       setActiveTab('agenda');
-    } else if (esAdmin && activeTab === 'cuotas') {
-      setActiveTab('perfil');
+    } else if (esAdmin && activeTab === 'quotas') {
+      setActiveTab('profile');
     }
   }, [esProfesor, esAdmin, activeTab]);
 
@@ -67,7 +67,7 @@ const User = () => {
   return (
     <div className="user-page py-4">
       <Container className="user-container">
-        {/* Header de Usuario */}
+        {/* Header de User */}
         <Card className="user-header-card mb-4 border-0 text-white p-4">
           <Row className="align-items-center gy-3">
             <Col md={8} className="d-flex align-items-center gap-3">
@@ -80,7 +80,7 @@ const User = () => {
               <div>
                 <div className="d-flex align-items-center gap-2 flex-wrap">
                   <h3 className="fw-bold mb-0">
-                    {user ? `${user.nombre} ${user.apellido}` : 'Perfil del Sistema'}
+                    {user ? `${user.name} ${user.lastname}` : 'Profile del Sistema'}
                   </h3>
                   {esAdmin ? (
                     <Badge bg="warning" className="text-dark px-3 py-1 rounded-pill fw-bold">
@@ -88,16 +88,16 @@ const User = () => {
                     </Badge>
                   ) : esProfesor ? (
                     <Badge bg="info" className="text-dark px-3 py-1 rounded-pill fw-bold">
-                      Profesor del Staff FitApp
+                      Teacher del Staff FitApp
                     </Badge>
                   ) : (
                     <Badge bg="primary" className="px-3 py-1 rounded-pill">
-                      {user?.categoria || 'Socio FitApp'}
+                      {user?.category || 'Member FitApp'}
                     </Badge>
                   )}
                 </div>
                 <p className="text-light opacity-75 mb-0 small">
-                  {user?.email || 'usuario@gymfit.com'}
+                  {user?.email || 'user@gymfit.com'}
                 </p>
               </div>
             </Col>
@@ -122,7 +122,7 @@ const User = () => {
 
         {/* Navegación por Pestañas */}
         <Nav className="user-nav-tabs mb-4 gap-2 border-0 flex-wrap">
-          {/* Pestaña exclusiva de Profesores */}
+          {/* Pestaña exclusiva de Teachers */}
           {esProfesor && (
             <Nav.Item>
               <Nav.Link
@@ -135,15 +135,15 @@ const User = () => {
                   <line x1="8" y1="2" x2="8" y2="6" />
                   <line x1="3" y1="10" x2="21" y2="10" />
                 </svg>
-                Mis Clases, Sedes & Horarios
+                Mis Clases, Branches & Schedules
               </Nav.Link>
             </Nav.Item>
           )}
 
           <Nav.Item>
             <Nav.Link
-              className={activeTab === 'perfil' ? 'active' : ''}
-              onClick={() => setActiveTab('perfil')}
+              className={activeTab === 'profile' ? 'active' : ''}
+              onClick={() => setActiveTab('profile')}
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
@@ -166,32 +166,32 @@ const User = () => {
             </Nav.Link>
           </Nav.Item>
 
-          {/* Únicamente mostrar Pestañas de Cuotas y Turnos a los Socios/Usuarios regulares */}
+          {/* Únicamente mostrar Pestañas de Quotas y Shifts a los Members/Users regulares */}
           {!esAdmin && !esProfesor && (
             <>
               <Nav.Item>
                 <Nav.Link
-                  className={activeTab === 'cuotas' ? 'active' : ''}
-                  onClick={() => setActiveTab('cuotas')}
+                  className={activeTab === 'quotas' ? 'active' : ''}
+                  onClick={() => setActiveTab('quotas')}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <rect width="20" height="14" x="2" y="5" rx="2" />
                     <line x1="2" x2="22" y1="10" strokeWidth="2" />
                   </svg>
-                  Cuotas y Pagos
+                  Quotas y Payments
                 </Nav.Link>
               </Nav.Item>
 
               <Nav.Item>
                 <Nav.Link
-                  className={activeTab === 'turnos' ? 'active' : ''}
-                  onClick={() => setActiveTab('turnos')}
+                  className={activeTab === 'shifts' ? 'active' : ''}
+                  onClick={() => setActiveTab('shifts')}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="12" cy="12" r="10" />
                     <polyline points="12 6 12 12 16 14" />
                   </svg>
-                  Turnos y Reservas
+                  Shifts y Reservations
                 </Nav.Link>
               </Nav.Item>
             </>
@@ -200,10 +200,10 @@ const User = () => {
 
         {/* Renderizado de Módulos */}
         {esProfesor && activeTab === 'agenda' && (
-          <ProfesorAgendaTab user={user} />
+          <TeacherAgendaTab user={user} />
         )}
 
-        {activeTab === 'perfil' && (
+        {activeTab === 'profile' && (
           <ProfileTab user={user} updateUser={updateUser} logout={logout} />
         )}
 
@@ -211,12 +211,12 @@ const User = () => {
           <SecurityTab user={user} />
         )}
 
-        {!esAdmin && !esProfesor && activeTab === 'cuotas' && (
-          <CuotasTab user={user} />
+        {!esAdmin && !esProfesor && activeTab === 'quotas' && (
+          <QuotasTab user={user} />
         )}
 
-        {!esAdmin && !esProfesor && activeTab === 'turnos' && (
-          <TurnosTab user={user} />
+        {!esAdmin && !esProfesor && activeTab === 'shifts' && (
+          <ShiftsTab user={user} />
         )}
       </Container>
     </div>

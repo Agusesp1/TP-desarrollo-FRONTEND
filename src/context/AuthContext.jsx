@@ -5,10 +5,10 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
     try {
-      const savedUser = localStorage.getItem('usuario');
+      const savedUser = localStorage.getItem('user');
       return savedUser ? JSON.parse(savedUser) : null;
     } catch (error) {
-      console.error('Error al leer el usuario de localStorage:', error);
+      console.error('Error al leer el user de localStorage:', error);
       return null;
     }
   });
@@ -16,18 +16,18 @@ export const AuthProvider = ({ children }) => {
   const login = (userData) => {
     setUser(userData);
     try {
-      localStorage.setItem('usuario', JSON.stringify(userData));
+      localStorage.setItem('user', JSON.stringify(userData));
     } catch (error) {
-      console.error('Error al guardar el usuario en localStorage:', error);
+      console.error('Error al guardar el user en localStorage:', error);
     }
   };
 
   const logout = () => {
     setUser(null);
     try {
-      localStorage.removeItem('usuario');
+      localStorage.removeItem('user');
     } catch (error) {
-      console.error('Error al eliminar el usuario de localStorage:', error);
+      console.error('Error al eliminar el user de localStorage:', error);
     }
   };
 
@@ -35,9 +35,9 @@ export const AuthProvider = ({ children }) => {
     setUser((prevUser) => {
       const updated = { ...prevUser, ...newData };
       try {
-        localStorage.setItem('usuario', JSON.stringify(updated));
+        localStorage.setItem('user', JSON.stringify(updated));
       } catch (error) {
-        console.error('Error al actualizar el usuario en localStorage:', error);
+        console.error('Error al actualizar el user en localStorage:', error);
       }
       return updated;
     });

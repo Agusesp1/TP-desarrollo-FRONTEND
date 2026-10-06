@@ -30,15 +30,15 @@ const Auth = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const [formData, setFormData] = useState({
-    nombre: '',
-    apellido: '',
+    name: '',
+    lastname: '',
     dni: '',
-    fechaNac: '',
+    dateNac: '',
     email: '',
     password: ''
   });
 
-  const [mensaje, setMensaje] = useState(null);
+  const [message, setMensaje] = useState(null);
   const [tipoMensaje, setTipoMensaje] = useState('danger'); 
   const [cargando, setCargando] = useState(false);
 
@@ -91,28 +91,28 @@ const Auth = () => {
 
       const data = await response.json();
 
-      if (!response.ok || !data.exito) {
+      if (!response.ok || !data.success) {
         setTipoMensaje('danger');
         const detalleTexto = data.detalles ? `: ${data.detalles}` : '';
-        setMensaje(`${data.mensaje || 'Ocurrió un error al procesar la solicitud'}${detalleTexto}`);
+        setMensaje(`${data.message || 'Ocurrió un error al procesar la solicitud'}${detalleTexto}`);
       } else {
         setTipoMensaje('success');
-        setMensaje(data.mensaje || (isLogin ? '¡Inicio de sesión exitoso!' : '¡Registro completado exitosamente! Redirigiendo...'));
+        setMensaje(data.message || (isLogin ? '¡Home de sesión exitoso!' : '¡Registro completado exitosamente! Redirigiendo...'));
         
-        // Guardar usuario en el contexto global de autenticación
-        const usuarioValido = data.usuario || {
-          nombre: formData.nombre,
-          apellido: formData.apellido,
+        // Guardar user en el contexto global de autenticación
+        const userValido = data.user || {
+          name: formData.name,
+          lastname: formData.lastname,
           email: formData.email,
           dni: formData.dni,
-          fechaNac: formData.fechaNac
+          dateNac: formData.dateNac
         };
 
-        authLogin(usuarioValido);
+        authLogin(userValido);
 
-        // Redirigir al panel de administración o inicio después de un breve delay
+        // Redirigir al panel de administración o home después de un breve delay
         setTimeout(() => {
-          if (usuarioValido.rol === 'admin' || usuarioValido.email === 'administraciongymfit@gmail.com') {
+          if (userValido.role === 'admin' || userValido.email === 'administraciongymfit@gmail.com') {
             navigate('/admin');
           } else {
             navigate('/');
@@ -135,13 +135,13 @@ const Auth = () => {
           <div className="text-center mb-4 auth-header">
             <h2 className="fw-bold">{isLogin ? 'Bienvenido nuevamente' : 'Crear cuenta'}</h2>
             <p className="text-light">
-              {isLogin ? 'Ingrese datos para iniciar sesión' : 'Registrarse para poder ingresar'}
+              {isLogin ? 'Ingrese datos para iniciar sesión' : 'Register para poder ingresar'}
             </p>
           </div>
 
-          {mensaje && (
+          {message && (
             <Alert variant={tipoMensaje} onClose={() => setMensaje(null)} dismissible className="mb-4 text-center">
-              {mensaje}
+              {message}
             </Alert>
           )}
 
@@ -150,13 +150,13 @@ const Auth = () => {
               {!isLogin && (
                 <>
                   <Col xs={12} sm={6}>
-                    <Form.Group className="mb-3" controlId="nombre">
-                      <Form.Label className="fw-medium text-white">Nombre</Form.Label>
+                    <Form.Group className="mb-3" controlId="name">
+                      <Form.Label className="fw-medium text-white">Name</Form.Label>
                       <Form.Control
                         type="text"
-                        name="nombre"
+                        name="name"
                         placeholder="Juan"
-                        value={formData.nombre}
+                        value={formData.name}
                         onChange={handleChange}
                         maxLength={100}
                         required
@@ -167,13 +167,13 @@ const Auth = () => {
                     </Form.Group>
                   </Col>
                   <Col xs={12} sm={6}>
-                    <Form.Group className="mb-3" controlId="apellido">
-                      <Form.Label className="fw-medium text-white">Apellido</Form.Label>
+                    <Form.Group className="mb-3" controlId="lastname">
+                      <Form.Label className="fw-medium text-white">Lastname</Form.Label>
                       <Form.Control
                         type="text"
-                        name="apellido"
+                        name="lastname"
                         placeholder="Pérez"
-                        value={formData.apellido}
+                        value={formData.lastname}
                         onChange={handleChange}
                         maxLength={100}
                         required
@@ -203,17 +203,17 @@ const Auth = () => {
                     </Form.Group>
                   </Col>
                   <Col xs={12} sm={6}>
-                    <Form.Group className="mb-3" controlId="fechaNac">
-                      <Form.Label className="fw-medium text-white">Fecha de Nacimiento *</Form.Label>
+                    <Form.Group className="mb-3" controlId="dateNac">
+                      <Form.Label className="fw-medium text-white">Date de Birth *</Form.Label>
                       <Form.Control
                         type="date"
-                        name="fechaNac"
-                        value={formData.fechaNac}
+                        name="dateNac"
+                        value={formData.dateNac}
                         onChange={handleChange}
                         max={new Date().toISOString().split('T')[0]}
                         required
                         className="custom-input"
-                        onInvalid={e => e.target.setCustomValidity('Por favor seleccioná tu fecha de nacimiento')}
+                        onInvalid={e => e.target.setCustomValidity('Por favor seleccioná tu date de birth')}
                         onInput={e => e.target.setCustomValidity('')}
                       />
                     </Form.Group>
@@ -277,7 +277,7 @@ const Auth = () => {
                   {isLogin ? 'Iniciando sesión...' : 'Registrando...'}
                 </>
               ) : (
-                isLogin ? 'Iniciar sesión' : 'Registrarse'
+                isLogin ? 'Iniciar sesión' : 'Register'
               )}
             </Button>
           </Form>
@@ -285,7 +285,7 @@ const Auth = () => {
           <div className="text-center mt-4 auth-footer text-light">
             {isLogin ? "¿No tienes cuenta? " : "¿Ya tienes una cuenta? "}
             <Button variant="link" className="p-0 text-decoration-none toggle-btn fw-bold" onClick={toggleAuthMode}>
-              {isLogin ? 'Registrarse' : 'Iniciar sesión'}
+              {isLogin ? 'Register' : 'Iniciar sesión'}
             </Button>
           </div>
         </Card.Body>

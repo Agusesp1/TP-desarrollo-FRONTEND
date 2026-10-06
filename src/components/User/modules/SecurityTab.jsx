@@ -68,7 +68,7 @@ const SecurityTab = ({ user }) => {
     setCargandoPassword(true);
 
     try {
-      const response = await fetch(`http://localhost:3000/api/usuarios/${userId}/password`, {
+      const response = await fetch(`http://localhost:3000/api/users/${userId}/password`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -81,13 +81,13 @@ const SecurityTab = ({ user }) => {
 
       const data = await response.json();
 
-      if (!response.ok || !data.exito) {
+      if (!response.ok || !data.success) {
         setPasswordMsgType('danger');
         const detalle = data.detalles ? `: ${data.detalles}` : '';
-        setPasswordMsg(`${data.mensaje || 'Error al actualizar la contraseña'}${detalle}`);
+        setPasswordMsg(`${data.message || 'Error al actualizar la contraseña'}${detalle}`);
       } else {
         setPasswordMsgType('success');
-        setPasswordMsg(data.mensaje || '¡Contraseña actualizada exitosamente!');
+        setPasswordMsg(data.message || '¡Contraseña actualizada exitosamente!');
         setPasswordData({ actual: '', nueva: '', confirmar: '' });
         setTimeout(() => setPasswordMsg(null), 3500);
       }

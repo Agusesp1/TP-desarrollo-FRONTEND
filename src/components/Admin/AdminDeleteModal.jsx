@@ -17,11 +17,11 @@ const AdminDeleteModal = ({ show, onHide, item, onConfirm, eliminando }) => {
       <Modal.Body>
         <p className="mb-2">
           ¿Estás completamente seguro de que deseas eliminar permanentemente{' '}
-          {item?.type === 'profesor' && 'al profesor'}
-          {item?.type === 'sede' && 'la sede'}
-          {item?.type === 'actividad' && 'la actividad'}
-          {item?.type === 'turno' && 'el turno horario'}{' '}
-          <strong>&quot;{item?.nombre}&quot;</strong>?
+          {item?.type === 'teacher' && 'al teacher'}
+          {item?.type === 'branch' && 'la branch'}
+          {item?.type === 'activity' && 'la activity'}
+          {item?.type === 'shift' && 'el shift schedule'}{' '}
+          <strong>&quot;{item?.name}&quot;</strong>?
         </p>
         <small className="text-warning d-block">
           ⚠️ Esta acción eliminará el registro de la base de datos y no se podrá deshacer.

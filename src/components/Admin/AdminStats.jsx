@@ -8,9 +8,9 @@ const AdminStats = ({ stats }) => {
         <Card className="stat-card border-0 p-3 text-white">
           <div className="d-flex align-items-center justify-content-between">
             <div>
-              <span className="text-light opacity-75 small fw-medium">Profesores</span>
+              <span className="text-light opacity-75 small fw-medium">Teachers</span>
               <h2 className="fw-bold mb-0 mt-1 text-white">{stats.totalProfesores}</h2>
-              <small className="text-success fw-bold">{stats.profesoresActivos} activos</small>
+              <small className="text-success fw-bold">{stats.teachersActivos} activos</small>
             </div>
             <div className="stat-icon-wrapper stat-icon-primary">
               <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -26,9 +26,9 @@ const AdminStats = ({ stats }) => {
         <Card className="stat-card border-0 p-3 text-white">
           <div className="d-flex align-items-center justify-content-between">
             <div>
-              <span className="text-light opacity-75 small fw-medium">Sedes</span>
+              <span className="text-light opacity-75 small fw-medium">Branches</span>
               <h2 className="fw-bold mb-0 mt-1 text-white">{stats.totalSedes}</h2>
-              <small className="text-light opacity-90 fw-bold">{stats.sedesActivas} operativas</small>
+              <small className="text-light opacity-90 fw-bold">{stats.branchesActivas} operativas</small>
             </div>
             <div className="stat-icon-wrapper stat-icon-primary">
               <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -44,9 +44,9 @@ const AdminStats = ({ stats }) => {
         <Card className="stat-card border-0 p-3 text-white">
           <div className="d-flex align-items-center justify-content-between">
             <div>
-              <span className="text-light opacity-75 small fw-medium">Actividades</span>
+              <span className="text-light opacity-75 small fw-medium">Activities</span>
               <h2 className="fw-bold mb-0 mt-1 text-white">{stats.totalActividades}</h2>
-              <small className="text-success fw-bold">{stats.actividadesActivas} activas</small>
+              <small className="text-success fw-bold">{stats.activitiesActivas} activas</small>
             </div>
             <div className="stat-icon-wrapper stat-icon-primary">
               <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -65,9 +65,9 @@ const AdminStats = ({ stats }) => {
         <Card className="stat-card border-0 p-3 text-white">
           <div className="d-flex align-items-center justify-content-between">
             <div>
-              <span className="text-light opacity-75 small fw-medium">Turnos Horarios</span>
+              <span className="text-light opacity-75 small fw-medium">Shifts Schedules</span>
               <h2 className="fw-bold mb-0 mt-1 text-white">{stats.totalTurnos}</h2>
-              <small className="text-success fw-bold">{stats.turnosActivos} disponibles</small>
+              <small className="text-success fw-bold">{stats.shiftsActivos} disponibles</small>
             </div>
             <div className="stat-icon-wrapper stat-icon-success">
               <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

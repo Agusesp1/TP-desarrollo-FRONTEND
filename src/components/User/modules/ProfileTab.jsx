@@ -5,12 +5,12 @@ import { useNavigate } from 'react-router-dom';
 const ProfileTab = ({ user, updateUser, logout }) => {
   const navigate = useNavigate();
   const [profileData, setProfileData] = useState({
-    nombre: user?.nombre || '',
-    apellido: user?.apellido || '',
+    name: user?.name || '',
+    lastname: user?.lastname || '',
     email: user?.email || ''
   });
 
-  const [mensaje, setMensaje] = useState(null);
+  const [message, setMensaje] = useState(null);
   const [profileMsgType, setProfileMsgType] = useState('success');
   const [cargandoPerfil, setCargandoPerfil] = useState(false);
 
@@ -22,8 +22,8 @@ const ProfileTab = ({ user, updateUser, logout }) => {
   useEffect(() => {
     if (user) {
       setProfileData({
-        nombre: user.nombre || '',
-        apellido: user.apellido || '',
+        name: user.name || '',
+        lastname: user.lastname || '',
         email: user.email || ''
       });
     }
@@ -45,7 +45,7 @@ const ProfileTab = ({ user, updateUser, logout }) => {
     if (!userId) {
       updateUser(profileData);
       setProfileMsgType('success');
-      setMensaje('¡Perfil actualizado en sesión local!');
+      setMensaje('¡Profile actualizado en sesión local!');
       setTimeout(() => setMensaje(null), 3000);
       return;
     }
@@ -53,7 +53,7 @@ const ProfileTab = ({ user, updateUser, logout }) => {
     setCargandoPerfil(true);
 
     try {
-      const response = await fetch(`http://localhost:3000/api/usuarios/${userId}`, {
+      const response = await fetch(`http://localhost:3000/api/users/${userId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -63,22 +63,22 @@ const ProfileTab = ({ user, updateUser, logout }) => {
 
       const data = await response.json();
 
-      if (!response.ok || !data.exito) {
+      if (!response.ok || !data.success) {
         setProfileMsgType('danger');
         const detalle = data.detalles ? `: ${data.detalles}` : '';
-        setMensaje(`${data.mensaje || 'Error al actualizar el perfil'}${detalle}`);
+        setMensaje(`${data.message || 'Error al actualizar el profile'}${detalle}`);
       } else {
         setProfileMsgType('success');
-        setMensaje(data.mensaje || '¡Perfil actualizado con éxito!');
-        if (data.usuario) {
-          updateUser(data.usuario);
+        setMensaje(data.message || '¡Profile actualizado con éxito!');
+        if (data.user) {
+          updateUser(data.user);
         } else {
           updateUser(profileData);
         }
         setTimeout(() => setMensaje(null), 3000);
       }
     } catch (error) {
-      console.error('Error al actualizar el perfil:', error);
+      console.error('Error al actualizar el profile:', error);
       setProfileMsgType('danger');
       setMensaje('No se pudo conectar con el servidor backend. Asegurate de que esté corriendo.');
     } finally {
@@ -98,7 +98,7 @@ const ProfileTab = ({ user, updateUser, logout }) => {
     setDeleteError(null);
 
     try {
-      const response = await fetch(`http://localhost:3000/api/usuarios/${userId}`, {
+      const response = await fetch(`http://localhost:3000/api/users/${userId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json'
@@ -107,16 +107,16 @@ const ProfileTab = ({ user, updateUser, logout }) => {
 
       const data = await response.json();
 
-      if (!response.ok || !data.exito) {
+      if (!response.ok || !data.success) {
         const detalle = data.detalles ? `: ${data.detalles}` : '';
-        setDeleteError(`${data.mensaje || 'Error al dar de baja la cuenta'}${detalle}`);
+        setDeleteError(`${data.message || 'Error al dar de baja la cuenta'}${detalle}`);
       } else {
         setShowDeleteModal(false);
         logout();
         navigate('/login');
       }
     } catch (error) {
-      console.error('Error al dar de baja el perfil:', error);
+      console.error('Error al dar de baja el profile:', error);
       setDeleteError('No se pudo conectar con el servidor backend.');
     } finally {
       setCargandoDelete(false);
@@ -128,25 +128,25 @@ const ProfileTab = ({ user, updateUser, logout }) => {
       <div className="mb-4">
         <h4 className="fw-bold mb-1 text-white">Datos Personales</h4>
         <p className="text-light opacity-75 small mb-0">
-          Modifica tu información de contacto y credenciales de socio en FitApp.
+          Modifica tu información de contacto y credenciales de member en FitApp.
         </p>
       </div>
 
-      {mensaje && (
+      {message && (
         <Alert variant={profileMsgType} dismissible onClose={() => setMensaje(null)} className="mb-4 text-center">
-          {mensaje}
+          {message}
         </Alert>
       )}
 
       <Form onSubmit={handleSubmitProfile}>
         <Row className="g-3">
           <Col md={6}>
-            <Form.Group controlId="nombre">
-              <Form.Label className="small text-light">Nombre</Form.Label>
+            <Form.Group controlId="name">
+              <Form.Label className="small text-light">Name</Form.Label>
               <Form.Control
                 type="text"
-                name="nombre"
-                value={profileData.nombre}
+                name="name"
+                value={profileData.name}
                 onChange={handleChangeProfile}
                 required
                 className="bg-transparent text-white border-secondary"
@@ -155,12 +155,12 @@ const ProfileTab = ({ user, updateUser, logout }) => {
           </Col>
 
           <Col md={6}>
-            <Form.Group controlId="apellido">
-              <Form.Label className="small text-light">Apellido</Form.Label>
+            <Form.Group controlId="lastname">
+              <Form.Label className="small text-light">Lastname</Form.Label>
               <Form.Control
                 type="text"
-                name="apellido"
-                value={profileData.apellido}
+                name="lastname"
+                value={profileData.lastname}
                 onChange={handleChangeProfile}
                 required
                 className="bg-transparent text-white border-secondary"
@@ -238,7 +238,7 @@ const ProfileTab = ({ user, updateUser, logout }) => {
             ¿Estás seguro de que deseas dar de baja tu membresía y cuenta en FitApp?
           </p>
           <small className="text-warning d-block">
-            ⚠️ Perderás el acceso a tus clases reservadas y beneficios del pase activo.
+            ⚠️ Perderás el acceso a tus clases reservadas y beneficios del pase active.
           </small>
         </Modal.Body>
         <Modal.Footer className="border-secondary">

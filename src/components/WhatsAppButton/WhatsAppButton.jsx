@@ -31,7 +31,7 @@ const WhatsAppButton = ({
               e.stopPropagation();
               setShowTooltip(false);
             }}
-            aria-label="Cerrar mensaje"
+            aria-label="Cerrar message"
           >
             &times;
           </button>

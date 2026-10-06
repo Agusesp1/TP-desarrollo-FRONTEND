@@ -106,7 +106,7 @@ body {
   stroke: var(--brand-highlight);
 }
 
-/* Color blanco únicamente para los placeholders del módulo de Seguridad y Contraseña del Usuario */
+/* Color blanco únicamente para los placeholders del módulo de Seguridad y Contraseña del User */
 .security-tab .form-control::placeholder,
 .security-tab .form-control::-webkit-input-placeholder,
 .security-tab .form-control::-moz-placeholder,
@@ -115,7 +115,7 @@ body {
   opacity: 1 !important;
 }
 
-/* Asegurar que las vistas de usuario nunca recorten contenido ni barra de desplazamiento */
+/* Asegurar que las vistas de user nunca recorten contenido ni barra de desplazamiento */
 .user-page,
 .user-container {
   height: auto;

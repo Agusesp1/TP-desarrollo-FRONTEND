@@ -6,60 +6,60 @@ import './Admin.css';
 
 import AdminStats from './AdminStats';
 import AdminDeleteModal from './AdminDeleteModal';
-import ProfesoresManager from './modules/ProfesoresManager';
-import SedesManager from './modules/SedesManager';
-import ActividadesManager from './modules/ActividadesManager';
-import TurnosManager from './modules/TurnosManager';
+import TeachersManager from './modules/TeachersManager';
+import BranchesManager from './modules/BranchesManager';
+import ActivitiesManager from './modules/ActivitiesManager';
+import ShiftsManager from './modules/ShiftsManager';
 import ClientesManager from './modules/ClientesManager';
-import CalendarioAdmin from './modules/CalendarioAdmin';
-import CuotasAdminManager from './modules/CuotasAdminManager';
+import CalendarAdmin from './modules/CalendarAdmin';
+import QuotasAdminManager from './modules/QuotasAdminManager';
 
 const API_BASE = 'http://localhost:3000/api';
 
 const Admin = () => {
   const { user } = useAuth();
 
-  // Active Tab: profesores | sedes | actividades | turnos | clientes | cuotas | calendario
-  const [activeTab, setActiveTab] = useState('profesores');
+  // Active Tab: teachers | branches | activities | shifts | clients | quotas | calendar
+  const [activeTab, setActiveTab] = useState('teachers');
 
   // Stats State
   const [stats, setStats] = useState({
     totalSocios: 0,
     totalProfesores: 0,
-    profesoresActivos: 0,
+    teachersActivos: 0,
     totalSedes: 0,
-    sedesActivas: 0,
+    branchesActivas: 0,
     totalActividades: 0,
-    actividadesActivas: 0,
+    activitiesActivas: 0,
     totalTurnos: 0,
-    turnosActivos: 0
+    shiftsActivos: 0
   });
 
   // Entities Data
-  const [profesores, setProfesores] = useState([]);
+  const [teachers, setProfesores] = useState([]);
   const [cargandoProfesores, setCargandoProfesores] = useState(false);
 
-  const [sedes, setSedes] = useState([]);
+  const [branches, setSedes] = useState([]);
   const [cargandoSedes, setCargandoSedes] = useState(false);
 
-  const [actividades, setActividades] = useState([]);
+  const [activities, setActividades] = useState([]);
   const [cargandoActividades, setCargandoActividades] = useState(false);
 
-  const [turnos, setTurnos] = useState([]);
+  const [shifts, setTurnos] = useState([]);
   const [cargandoTurnos, setCargandoTurnos] = useState(false);
 
   // Modal Delete State
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [itemAEliminar, setItemAEliminar] = useState(null); // { type: 'profesor' | 'sede' | 'actividad' | 'turno', id, nombre }
+  const [itemAEliminar, setItemAEliminar] = useState(null); // { type: 'teacher' | 'branch' | 'activity' | 'shift', id, name }
   const [eliminando, setEliminando] = useState(false);
 
   // Alerta Feedback
   const [alerta, setAlerta] = useState(null);
 
-  const esAdmin = user && (user.rol === 'admin' || user.email === 'administraciongymfit@gmail.com');
+  const esAdmin = user && (user.role === 'admin' || user.email === 'administraciongymfit@gmail.com');
 
-  const mostrarAlerta = (mensaje, type = 'success') => {
-    setAlerta({ mensaje, type });
+  const mostrarAlerta = (message, type = 'success') => {
+    setAlerta({ message, type });
     setTimeout(() => setAlerta(null), 4500);
   };
 
@@ -68,7 +68,7 @@ const Admin = () => {
     try {
       const res = await fetch(`${API_BASE}/admin/estadisticas`);
       const data = await res.json();
-      if (res.ok && data.exito) {
+      if (res.ok && data.success) {
         setStats(data.estadisticas);
       }
     } catch (err) {
@@ -79,13 +79,13 @@ const Admin = () => {
   const cargarSedes = useCallback(async () => {
     setCargandoSedes(true);
     try {
-      const res = await fetch(`${API_BASE}/sedes`);
+      const res = await fetch(`${API_BASE}/branches`);
       const data = await res.json();
-      if (res.ok && data.exito) {
-        setSedes(data.sedes || []);
+      if (res.ok && data.success) {
+        setSedes(data.branches || []);
       }
     } catch (err) {
-      console.error('Error al cargar sedes:', err);
+      console.error('Error al cargar branches:', err);
     } finally {
       setCargandoSedes(false);
     }
@@ -94,13 +94,13 @@ const Admin = () => {
   const cargarProfesores = useCallback(async () => {
     setCargandoProfesores(true);
     try {
-      const res = await fetch(`${API_BASE}/profesores`);
+      const res = await fetch(`${API_BASE}/teachers`);
       const data = await res.json();
-      if (res.ok && data.exito) {
-        setProfesores(data.profesores || []);
+      if (res.ok && data.success) {
+        setProfesores(data.teachers || []);
       }
     } catch (err) {
-      console.error('Error al cargar profesores:', err);
+      console.error('Error al cargar teachers:', err);
     } finally {
       setCargandoProfesores(false);
     }
@@ -109,13 +109,13 @@ const Admin = () => {
   const cargarActividades = useCallback(async () => {
     setCargandoActividades(true);
     try {
-      const res = await fetch(`${API_BASE}/actividades`);
+      const res = await fetch(`${API_BASE}/activities`);
       const data = await res.json();
-      if (res.ok && data.exito) {
-        setActividades(data.actividades || []);
+      if (res.ok && data.success) {
+        setActividades(data.activities || []);
       }
     } catch (err) {
-      console.error('Error al cargar actividades:', err);
+      console.error('Error al cargar activities:', err);
     } finally {
       setCargandoActividades(false);
     }
@@ -124,13 +124,13 @@ const Admin = () => {
   const cargarTurnos = useCallback(async () => {
     setCargandoTurnos(true);
     try {
-      const res = await fetch(`${API_BASE}/turnos`);
+      const res = await fetch(`${API_BASE}/shifts`);
       const data = await res.json();
-      if (res.ok && data.exito) {
-        setTurnos(data.turnos || []);
+      if (res.ok && data.success) {
+        setTurnos(data.shifts || []);
       }
     } catch (err) {
-      console.error('Error al cargar turnos:', err);
+      console.error('Error al cargar shifts:', err);
     } finally {
       setCargandoTurnos(false);
     }
@@ -162,20 +162,20 @@ const Admin = () => {
 
     try {
       let endpoint = '';
-      if (itemAEliminar.type === 'profesor') endpoint = `${API_BASE}/profesores/${itemAEliminar.id}`;
-      if (itemAEliminar.type === 'sede') endpoint = `${API_BASE}/sedes/${itemAEliminar.id}`;
-      if (itemAEliminar.type === 'actividad') endpoint = `${API_BASE}/actividades/${itemAEliminar.id}`;
-      if (itemAEliminar.type === 'turno') endpoint = `${API_BASE}/turnos/${itemAEliminar.id}`;
+      if (itemAEliminar.type === 'teacher') endpoint = `${API_BASE}/teachers/${itemAEliminar.id}`;
+      if (itemAEliminar.type === 'branch') endpoint = `${API_BASE}/branches/${itemAEliminar.id}`;
+      if (itemAEliminar.type === 'activity') endpoint = `${API_BASE}/activities/${itemAEliminar.id}`;
+      if (itemAEliminar.type === 'shift') endpoint = `${API_BASE}/shifts/${itemAEliminar.id}`;
 
       const res = await fetch(endpoint, { method: 'DELETE' });
       const data = await res.json();
 
-      if (res.ok && data.exito) {
-        mostrarAlerta(data.mensaje || 'Registro eliminado correctamente');
+      if (res.ok && data.success) {
+        mostrarAlerta(data.message || 'Registro eliminado correctamente');
         setShowDeleteModal(false);
         recargarTodo();
       } else {
-        mostrarAlerta(data.mensaje || 'Error al eliminar registro', 'danger');
+        mostrarAlerta(data.message || 'Error al eliminar registro', 'danger');
       }
     } catch {
       mostrarAlerta('Error de conexión con el servidor', 'danger');
@@ -235,7 +235,7 @@ const Admin = () => {
 
             <Col md={5} lg={4} className="text-md-end d-flex gap-2 justify-content-md-end">
               <Button as={Link} to="/user" variant="outline-light" size="sm" className="rounded-pill px-3">
-                Ver Mi Perfil de Usuario
+                Ver Mi Profile de User
               </Button>
             </Col>
           </Row>
@@ -253,7 +253,7 @@ const Admin = () => {
               onClose={() => setAlerta(null)}
               className="text-center shadow-lg border-0 mb-0 py-3"
             >
-              {alerta.mensaje}
+              {alerta.message}
             </Alert>
           </div>
         )}
@@ -262,61 +262,61 @@ const Admin = () => {
         <Nav className="admin-nav-tabs mb-4 gap-2 border-0 flex-wrap">
           <Nav.Item>
             <Nav.Link
-              className={activeTab === 'profesores' ? 'active' : ''}
-              onClick={() => setActiveTab('profesores')}
+              className={activeTab === 'teachers' ? 'active' : ''}
+              onClick={() => setActiveTab('teachers')}
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
                 <circle cx="9" cy="7" r="4" />
               </svg>
-              Profesores ({profesores.length})
+              Teachers ({teachers.length})
             </Nav.Link>
           </Nav.Item>
 
           <Nav.Item>
             <Nav.Link
-              className={activeTab === 'sedes' ? 'active' : ''}
-              onClick={() => setActiveTab('sedes')}
+              className={activeTab === 'branches' ? 'active' : ''}
+              onClick={() => setActiveTab('branches')}
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
                 <circle cx="12" cy="10" r="3" />
               </svg>
-              Sedes ({sedes.length})
+              Branches ({branches.length})
             </Nav.Link>
           </Nav.Item>
 
           <Nav.Item>
             <Nav.Link
-              className={activeTab === 'actividades' ? 'active' : ''}
-              onClick={() => setActiveTab('actividades')}
+              className={activeTab === 'activities' ? 'active' : ''}
+              onClick={() => setActiveTab('activities')}
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="12" r="10" />
                 <path d="m4.93 4.93 4.24 4.24" />
                 <path d="m14.83 9.17 4.24-4.24" />
               </svg>
-              Actividades ({actividades.length})
+              Activities ({activities.length})
             </Nav.Link>
           </Nav.Item>
 
           <Nav.Item>
             <Nav.Link
-              className={activeTab === 'turnos' ? 'active' : ''}
-              onClick={() => setActiveTab('turnos')}
+              className={activeTab === 'shifts' ? 'active' : ''}
+              onClick={() => setActiveTab('shifts')}
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="12" r="10" />
                 <polyline points="12 6 12 12 16 14" />
               </svg>
-              Turnos ({turnos.length})
+              Shifts ({shifts.length})
             </Nav.Link>
           </Nav.Item>
 
           <Nav.Item>
             <Nav.Link
-              className={activeTab === 'clientes' ? 'active' : ''}
-              onClick={() => setActiveTab('clientes')}
+              className={activeTab === 'clients' ? 'active' : ''}
+              onClick={() => setActiveTab('clients')}
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
@@ -324,28 +324,28 @@ const Admin = () => {
                 <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
                 <path d="M16 3.13a4 4 0 0 1 0 7.75" />
               </svg>
-              Usuarios
+              Users
             </Nav.Link>
           </Nav.Item>
 
           <Nav.Item>
             <Nav.Link
-              className={activeTab === 'cuotas' ? 'active' : ''}
-              onClick={() => setActiveTab('cuotas')}
+              className={activeTab === 'quotas' ? 'active' : ''}
+              onClick={() => setActiveTab('quotas')}
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <rect width="20" height="14" x="2" y="5" rx="2" />
                 <line x1="2" x2="22" y1="10" strokeWidth="2" />
                 <line x1="6" y1="15" x2="8" y2="15" strokeWidth="2" />
               </svg>
-              Cuotas & Precios
+              Quotas & Prices
             </Nav.Link>
           </Nav.Item>
 
           <Nav.Item>
             <Nav.Link
-              className={activeTab === 'calendario' ? 'active' : ''}
-              onClick={() => setActiveTab('calendario')}
+              className={activeTab === 'calendar' ? 'active' : ''}
+              onClick={() => setActiveTab('calendar')}
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
@@ -353,16 +353,16 @@ const Admin = () => {
                 <line x1="8" y1="2" x2="8" y2="6" />
                 <line x1="3" y1="10" x2="21" y2="10" />
               </svg>
-              Calendario Semanal
+              Calendar Semanal
             </Nav.Link>
           </Nav.Item>
         </Nav>
 
         {/* Submódulos según la pestaña seleccionada */}
-        {activeTab === 'profesores' && (
-          <ProfesoresManager
-            profesores={profesores}
-            sedes={sedes}
+        {activeTab === 'teachers' && (
+          <TeachersManager
+            teachers={teachers}
+            branches={branches}
             cargando={cargandoProfesores}
             onRecargar={cargarProfesores}
             onMostrarAlerta={mostrarAlerta}
@@ -371,10 +371,10 @@ const Admin = () => {
           />
         )}
 
-        {activeTab === 'sedes' && (
-          <SedesManager
-            sedes={sedes}
-            profesores={profesores}
+        {activeTab === 'branches' && (
+          <BranchesManager
+            branches={branches}
+            teachers={teachers}
             cargando={cargandoSedes}
             onRecargar={() => {
               cargarSedes();
@@ -387,11 +387,11 @@ const Admin = () => {
           />
         )}
 
-        {activeTab === 'actividades' && (
-          <ActividadesManager
-            actividades={actividades}
-            sedes={sedes}
-            profesores={profesores}
+        {activeTab === 'activities' && (
+          <ActivitiesManager
+            activities={activities}
+            branches={branches}
+            teachers={teachers}
             cargando={cargandoActividades}
             onRecargar={() => {
               cargarActividades();
@@ -403,12 +403,12 @@ const Admin = () => {
           />
         )}
 
-        {activeTab === 'turnos' && (
-          <TurnosManager
-            turnos={turnos}
-            actividades={actividades}
-            profesores={profesores}
-            sedes={sedes}
+        {activeTab === 'shifts' && (
+          <ShiftsManager
+            shifts={shifts}
+            activities={activities}
+            teachers={teachers}
+            branches={branches}
             cargando={cargandoTurnos}
             onRecargar={cargarTurnos}
             onMostrarAlerta={mostrarAlerta}
@@ -417,24 +417,24 @@ const Admin = () => {
           />
         )}
 
-        {activeTab === 'clientes' && (
+        {activeTab === 'clients' && (
           <ClientesManager
             onMostrarAlerta={mostrarAlerta}
             apiBase={API_BASE}
           />
         )}
 
-        {activeTab === 'cuotas' && (
-          <CuotasAdminManager
+        {activeTab === 'quotas' && (
+          <QuotasAdminManager
             onMostrarAlerta={mostrarAlerta}
             apiBase={API_BASE}
           />
         )}
 
-        {activeTab === 'calendario' && (
-          <CalendarioAdmin
-            turnos={turnos}
-            sedes={sedes}
+        {activeTab === 'calendar' && (
+          <CalendarAdmin
+            shifts={shifts}
+            branches={branches}
           />
         )}
 

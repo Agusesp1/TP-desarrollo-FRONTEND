@@ -7,10 +7,10 @@ import './Home.css';
 const Home = () => {
   const { user } = useAuth();
   const [contactData, setContactData] = useState({
-    nombre: '',
+    name: '',
     email: '',
     asunto: '',
-    mensaje: ''
+    message: ''
   });
   const [contactoEnviado, setContactoEnviado] = useState(false);
   const [cargandoContacto, setCargandoContacto] = useState(false);
@@ -20,7 +20,7 @@ const Home = () => {
     if (user) {
       setContactData((prev) => ({
         ...prev,
-        nombre: `${user.nombre || ''} ${user.apellido || ''}`.trim(),
+        name: `${user.name || ''} ${user.lastname || ''}`.trim(),
         email: user.email || ''
       }));
     }
@@ -43,22 +43,22 @@ const Home = () => {
 
       const data = await res.json();
 
-      if (res.ok && data.exito) {
+      if (res.ok && data.success) {
         setContactoEnviado(true);
         setContactData({
-          nombre: user ? `${user.nombre || ''} ${user.apellido || ''}`.trim() : '',
+          name: user ? `${user.name || ''} ${user.lastname || ''}`.trim() : '',
           email: user ? user.email || '' : '',
           asunto: '',
-          mensaje: ''
+          message: ''
         });
         setTimeout(() => {
           setContactoEnviado(false);
         }, 5000);
       } else {
-        setErrorContacto(data.mensaje || 'Ocurrió un error al enviar el mensaje.');
+        setErrorContacto(data.message || 'Ocurrió un error al enviar el message.');
       }
     } catch (err) {
-      console.error('Error al enviar mensaje de contacto:', err);
+      console.error('Error al enviar message de contacto:', err);
       setErrorContacto('No se pudo conectar con el servidor. Asegúrate de que el backend esté iniciado.');
     } finally {
       setCargandoContacto(false);
@@ -78,7 +78,7 @@ const Home = () => {
               <h1 className="display-3 fw-bold mb-4 hero-title">
                 {user ? (
                   <>
-                    ¡Hola, <span className="text-gradient">{user.nombre || 'Socio'}</span>! Bienvenid@ a FitApp
+                    ¡Hola, <span className="text-gradient">{user.name || 'Member'}</span>! Bienvenid@ a FitApp
                   </>
                 ) : (
                   <>
@@ -104,7 +104,7 @@ const Home = () => {
                         <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
                         <circle cx="12" cy="7" r="4" />
                       </svg>
-                      Ir a Mi Perfil
+                      Ir a Mi Profile
                     </Button>
                   </>
                 ) : (
@@ -117,7 +117,7 @@ const Home = () => {
                       size="lg" 
                       className="px-4 py-3 fw-bold hero-btn shadow-lg"
                     >
-                      Registrarse Ahora
+                      Register Ahora
                     </Button>
                     <Button 
                       as={Link} 
@@ -166,7 +166,7 @@ const Home = () => {
                   </div>
                   <Card.Title className="fw-bold mb-3 text-white">Equipamiento Moderno</Card.Title>
                   <Card.Text className="text-light opacity-75">
-                    Máquinas e instalaciones de última generación para asegurar un entrenamiento eficiente y seguro.
+                    Máquinas e instalaciones de última generación para asegurar un training eficiente y seguro.
                   </Card.Text>
                 </Card.Body>
               </Card>
@@ -217,7 +217,7 @@ const Home = () => {
           <Row className="align-items-center g-5">
             <Col lg={6}>
               <span className="text-primary fw-bold text-uppercase tracking-wider">Sobre Nosotros</span>
-              <h2 className="display-5 fw-bold text-white mb-4">Más que un gimnasio, tu comunidad fitness</h2>
+              <h2 className="display-5 fw-bold text-white mb-4">Más que un gym, tu comunidad fitness</h2>
               <p className="text-light opacity-75 mb-3">
                 En <strong>FitApp Premium</strong> nacimos con la misión de impulsar a cada persona a descubrir su máximo potencial. Con más de 10 años de trayectoria, contamos con espacios pensados para el alto rendimiento y la salud integral.
               </p>
@@ -228,7 +228,7 @@ const Home = () => {
                 <Col sm={4}>
                   <div className="stat-card p-3 rounded-3">
                     <h3 className="fw-bold text-gradient mb-0">+5,000</h3>
-                    <small className="text-light opacity-75">Socios Activos</small>
+                    <small className="text-light opacity-75">Members Activos</small>
                   </div>
                 </Col>
                 <Col sm={4}>
@@ -240,7 +240,7 @@ const Home = () => {
                 <Col sm={4}>
                   <div className="stat-card p-3 rounded-3">
                     <h3 className="fw-bold text-gradient mb-0">3</h3>
-                    <small className="text-light opacity-75">Sedes Premium</small>
+                    <small className="text-light opacity-75">Branches Premium</small>
                   </div>
                 </Col>
               </Row>
@@ -248,36 +248,36 @@ const Home = () => {
 
             <Col lg={6}>
               <div className="about-image-card p-4 rounded-4 shadow-lg">
-                <h4 className="fw-bold text-white mb-3">Nuestras Sedes</h4>
-                <div className="sede-item p-3 mb-3 rounded-3">
+                <h4 className="fw-bold text-white mb-3">Nuestras Branches</h4>
+                <div className="branch-item p-3 mb-3 rounded-3">
                   <h5 className="fw-bold text-white mb-1 d-flex align-items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-icon text-primary">
                       <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
                       <circle cx="12" cy="10" r="3" />
                     </svg>
-                    Sede Central (Centro)
+                    Branch Central (Centro)
                   </h5>
                   <p className="small text-light opacity-75 mb-1">Av. Corrientes 1234, CABA</p>
                   <small className="text-primary">Lun a Vie: 06:00 - 23:00 hs | Sáb: 08:00 - 20:00 hs</small>
                 </div>
-                <div className="sede-item p-3 mb-3 rounded-3">
+                <div className="branch-item p-3 mb-3 rounded-3">
                   <h5 className="fw-bold text-white mb-1 d-flex align-items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-icon text-primary">
                       <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
                       <circle cx="12" cy="10" r="3" />
                     </svg>
-                    Sede Norte (Palermo)
+                    Branch Norte (Palermo)
                   </h5>
                   <p className="small text-light opacity-75 mb-1">Av. Santa Fe 4567, CABA</p>
                   <small className="text-primary">Lun a Vie: 06:00 - 23:00 hs | Sáb: 08:00 - 20:00 hs</small>
                 </div>
-                <div className="sede-item p-3 rounded-3">
+                <div className="branch-item p-3 rounded-3">
                   <h5 className="fw-bold text-white mb-1 d-flex align-items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-icon text-primary">
                       <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
                       <circle cx="12" cy="10" r="3" />
                     </svg>
-                    Sede Belgrano
+                    Branch Belgrano
                   </h5>
                   <p className="small text-light opacity-75 mb-1">Cabildo 2345, CABA</p>
                   <small className="text-primary">24 horas los 7 días de la semana</small>
@@ -305,7 +305,7 @@ const Home = () => {
               <Card className="contact-card p-4 p-md-5 border-0 shadow-lg">
                 {contactoEnviado && (
                   <Alert variant="success" className="text-center mb-4">
-                    ¡Gracias por tu mensaje! Nos pondremos en contacto a la brevedad.
+                    ¡Gracias por tu message! Nos pondremos en contacto a la brevedad.
                   </Alert>
                 )}
                 {errorContacto && (
@@ -317,12 +317,12 @@ const Home = () => {
                   <Row className="g-3">
                     <Col md={6}>
                       <Form.Group controlId="contactName">
-                        <Form.Label className="text-white fw-medium">Nombre Completo</Form.Label>
+                        <Form.Label className="text-white fw-medium">Name Completo</Form.Label>
                         <Form.Control 
                           type="text" 
-                          placeholder="Tu nombre" 
-                          value={contactData.nombre}
-                          onChange={(e) => setContactData({ ...contactData, nombre: e.target.value })}
+                          placeholder="Tu name" 
+                          value={contactData.name}
+                          onChange={(e) => setContactData({ ...contactData, name: e.target.value })}
                           className="custom-input" 
                           required 
                         />
@@ -356,13 +356,13 @@ const Home = () => {
                     </Col>
                     <Col md={12}>
                       <Form.Group controlId="contactMessage">
-                        <Form.Label className="text-white fw-medium">Mensaje</Form.Label>
+                        <Form.Label className="text-white fw-medium">Message</Form.Label>
                         <Form.Control 
                           as="textarea" 
                           rows={4} 
-                          placeholder="Escribe tu mensaje aquí..." 
-                          value={contactData.mensaje}
-                          onChange={(e) => setContactData({ ...contactData, mensaje: e.target.value })}
+                          placeholder="Escribe tu message aquí..." 
+                          value={contactData.message}
+                          onChange={(e) => setContactData({ ...contactData, message: e.target.value })}
                           className="custom-input" 
                           required 
                         />
@@ -396,7 +396,7 @@ const Home = () => {
               {user ? '¡Continúa alcanzando tus objetivos!' : '¿Listo para comenzar tu transformación?'}
             </h2>
             <p className="lead mb-4 opacity-75">
-              {user ? 'Gestiona tus cuotas y consulta tus horarios en tu perfil.' : 'Únete hoy y obtén tu primera sesión de evaluación totalmente gratuita.'}
+              {user ? 'Gestiona tus quotas y consulta tus schedules en tu profile.' : 'Únete hoy y obtén tu primera sesión de evaluación totalmente gratuita.'}
             </p>
             {user ? (
               <Button 
@@ -406,7 +406,7 @@ const Home = () => {
                 size="lg" 
                 className="px-5 py-3 fw-bold shadow"
               >
-                Acceder a Mi Perfil
+                Acceder a Mi Profile
               </Button>
             ) : (
               <Button 

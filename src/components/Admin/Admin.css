@@ -106,7 +106,7 @@
   border-radius: 0.5rem;
 }
 
-/* Estilos claros y sin opacidad para inputs de horario (type="time") */
+/* Estilos claros y sin opacidad para inputs de schedule (type="time") */
 .admin-page input[type="time"],
 .modal-content input[type="time"],
 .custom-time-input {
@@ -399,20 +399,20 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 }
 
 /* ==========================================================================
-   Sede Schedule & Turnos Auto-generation Styles
+   Branch Schedule & Shifts Auto-generation Styles
    ========================================================================== */
-.sede-modal-xl .modal-dialog {
+.branch-modal-xl .modal-dialog {
   max-width: 950px;
 }
 
 @media (max-width: 576px) {
-  .sede-modal-xl .modal-dialog {
+  .branch-modal-xl .modal-dialog {
     margin: 0.5rem;
     max-width: 100%;
   }
 }
 
-.sede-section-card {
+.branch-section-card {
   background: rgba(22, 27, 51, 0.7);
   border: 1px solid rgba(44, 53, 88, 0.8);
   border-radius: 1rem;
@@ -420,7 +420,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   margin-bottom: 1.25rem;
 }
 
-.sede-dia-card {
+.branch-day-card {
   background: rgba(14, 19, 38, 0.85);
   border: 1px solid rgba(44, 53, 88, 0.8);
   border-radius: 0.85rem;
@@ -428,18 +428,18 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   transition: all 0.25s ease;
 }
 
-.sede-dia-card.abierto {
+.branch-day-card.abierto {
   border-color: rgba(88, 86, 240, 0.5);
   box-shadow: 0 4px 15px rgba(88, 86, 240, 0.08);
 }
 
-.sede-dia-card.cerrado {
+.branch-day-card.cerrado {
   opacity: 0.6;
   border-color: rgba(44, 53, 88, 0.4);
   background: rgba(11, 15, 29, 0.6);
 }
 
-.sede-quick-btn {
+.branch-quick-btn {
   font-size: 0.78rem;
   padding: 0.35rem 0.75rem;
   border-radius: 2rem;
@@ -449,14 +449,14 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   transition: all 0.2s ease;
 }
 
-.sede-quick-btn:hover {
+.branch-quick-btn:hover {
   background: #5856F0;
   color: #FFFFFF;
   border-color: #5856F0;
   transform: translateY(-1px);
 }
 
-.preview-turnos-box {
+.preview-shifts-box {
   background: rgba(11, 15, 29, 0.85);
   border: 1px dashed rgba(129, 140, 248, 0.4);
   border-radius: 0.85rem;
