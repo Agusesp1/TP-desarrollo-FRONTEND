@@ -28,6 +28,11 @@ const Auth = () => {
   const { login: authLogin } = useAuth();
   const [isLogin, setIsLogin] = useState(location.state?.mode !== 'register');
   const [showPassword, setShowPassword] = useState(false);
+  
+  // States for 2FA and Forgot Password
+  const [step, setStep] = useState('auth'); // 'auth' | '2fa' | 'forgot'
+  const [code2FA, setCode2FA] = useState('');
+  const [tempEmail, setTempEmail] = useState('');
 
   const [formData, setFormData] = useState({
     name: '',
@@ -62,80 +67,144 @@ const Auth = () => {
     }
   };
 
+  const handleSuccessLogin = (data, emailOrFormData) => {
+    const userValido = data.user || {
+      name: emailOrFormData.name,
+      lastname: emailOrFormData.lastname,
+      email: emailOrFormData.email,
+      dni: emailOrFormData.dni,
+      dateNac: emailOrFormData.dateNac
+    };
+
+    authLogin(userValido);
+
+    // Redirigir al panel de administración o home después de un breve delay
+    setTimeout(() => {
+      if (userValido.role === 'admin' || userValido.email === 'administraciongymfit@gmail.com') {
+        navigate('/admin');
+      } else {
+        navigate('/');
+      }
+    }, 1000);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMensaje(null);
     setCargando(true);
 
-    if (!isLogin && formData.password.length < 6) {
-      setTipoMensaje('danger');
-      setMensaje('La contraseña debe tener al menos 6 caracteres');
-      setCargando(false);
-      return;
-    }
-
-    const endpoint = isLogin ? `${API_BASE_URL}/login` : `${API_BASE_URL}/registro`;
-
-    const bodyData = isLogin
-      ? { email: formData.email, password: formData.password }
-      : { ...formData };
-
-    try {
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(bodyData)
-      });
-
-      const data = await response.json();
-
-      if (!response.ok || !data.success) {
+    if (step === 'auth') {
+      if (!isLogin && formData.password.length < 6) {
         setTipoMensaje('danger');
-        const detalleTexto = data.detalles ? `: ${data.detalles}` : '';
-        setMensaje(`${data.message || 'Ocurrió un error al procesar la solicitud'}${detalleTexto}`);
-      } else {
-        setTipoMensaje('success');
-        setMensaje(data.message || (isLogin ? '¡Home de sesión exitoso!' : '¡Registro completado exitosamente! Redirigiendo...'));
-        
-        // Guardar user en el contexto global de autenticación
-        const userValido = data.user || {
-          name: formData.name,
-          lastname: formData.lastname,
-          email: formData.email,
-          dni: formData.dni,
-          dateNac: formData.dateNac
-        };
-
-        authLogin(userValido);
-
-        // Redirigir al panel de administración o home después de un breve delay
-        setTimeout(() => {
-          if (userValido.role === 'admin' || userValido.email === 'administraciongymfit@gmail.com') {
-            navigate('/admin');
-          } else {
-            navigate('/');
-          }
-        }, 1000);
+        setMensaje('La contraseña debe tener al menos 6 caracteres');
+        setCargando(false);
+        return;
       }
-    } catch (error) {
-      console.error('Error de red al autenticar:', error);
-      setTipoMensaje('danger');
-      setMensaje('No se pudo conectar con el servidor backend. Asegurate de que esté corriendo en http://localhost:3000');
-    } finally {
-      setCargando(false);
+
+      const endpoint = isLogin ? `${API_BASE_URL}/login` : `${API_BASE_URL}/registro`;
+
+      const bodyData = isLogin
+        ? { email: formData.email, password: formData.password }
+        : { ...formData };
+
+      try {
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(bodyData)
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+          setTipoMensaje('danger');
+          const detalleTexto = data.detalles ? `: ${data.detalles}` : '';
+          setMensaje(`${data.message || 'Ocurrió un error al procesar la solicitud'}${detalleTexto}`);
+        } else {
+          if (data.requiresTwoFactor) {
+            setTipoMensaje('success');
+            setMensaje('Te enviamos un código de verificación por correo.');
+            setTempEmail(data.email || formData.email);
+            setStep('2fa');
+          } else {
+            setTipoMensaje('success');
+            setMensaje(data.message || (isLogin ? '¡Inicio de sesión exitoso!' : '¡Registro completado exitosamente! Redirigiendo...'));
+            handleSuccessLogin(data, formData);
+          }
+        }
+      } catch (error) {
+        console.error('Error de red al autenticar:', error);
+        setTipoMensaje('danger');
+        setMensaje('No se pudo conectar con el servidor backend.');
+      }
+    } else if (step === '2fa') {
+      try {
+        const response = await fetch(`${API_BASE_URL}/verify-2fa`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ email: tempEmail, code: code2FA })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+          setTipoMensaje('danger');
+          setMensaje(data.message || 'Código inválido o expirado.');
+        } else {
+          setTipoMensaje('success');
+          setMensaje('¡Verificación exitosa! Redirigiendo...');
+          handleSuccessLogin(data, formData);
+        }
+      } catch (error) {
+        console.error('Error de red al verificar 2fa:', error);
+        setTipoMensaje('danger');
+        setMensaje('No se pudo conectar con el servidor backend.');
+      }
+    } else if (step === 'forgot') {
+      try {
+        const response = await fetch(`${API_BASE_URL}/forgot-password`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ email: formData.email })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+          setTipoMensaje('danger');
+          setMensaje(data.message || 'Error al solicitar la recuperación.');
+        } else {
+          setTipoMensaje('success');
+          setMensaje('Si el correo existe, se enviará un enlace de recuperación. Revisa tu bandeja de entrada.');
+          // Regresar al login
+          setTimeout(() => setStep('auth'), 3000);
+        }
+      } catch (error) {
+        console.error('Error de red:', error);
+        setTipoMensaje('danger');
+        setMensaje('No se pudo conectar con el servidor backend.');
+      }
     }
+    
+    setCargando(false);
   };
 
   return (
     <Container className="d-flex justify-content-center align-items-center auth-container">
-      <Card className={`auth-card p-4 p-sm-5 border-0 shadow-lg ${!isLogin ? 'auth-card-wide' : ''}`}>
+      <Card className={`auth-card p-4 p-sm-5 border-0 shadow-lg ${!isLogin && step === 'auth' ? 'auth-card-wide' : ''}`}>
         <Card.Body>
           <div className="text-center mb-4 auth-header">
-            <h2 className="fw-bold">{isLogin ? 'Bienvenido nuevamente' : 'Crear cuenta'}</h2>
+            <h2 className="fw-bold">
+              {step === '2fa' ? 'Verificación 2FA' : step === 'forgot' ? 'Recuperar Contraseña' : isLogin ? 'Bienvenido nuevamente' : 'Crear cuenta'}
+            </h2>
             <p className="text-light">
-              {isLogin ? 'Ingrese datos para iniciar sesión' : 'Register para poder ingresar'}
+              {step === '2fa' ? 'Ingresa el código enviado a tu correo' : step === 'forgot' ? 'Ingresa tu correo para recibir un enlace de recuperación' : isLogin ? 'Ingrese datos para iniciar sesión' : 'Regístrate para poder ingresar'}
             </p>
           </div>
 
@@ -146,147 +215,195 @@ const Auth = () => {
           )}
 
           <Form onSubmit={handleSubmit} className="auth-form">
-            <Row>
-              {!isLogin && (
-                <>
-                  <Col xs={12} sm={6}>
-                    <Form.Group className="mb-3" controlId="name">
-                      <Form.Label className="fw-medium text-white">Name</Form.Label>
-                      <Form.Control
-                        type="text"
-                        name="name"
-                        placeholder="Juan"
-                        value={formData.name}
-                        onChange={handleChange}
-                        maxLength={100}
-                        required
-                        className="custom-input"
-                        onInvalid={e => e.target.setCustomValidity('Por favor completá este campo')}
-                        onInput={e => e.target.setCustomValidity('')}
-                      />
-                    </Form.Group>
-                  </Col>
-                  <Col xs={12} sm={6}>
-                    <Form.Group className="mb-3" controlId="lastname">
-                      <Form.Label className="fw-medium text-white">Lastname</Form.Label>
-                      <Form.Control
-                        type="text"
-                        name="lastname"
-                        placeholder="Pérez"
-                        value={formData.lastname}
-                        onChange={handleChange}
-                        maxLength={100}
-                        required
-                        className="custom-input"
-                        onInvalid={e => e.target.setCustomValidity('Por favor completá este campo')}
-                        onInput={e => e.target.setCustomValidity('')}
-                      />
-                    </Form.Group>
-                  </Col>
-                  <Col xs={12} sm={6}>
-                    <Form.Group className="mb-3" controlId="dni">
-                      <Form.Label className="fw-medium text-white">DNI *</Form.Label>
-                      <Form.Control
-                        type="text"
-                        name="dni"
-                        inputMode="numeric"
-                        pattern="[0-9]*"
-                        placeholder="12345678"
-                        value={formData.dni}
-                        onChange={handleChange}
-                        maxLength={20}
-                        required
-                        className="custom-input"
-                        onInvalid={e => e.target.setCustomValidity('Por favor completá este campo con tu DNI numérico')}
-                        onInput={e => e.target.setCustomValidity('')}
-                      />
-                    </Form.Group>
-                  </Col>
-                  <Col xs={12} sm={6}>
-                    <Form.Group className="mb-3" controlId="dateNac">
-                      <Form.Label className="fw-medium text-white">Date de Birth *</Form.Label>
-                      <Form.Control
-                        type="date"
-                        name="dateNac"
-                        value={formData.dateNac}
-                        onChange={handleChange}
-                        max={new Date().toISOString().split('T')[0]}
-                        required
-                        className="custom-input"
-                        onInvalid={e => e.target.setCustomValidity('Por favor seleccioná tu date de birth')}
-                        onInput={e => e.target.setCustomValidity('')}
-                      />
-                    </Form.Group>
-                  </Col>
-                </>
-              )}
+            {step === 'auth' && (
+              <Row>
+                {!isLogin && (
+                  <>
+                    <Col xs={12} sm={6}>
+                      <Form.Group className="mb-3" controlId="name">
+                        <Form.Label className="fw-medium text-white">Nombre</Form.Label>
+                        <Form.Control
+                          type="text"
+                          name="name"
+                          placeholder="Juan"
+                          value={formData.name}
+                          onChange={handleChange}
+                          maxLength={100}
+                          required
+                          className="custom-input"
+                          onInvalid={e => e.target.setCustomValidity('Por favor completá este campo')}
+                          onInput={e => e.target.setCustomValidity('')}
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col xs={12} sm={6}>
+                      <Form.Group className="mb-3" controlId="lastname">
+                        <Form.Label className="fw-medium text-white">Apellido</Form.Label>
+                        <Form.Control
+                          type="text"
+                          name="lastname"
+                          placeholder="Pérez"
+                          value={formData.lastname}
+                          onChange={handleChange}
+                          maxLength={100}
+                          required
+                          className="custom-input"
+                          onInvalid={e => e.target.setCustomValidity('Por favor completá este campo')}
+                          onInput={e => e.target.setCustomValidity('')}
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col xs={12} sm={6}>
+                      <Form.Group className="mb-3" controlId="dni">
+                        <Form.Label className="fw-medium text-white">DNI *</Form.Label>
+                        <Form.Control
+                          type="text"
+                          name="dni"
+                          inputMode="numeric"
+                          pattern="[0-9]*"
+                          placeholder="12345678"
+                          value={formData.dni}
+                          onChange={handleChange}
+                          maxLength={20}
+                          required
+                          className="custom-input"
+                          onInvalid={e => e.target.setCustomValidity('Por favor completá este campo con tu DNI numérico')}
+                          onInput={e => e.target.setCustomValidity('')}
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col xs={12} sm={6}>
+                      <Form.Group className="mb-3" controlId="dateNac">
+                        <Form.Label className="fw-medium text-white">Fecha de Nacimiento *</Form.Label>
+                        <Form.Control
+                          type="date"
+                          name="dateNac"
+                          value={formData.dateNac}
+                          onChange={handleChange}
+                          max={new Date().toISOString().split('T')[0]}
+                          required
+                          className="custom-input"
+                          onInvalid={e => e.target.setCustomValidity('Por favor seleccioná tu fecha de nacimiento')}
+                          onInput={e => e.target.setCustomValidity('')}
+                        />
+                      </Form.Group>
+                    </Col>
+                  </>
+                )}
 
-              <Col xs={12} sm={isLogin ? 12 : 6}>
-                <Form.Group className="mb-3" controlId="email">
-                  <Form.Label className="fw-medium text-white">Correo electrónico</Form.Label>
-                  <Form.Control
-                    type="email"
-                    name="email"
-                    placeholder="tu-email@gmail.com"
-                    value={formData.email}
-                    onChange={handleChange}
-                    maxLength={150}
-                    required
-                    className="custom-input"
-                    onInvalid={e => e.target.setCustomValidity(e.target.value === '' ? 'Por favor completá este campo' : 'Ingresá un correo electrónico válido')}
-                    onInput={e => e.target.setCustomValidity('')}
-                  />
-                </Form.Group>
-              </Col>
-
-              <Col xs={12} sm={isLogin ? 12 : 6}>
-                <Form.Group className="mb-4" controlId="password">
-                  <Form.Label className="fw-medium text-white">Contraseña</Form.Label>
-                  <InputGroup>
+                <Col xs={12} sm={isLogin ? 12 : 6}>
+                  <Form.Group className="mb-3" controlId="email">
+                    <Form.Label className="fw-medium text-white">Correo electrónico</Form.Label>
                     <Form.Control
-                      type={showPassword ? 'text' : 'password'}
-                      name="password"
-                      placeholder="••••••••"
-                      value={formData.password}
+                      type="email"
+                      name="email"
+                      placeholder="tu-email@gmail.com"
+                      value={formData.email}
                       onChange={handleChange}
-                      minLength={isLogin ? undefined : 6}
-                      maxLength={100}
+                      maxLength={150}
                       required
                       className="custom-input"
-                      onInvalid={e => e.target.setCustomValidity('Por favor completá este campo')}
+                      onInvalid={e => e.target.setCustomValidity(e.target.value === '' ? 'Por favor completá este campo' : 'Ingresá un correo electrónico válido')}
                       onInput={e => e.target.setCustomValidity('')}
                     />
-                    <Button 
-                      variant="link" 
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="text-white opacity-75 text-decoration-none border-0 bg-transparent px-3 d-flex align-items-center shadow-none"
-                      title={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
-                    >
-                      {showPassword ? <EyeSlashIcon /> : <EyeIcon />}
-                    </Button>
-                  </InputGroup>
-                </Form.Group>
-              </Col>
-            </Row>
+                  </Form.Group>
+                </Col>
+
+                <Col xs={12} sm={isLogin ? 12 : 6}>
+                  <Form.Group className="mb-4" controlId="password">
+                    <Form.Label className="fw-medium text-white">Contraseña</Form.Label>
+                    <InputGroup>
+                      <Form.Control
+                        type={showPassword ? 'text' : 'password'}
+                        name="password"
+                        placeholder="••••••••"
+                        value={formData.password}
+                        onChange={handleChange}
+                        minLength={isLogin ? undefined : 6}
+                        maxLength={100}
+                        required
+                        className="custom-input"
+                        onInvalid={e => e.target.setCustomValidity('Por favor completá este campo')}
+                        onInput={e => e.target.setCustomValidity('')}
+                      />
+                      <Button 
+                        variant="link" 
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="text-white opacity-75 text-decoration-none border-0 bg-transparent px-3 d-flex align-items-center shadow-none"
+                        title={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                      >
+                        {showPassword ? <EyeSlashIcon /> : <EyeIcon />}
+                      </Button>
+                    </InputGroup>
+                  </Form.Group>
+                </Col>
+              </Row>
+            )}
+
+            {step === '2fa' && (
+              <Form.Group className="mb-4" controlId="code2FA">
+                <Form.Label className="fw-medium text-white text-center w-100">Código de 6 dígitos</Form.Label>
+                <Form.Control
+                  type="text"
+                  maxLength={6}
+                  placeholder="123456"
+                  value={code2FA}
+                  onChange={(e) => setCode2FA(e.target.value.replace(/\D/g, ''))}
+                  required
+                  className="custom-input text-center fs-4 letter-spacing-2"
+                />
+              </Form.Group>
+            )}
+
+            {step === 'forgot' && (
+              <Form.Group className="mb-4" controlId="forgotEmail">
+                <Form.Label className="fw-medium text-white">Correo electrónico</Form.Label>
+                <Form.Control
+                  type="email"
+                  name="email"
+                  placeholder="tu-email@gmail.com"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                  className="custom-input"
+                />
+              </Form.Group>
+            )}
 
             <Button variant="primary" type="submit" disabled={cargando} className="w-100 fw-bold auth-button py-2">
               {cargando ? (
                 <>
                   <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" className="me-2" />
-                  {isLogin ? 'Iniciando sesión...' : 'Registrando...'}
+                  {step === '2fa' ? 'Verificando...' : step === 'forgot' ? 'Enviando...' : isLogin ? 'Iniciando sesión...' : 'Registrando...'}
                 </>
               ) : (
-                isLogin ? 'Iniciar sesión' : 'Register'
+                step === '2fa' ? 'Verificar' : step === 'forgot' ? 'Enviar enlace' : isLogin ? 'Iniciar sesión' : 'Registrarse'
               )}
             </Button>
           </Form>
 
-          <div className="text-center mt-4 auth-footer text-light">
-            {isLogin ? "¿No tienes cuenta? " : "¿Ya tienes una cuenta? "}
-            <Button variant="link" className="p-0 text-decoration-none toggle-btn fw-bold" onClick={toggleAuthMode}>
-              {isLogin ? 'Register' : 'Iniciar sesión'}
-            </Button>
+          <div className="text-center mt-4 auth-footer text-light d-flex flex-column gap-2">
+            {step === 'auth' && isLogin && (
+              <Button variant="link" className="p-0 text-decoration-none text-light opacity-75" onClick={() => { setStep('forgot'); setMensaje(null); }}>
+                ¿Olvidaste tu contraseña?
+              </Button>
+            )}
+
+            <div>
+              {step !== 'auth' ? (
+                <Button variant="link" className="p-0 text-decoration-none toggle-btn fw-bold" onClick={() => { setStep('auth'); setMensaje(null); }}>
+                  Volver al inicio de sesión
+                </Button>
+              ) : (
+                <>
+                  {isLogin ? "¿No tienes cuenta? " : "¿Ya tienes una cuenta? "}
+                  <Button variant="link" className="p-0 text-decoration-none toggle-btn fw-bold" onClick={toggleAuthMode}>
+                    {isLogin ? 'Regístrate' : 'Iniciar sesión'}
+                  </Button>
+                </>
+              )}
+            </div>
           </div>
         </Card.Body>
       </Card>
