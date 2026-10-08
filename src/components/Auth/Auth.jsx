@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Container, Card, Form, Button, Row, Col, Alert, Spinner, InputGroup } from 'react-bootstrap';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
@@ -33,6 +33,12 @@ const Auth = () => {
   const [step, setStep] = useState('auth'); // 'auth' | '2fa' | 'forgot'
   const [code2FA, setCode2FA] = useState('');
   const [tempEmail, setTempEmail] = useState('');
+
+  useEffect(() => {
+    if (!localStorage.getItem('deviceId')) {
+      localStorage.setItem('deviceId', 'dev_' + Math.random().toString(36).substring(2) + Date.now().toString(36));
+    }
+  }, []);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -104,7 +110,7 @@ const Auth = () => {
       const endpoint = isLogin ? `${API_BASE_URL}/login` : `${API_BASE_URL}/registro`;
 
       const bodyData = isLogin
-        ? { email: formData.email, password: formData.password }
+        ? { email: formData.email, password: formData.password, deviceId: localStorage.getItem('deviceId') }
         : { ...formData };
 
       try {
@@ -130,8 +136,8 @@ const Auth = () => {
             setStep('2fa');
           } else {
             setTipoMensaje('success');
-            setMensaje(data.message || (isLogin ? '¡Inicio de sesión exitoso!' : '¡Registro completado exitosamente! Redirigiendo...'));
-            handleSuccessLogin(data, formData);
+            setMensaje(data.message || (isLogin ? '¡Inicio de sesión exitoso!' : '¡Registro completado exitosamente! Por favor, verifica tu correo.'));
+            if (isLogin) { handleSuccessLogin(data, formData); } else { setTimeout(() => { setStep('auth'); setIsLogin(true); }, 3000); }
           }
         }
       } catch (error) {
@@ -146,7 +152,7 @@ const Auth = () => {
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ email: tempEmail, code: code2FA })
+          body: JSON.stringify({ email: tempEmail, code: code2FA, deviceId: localStorage.getItem('deviceId') })
         });
 
         const data = await response.json();

@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import Auth from './components/Auth/Auth';
 import ResetPassword from './components/Auth/ResetPassword';
+import VerifyEmail from './components/Auth/VerifyEmail';
 import User from './components/User/User';
 import Admin from './components/Admin/Admin';
 import Navigation from './components/Navigation/Navigation';
@@ -29,6 +30,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Auth />} />
           <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/verify-email" element={<VerifyEmail />} />
           {/* User Dashboard route */}
           <Route path="/user" element={<User />} />
           <Route path="/dashboard/quotas" element={<Navigate to="/user?tab=quotas" replace />} />
