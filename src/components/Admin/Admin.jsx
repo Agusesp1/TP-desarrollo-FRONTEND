@@ -7,9 +7,9 @@ import './Admin.css';
 import AdminStats from './AdminStats';
 import AdminDeleteModal from './AdminDeleteModal';
 import TeachersManager from './modules/TeachersManager';
-import SedesManager from './modules/SedesManager';
+import BranchesManager from './modules/BranchesManager';
 import ActivitiesManager from './modules/ActivitiesManager';
-import TurnosManager from './modules/TurnosManager';
+import ShiftsManager from './modules/ShiftsManager';
 import ClientesManager from './modules/ClientesManager';
 import CalendarAdmin from './modules/CalendarAdmin';
 import QuotasAdminManager from './modules/QuotasAdminManager';
@@ -372,7 +372,7 @@ const Admin = () => {
         )}
 
         {activeTab === 'branches' && (
-          <SedesManager
+          <BranchesManager
             branches={branches}
             teachers={teachers}
             cargando={cargandoSedes}
@@ -404,7 +404,7 @@ const Admin = () => {
         )}
 
         {activeTab === 'shifts' && (
-          <TurnosManager
+          <ShiftsManager
             shifts={shifts}
             activities={activities}
             teachers={teachers}
