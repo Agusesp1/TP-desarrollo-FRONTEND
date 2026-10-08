@@ -1,6 +1,7 @@
 ﻿import React, { useEffect, useState } from 'react';
 import { Container, Card, Alert, Spinner, Button } from 'react-bootstrap';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 const API_BASE_URL = 'http://localhost:3000/api/auth';
 
@@ -8,6 +9,7 @@ const VerifyEmail = () => {
   const [status, setStatus] = useState('loading'); // 'loading', 'success', 'error'
   const [message, setMessage] = useState('Verificando tu cuenta...');
   const location = useLocation();
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -31,8 +33,20 @@ const VerifyEmail = () => {
         
         if (response.ok && data.success) {
           setStatus('success');
-          setMessage(data.message || 'Correo verificado exitosamente. Ya puedes iniciar sesión.');
-          setTimeout(() => navigate('/login'), 3000);
+          setMessage(data.message || 'Correo verificado exitosamente. Iniciando sesión...');
+          
+          if (data.user) {
+            login(data.user);
+            setTimeout(() => {
+              if (data.user.role === 'admin' || data.user.email === 'administraciongymfit@gmail.com') {
+                navigate('/admin');
+              } else {
+                navigate('/user');
+              }
+            }, 2000);
+          } else {
+            setTimeout(() => navigate('/login'), 3000);
+          }
         } else {
           setStatus('error');
           setMessage(data.message || 'Error al verificar la cuenta.');
