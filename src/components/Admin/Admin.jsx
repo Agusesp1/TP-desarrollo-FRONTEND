@@ -7,9 +7,9 @@ import './Admin.css';
 import AdminStats from './AdminStats';
 import AdminDeleteModal from './AdminDeleteModal';
 import TeachersManager from './modules/TeachersManager';
-import BranchesManager from './modules/BranchesManager';
+import SedesManager from './modules/SedesManager';
 import ActivitiesManager from './modules/ActivitiesManager';
-import ShiftsManager from './modules/ShiftsManager';
+import TurnosManager from './modules/TurnosManager';
 import ClientesManager from './modules/ClientesManager';
 import CalendarAdmin from './modules/CalendarAdmin';
 import QuotasAdminManager from './modules/QuotasAdminManager';
@@ -282,7 +282,7 @@ const Admin = () => {
                 <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
                 <circle cx="12" cy="10" r="3" />
               </svg>
-              Branches ({branches.length})
+              Sedes ({branches.length})
             </Nav.Link>
           </Nav.Item>
 
@@ -309,7 +309,7 @@ const Admin = () => {
                 <circle cx="12" cy="12" r="10" />
                 <polyline points="12 6 12 12 16 14" />
               </svg>
-              Shifts ({shifts.length})
+              Turnos ({shifts.length})
             </Nav.Link>
           </Nav.Item>
 
@@ -372,7 +372,7 @@ const Admin = () => {
         )}
 
         {activeTab === 'branches' && (
-          <BranchesManager
+          <SedesManager
             branches={branches}
             teachers={teachers}
             cargando={cargandoSedes}
@@ -404,7 +404,7 @@ const Admin = () => {
         )}
 
         {activeTab === 'shifts' && (
-          <ShiftsManager
+          <TurnosManager
             shifts={shifts}
             activities={activities}
             teachers={teachers}

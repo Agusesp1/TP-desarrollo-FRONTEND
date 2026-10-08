@@ -219,7 +219,7 @@ const ClientesManager = ({ onMostrarAlerta, apiBase }) => {
     if (u.status) {
       return (
         <span className="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50 px-2 py-1 rounded-pill">
-          Active (Al día)
+          Activo (Al día)
         </span>
       );
     }

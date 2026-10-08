@@ -128,7 +128,7 @@ const TeachersManager = ({
         <div>
           <h4 className="fw-bold mb-1 text-white">Listado y Carga de Profesores</h4>
           <p className="text-secondary small mb-0">
-            Agrega, asigna branches, edita especialidades y gestiona el cuerpo docente de FitApp.
+            Agrega, asigna sedes, edita especialidades y gestiona el cuerpo docente de FitApp.
           </p>
         </div>
 
@@ -141,7 +141,7 @@ const TeachersManager = ({
             <path d="M5 12h14" />
             <path d="M12 5v14" />
           </svg>
-          Cargar Teacher
+          Cargar Profesor
         </Button>
       </div>
 
@@ -156,7 +156,7 @@ const TeachersManager = ({
             </InputGroup.Text>
             <Form.Control
               type="text"
-              placeholder="Buscar teacher..."
+              placeholder="Buscar profesor..."
               value={filterTexto}
               onChange={(e) => setFiltroTexto(e.target.value)}
             />
@@ -188,7 +188,7 @@ const TeachersManager = ({
             value={filterSede}
             onChange={(e) => setFiltroSede(e.target.value)}
           >
-            <option value="">Todas las Branches</option>
+            <option value="">Todas las Sedes</option>
             {branches.map((s) => (
               <option key={s.id} value={s.id}>
                 {s.name} ({s.city})
@@ -205,18 +205,18 @@ const TeachersManager = ({
         </div>
       ) : teachersFiltrados.length === 0 ? (
         <div className="text-center py-5 text-secondary">
-          <p className="mb-0">No se encontraron profesores con los filters aplicados.</p>
+          <p className="mb-0">No se encontraron profesores con los filtros aplicados.</p>
         </div>
       ) : (
         <div className="table-responsive">
           <Table className="admin-table align-middle mb-0">
             <thead>
               <tr>
-                <th>Teacher / DNI</th>
+                <th>Profesor / DNI</th>
                 <th>Contacto</th>
-                <th>Specialty</th>
+                <th>Especialidad</th>
                 <th>Shift</th>
-                <th>Branch Asignada</th>
+                <th>Sede Asignada</th>
                 <th>Status</th>
                 <th className="text-end">Acciones</th>
               </tr>
@@ -244,12 +244,12 @@ const TeachersManager = ({
                     {teacher.branch ? (
                       <span className="text-white small fw-medium">{teacher.branch.name}</span>
                     ) : (
-                      <span className="text-secondary small">Sin branch asignada</span>
+                      <span className="text-secondary small">Sin sede asignada</span>
                     )}
                   </td>
                   <td>
                     <span className={teacher.status ? 'badge-status-active' : 'badge-status-inactive'}>
-                      {teacher.status ? 'Active' : 'Inactivo'}
+                      {teacher.status ? 'Activo' : 'Inactivo'}
                     </span>
                   </td>
                   <td className="text-end">
@@ -258,7 +258,7 @@ const TeachersManager = ({
                         size="sm"
                         className="btn-token-outline-warning rounded-pill px-3 py-1"
                         onClick={() => handleToggleEstado(teacher.id)}
-                        title={teacher.status ? 'Desactivar teacher' : 'Activar teacher'}
+                        title={teacher.status ? 'Desactivar profesor' : 'Activar profesor'}
                       >
                         {teacher.status ? 'Pausar' : 'Activar'}
                       </Button>
@@ -266,7 +266,7 @@ const TeachersManager = ({
                         size="sm"
                         className="btn-token-outline-primary rounded-pill px-3 py-1"
                         onClick={() => handleAbrirModal(teacher)}
-                        title="Editar datos del teacher"
+                        title="Editar datos del profesor"
                       >
                         Editar
                       </Button>
@@ -291,11 +291,11 @@ const TeachersManager = ({
         </div>
       )}
 
-      {/* Modal Crear / Editar Teacher */}
+      {/* Modal Crear / Editar Profesor */}
       <Modal show={showModal} onHide={() => setShowModal(false)} centered contentClassName="glass-card text-white">
         <Modal.Header closeButton closeVariant="white">
           <Modal.Title className="fw-bold">
-            {teacherEditando ? 'Editar Teacher' : 'Cargar Nuevo Teacher'}
+            {teacherEditando ? 'Editar Profesor' : 'Cargar Nuevo Profesor'}
           </Modal.Title>
         </Modal.Header>
         <Form onSubmit={handleGuardar}>
@@ -385,7 +385,7 @@ const TeachersManager = ({
               </Col>
               <Col md={6}>
                 <Form.Group>
-                  <Form.Label>Specialty</Form.Label>
+                  <Form.Label>Especialidad</Form.Label>
                   <Form.Select
                     value={formData.specialty}
                     onChange={(e) => setFormData({ ...formData, specialty: e.target.value })}
@@ -415,13 +415,13 @@ const TeachersManager = ({
               </Col>
               <Col md={12}>
                 <Form.Group>
-                  <Form.Label>Branch Asignada *</Form.Label>
+                  <Form.Label>Sede Asignada *</Form.Label>
                   <Form.Select
                     required
                     value={formData.branch_id}
                     onChange={(e) => setFormData({ ...formData, branch_id: e.target.value })}
                   >
-                    <option value="">-- Seleccione una branch --</option>
+                    <option value="">-- Seleccione una sede --</option>
                     {branches.map((s) => (
                       <option key={s.id} value={s.id}>
                         {s.name} ({s.city})
@@ -445,7 +445,7 @@ const TeachersManager = ({
               ) : teacherEditando ? (
                 'Guardar Cambios'
               ) : (
-                'Registrar Teacher'
+                'Registrar Profesor'
               )}
             </Button>
           </Modal.Footer>
