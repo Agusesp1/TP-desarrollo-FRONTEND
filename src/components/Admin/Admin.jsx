@@ -100,7 +100,7 @@ const Admin = () => {
         setProfesores(data.teachers || []);
       }
     } catch (err) {
-      console.error('Error al cargar teachers:', err);
+      console.error('Error al cargar profesores:', err);
     } finally {
       setCargandoProfesores(false);
     }
@@ -269,7 +269,7 @@ const Admin = () => {
                 <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
                 <circle cx="9" cy="7" r="4" />
               </svg>
-              Teachers ({teachers.length})
+              Profesores ({teachers.length})
             </Nav.Link>
           </Nav.Item>
 

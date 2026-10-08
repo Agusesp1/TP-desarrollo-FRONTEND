@@ -12,6 +12,7 @@ const TeachersManager = ({
 }) => {
   const [filterTexto, setFiltroTexto] = useState('');
   const [filterSede, setFiltroSede] = useState('');
+  const [filterEspecialidad, setFiltroEspecialidad] = useState('');
 
   // Modal State
   const [showModal, setShowModal] = useState(false);
@@ -117,14 +118,15 @@ const TeachersManager = ({
     const texto = `${p.name} ${p.lastname} ${p.specialty} ${p.dni}`.toLowerCase();
     const coincideTexto = texto.includes(filterTexto.toLowerCase());
     const coincideSede = !filterSede || (p.branch_id && p.branch_id.toString() === filterSede.toString());
-    return coincideTexto && coincideSede;
+    const coincideEspecialidad = !filterEspecialidad || p.specialty === filterEspecialidad;
+    return coincideTexto && coincideSede && coincideEspecialidad;
   });
 
   return (
     <Card className="glass-card border-0 p-4 text-white">
       <div className="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
         <div>
-          <h4 className="fw-bold mb-1 text-white">Listado y Carga de Teachers</h4>
+          <h4 className="fw-bold mb-1 text-white">Listado y Carga de Profesores</h4>
           <p className="text-secondary small mb-0">
             Agrega, asigna branches, edita especialidades y gestiona el cuerpo docente de FitApp.
           </p>
@@ -144,7 +146,7 @@ const TeachersManager = ({
       </div>
 
       <Row className="g-3 mb-4">
-        <Col md={7} lg={8}>
+        <Col md={5}>
           <InputGroup>
             <InputGroup.Text>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -154,7 +156,7 @@ const TeachersManager = ({
             </InputGroup.Text>
             <Form.Control
               type="text"
-              placeholder="Buscar teacher por name, specialty o DNI..."
+              placeholder="Buscar teacher..."
               value={filterTexto}
               onChange={(e) => setFiltroTexto(e.target.value)}
             />
@@ -166,7 +168,22 @@ const TeachersManager = ({
           </InputGroup>
         </Col>
 
-        <Col md={5} lg={4}>
+        <Col md={4}>
+          <Form.Select
+            value={filterEspecialidad}
+            onChange={(e) => setFiltroEspecialidad(e.target.value)}
+          >
+            <option value="">Todas las Especialidades</option>
+            <option value="Musculación & Hipertrofia">Musculación & Hipertrofia</option>
+            <option value="Crossfit & Funcional">Crossfit & Funcional</option>
+            <option value="Spinning & Cardio">Spinning & Cardio</option>
+            <option value="Yoga & Pilates">Yoga & Pilates</option>
+            <option value="Zumba & Ritmos">Zumba & Ritmos</option>
+            <option value="Boxeo & Artes Marciales">Boxeo & Artes Marciales</option>
+          </Form.Select>
+        </Col>
+
+        <Col md={3}>
           <Form.Select
             value={filterSede}
             onChange={(e) => setFiltroSede(e.target.value)}
@@ -184,11 +201,11 @@ const TeachersManager = ({
       {cargando ? (
         <div className="text-center py-5">
           <Spinner animation="border" variant="primary" />
-          <p className="mt-2 text-secondary">Cargando teachers...</p>
+          <p className="mt-2 text-secondary">Cargando profesores...</p>
         </div>
       ) : teachersFiltrados.length === 0 ? (
         <div className="text-center py-5 text-secondary">
-          <p className="mb-0">No se encontraron teachers con los filters aplicados.</p>
+          <p className="mb-0">No se encontraron profesores con los filters aplicados.</p>
         </div>
       ) : (
         <div className="table-responsive">
@@ -398,12 +415,13 @@ const TeachersManager = ({
               </Col>
               <Col md={12}>
                 <Form.Group>
-                  <Form.Label>Branch Asignada</Form.Label>
+                  <Form.Label>Branch Asignada *</Form.Label>
                   <Form.Select
+                    required
                     value={formData.branch_id}
                     onChange={(e) => setFormData({ ...formData, branch_id: e.target.value })}
                   >
-                    <option value="">-- Sin branch asignada --</option>
+                    <option value="">-- Seleccione una branch --</option>
                     {branches.map((s) => (
                       <option key={s.id} value={s.id}>
                         {s.name} ({s.city})

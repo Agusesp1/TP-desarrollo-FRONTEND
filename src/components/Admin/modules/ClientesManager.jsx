@@ -10,6 +10,7 @@ const ClientesManager = ({ onMostrarAlerta, apiBase }) => {
   const [cargando, setCargando] = useState(true);
   const [filterTexto, setFiltroTexto] = useState('');
   const [filterCategoria, setFiltroCategoria] = useState('todas');
+  const [filterEstado, setFiltroEstado] = useState('todos');
 
   // Estados para el modal de quotas vencidas
   const [memberSeleccionado, setSocioSeleccionado] = useState(null);
@@ -143,13 +144,18 @@ const ClientesManager = ({ onMostrarAlerta, apiBase }) => {
   };
 
   const usersFiltrados = users.filter((u) => {
+    if (u.role !== 'user') return false;
     const texto = `${u.name} ${u.lastname} ${u.email} ${u.dni || ''}`.toLowerCase();
     const coincideTexto = texto.includes(filterTexto.toLowerCase());
     const coincideCat =
       filterCategoria === 'todas' ||
       !filterCategoria ||
       u.category === filterCategoria;
-    return coincideTexto && coincideCat;
+    const coincideEstado = 
+      filterEstado === 'todos' ||
+      (filterEstado === 'activos' && u.status === true) ||
+      (filterEstado === 'inactivos' && u.status === false);
+    return coincideTexto && coincideCat && coincideEstado;
   });
 
   const renderBadgeEstadoCuotas = (u) => {
@@ -254,7 +260,7 @@ const ClientesManager = ({ onMostrarAlerta, apiBase }) => {
       </div>
 
       <Row className="g-3 mb-4">
-        <Col md={8}>
+        <Col md={6}>
           <InputGroup>
             <InputGroup.Text>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -276,15 +282,26 @@ const ClientesManager = ({ onMostrarAlerta, apiBase }) => {
           </InputGroup>
         </Col>
 
-        <Col md={4}>
+        <Col md={3}>
           <Form.Select
             value={filterCategoria}
             onChange={(e) => setFiltroCategoria(e.target.value)}
           >
             <option value="todas">Todas las Membresías</option>
             <option value="Premium">Premium</option>
-            <option value="Estándar">Estándar</option>
-            <option value="Básico">Básico</option>
+            <option value="Medium">Medium</option>
+            <option value="Inicial">Inicial</option>
+          </Form.Select>
+        </Col>
+
+        <Col md={3}>
+          <Form.Select
+            value={filterEstado}
+            onChange={(e) => setFiltroEstado(e.target.value)}
+          >
+            <option value="todos">Todos los Estados</option>
+            <option value="activos">Activos</option>
+            <option value="inactivos">Inactivos</option>
           </Form.Select>
         </Col>
       </Row>
