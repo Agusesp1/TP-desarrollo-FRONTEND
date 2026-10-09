@@ -388,8 +388,8 @@ const Auth = () => {
               )}
             </Button>
           </Form>
-
-          <div className="text-center mt-4 auth-footer text-light d-flex flex-column gap-2">
+ 
+         <div className="text-center mt-4 auth-footer text-light d-flex flex-column gap-2">
             {step === 'auth' && isLogin && (
               <Button variant="link" className="p-0 text-decoration-none text-light opacity-75" onClick={() => { setStep('forgot'); setMensaje(null); }}>
                 ¿Olvidaste tu contraseña?
