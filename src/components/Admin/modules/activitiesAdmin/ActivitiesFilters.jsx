@@ -23,7 +23,7 @@ const ActivitiesFilters = ({
           </InputGroup.Text>
           <Form.Control
             type="text"
-            placeholder="Buscar por activity o teacher..."
+            placeholder="Buscar por actividad o profesor..."
             value={filterTexto}
             onChange={(e) => setFiltroTexto(e.target.value)}
           />
@@ -37,7 +37,7 @@ const ActivitiesFilters = ({
 
       <Col md={3} lg={3}>
         <InputGroup>
-          <InputGroup.Text title="Filtrar por branch">
+          <InputGroup.Text title="Filtrar por sede">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
               <circle cx="12" cy="10" r="3" />
@@ -47,8 +47,8 @@ const ActivitiesFilters = ({
             value={filterSede}
             onChange={(e) => setFiltroSede(e.target.value)}
           >
-            <option value="todas">Todas las branches</option>
-            <option value="sin_branch">Sin branch asignada</option>
+            <option value="todas">Todas las sedes</option>
+            <option value="sin_branch">Sin sede asignada</option>
             {branches && branches.map((s) => (
               <option key={s.id} value={s.id.toString()}>
                 {s.name}
@@ -70,8 +70,8 @@ const ActivitiesFilters = ({
             value={filterProfesor}
             onChange={(e) => setFiltroProfesor(e.target.value)}
           >
-            <option value="todos">Todos los teachers</option>
-            <option value="sin_teacher">Sin teacher asignado</option>
+            <option value="todos">Todos los profesores</option>
+            <option value="sin_teacher">Sin profesor asignado</option>
             {teachers && teachers.map((p) => (
               <option key={p.id} value={p.id.toString()}>
                 {p.name} {p.lastname}
@@ -85,7 +85,7 @@ const ActivitiesFilters = ({
                 setFiltroSede('todas');
                 setFiltroProfesor('todos');
               }}
-              title="Restablecer filters"
+              title="Restablecer filtros"
             >
               ✕
             </Button>

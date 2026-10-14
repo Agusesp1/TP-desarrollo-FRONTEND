@@ -1,13 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Container, Card, Row, Col, Button, Nav, Badge } from 'react-bootstrap';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, Navigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import './User.css';
 
 import ProfileTab from './modules/ProfileTab';
 import SecurityTab from './modules/SecurityTab';
-import QuotasTab from './modules/QuotasTab';
-import ShiftsTab from './modules/ShiftsTab';
 import TeacherAgendaTab from './modules/TeacherAgendaTab';
 
 const User = () => {
@@ -23,19 +21,9 @@ const User = () => {
     searchParams.has('status') ||
     searchParams.has('collection_status');
 
-  const [activeTab, setActiveTab] = useState(() => {
-    if (hasCuotasParam && !esProfesor && !esAdmin) {
-      return 'quotas';
-    }
-    return user?.role === 'teacher' ? 'agenda' : 'profile';
-  });
-
-  // Si en la URL vienen parámetros como tab=quotas, payment, status, o collection_status, activar automáticamente quotas
-  useEffect(() => {
-    if (hasCuotasParam && !esProfesor && !esAdmin) {
-      setActiveTab('quotas');
-    }
-  }, [hasCuotasParam, esProfesor, esAdmin]);
+  const [activeTab, setActiveTab] = useState(() =>
+    user?.role === 'teacher' ? 'agenda' : 'profile'
+  );
 
   // Limpiar de forma preventiva cualquier clase modal-open o estilo overflow/padding-right residual y backdrops huérfanos
   useEffect(() => {
@@ -54,14 +42,13 @@ const User = () => {
     };
   }, [activeTab]);
 
-  // Control de acceso por role
-  useEffect(() => {
-    if (esProfesor && (activeTab === 'quotas' || activeTab === 'shifts')) {
-      setActiveTab('agenda');
-    } else if (esAdmin && activeTab === 'quotas') {
-      setActiveTab('profile');
-    }
-  }, [esProfesor, esAdmin, activeTab]);
+  // Compatibilidad: enlaces/retornos de pago antiguos hacia /user?tab=quotas ahora van a /cuotas
+  if (hasCuotasParam && !esProfesor && !esAdmin) {
+    const params = new URLSearchParams(searchParams);
+    params.delete('tab');
+    const qs = params.toString();
+    return <Navigate to={`/cuotas${qs ? `?${qs}` : ''}`} replace />;
+  }
 
 
   return (
@@ -165,37 +152,6 @@ const User = () => {
               Seguridad & Contraseña
             </Nav.Link>
           </Nav.Item>
-
-          {/* Únicamente mostrar Pestañas de Quotas y Shifts a los Members/Users regulares */}
-          {!esAdmin && !esProfesor && (
-            <>
-              <Nav.Item>
-                <Nav.Link
-                  className={activeTab === 'quotas' ? 'active' : ''}
-                  onClick={() => setActiveTab('quotas')}
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <rect width="20" height="14" x="2" y="5" rx="2" />
-                    <line x1="2" x2="22" y1="10" strokeWidth="2" />
-                  </svg>
-                  Cuotas y Pagos
-                </Nav.Link>
-              </Nav.Item>
-
-              <Nav.Item>
-                <Nav.Link
-                  className={activeTab === 'shifts' ? 'active' : ''}
-                  onClick={() => setActiveTab('shifts')}
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="12" cy="12" r="10" />
-                    <polyline points="12 6 12 12 16 14" />
-                  </svg>
-                  Turnos y Reservas
-                </Nav.Link>
-              </Nav.Item>
-            </>
-          )}
         </Nav>
 
         {/* Renderizado de Módulos */}
@@ -209,14 +165,6 @@ const User = () => {
 
         {activeTab === 'seguridad' && (
           <SecurityTab user={user} />
-        )}
-
-        {!esAdmin && !esProfesor && activeTab === 'quotas' && (
-          <QuotasTab user={user} />
-        )}
-
-        {!esAdmin && !esProfesor && activeTab === 'shifts' && (
-          <ShiftsTab user={user} />
         )}
       </Container>
     </div>

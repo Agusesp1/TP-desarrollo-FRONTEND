@@ -225,9 +225,9 @@ const ActivitiesManager = ({
       {/* Encabezado y Botón Nueva Activity */}
       <div className="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
         <div>
-          <h4 className="fw-bold mb-1 text-white">Gestión de Activities y Clases</h4>
+          <h4 className="fw-bold mb-1 text-white">Gestión de Actividades y Clases</h4>
           <p className="text-secondary small mb-0">
-            Administra disciplinas deportivas, teachers a cargo, branches y cupos máximos por clase.
+            Administra disciplinas deportivas, profesores a cargo, sedes y cupos máximos por clase.
           </p>
         </div>
 
@@ -240,7 +240,7 @@ const ActivitiesManager = ({
             <path d="M5 12h14" />
             <path d="M12 5v14" />
           </svg>
-          Nueva Activity
+          Nueva Actividad
         </Button>
       </div>
 
@@ -260,12 +260,12 @@ const ActivitiesManager = ({
       {cargando ? (
         <div className="text-center py-5">
           <Spinner animation="border" variant="primary" />
-          <p className="mt-2 text-secondary">Cargando activities...</p>
+          <p className="mt-2 text-secondary">Cargando actividades...</p>
         </div>
       ) : activitiesFiltradas.length === 0 ? (
         <div className="text-center py-5 text-secondary">
           <p className="mb-0">
-            No se encontraron activities {filterSede !== 'todas' || filterProfesor !== 'todos' || filterTexto ? 'con los filters seleccionados.' : 'registradas.'}
+            No se encontraron actividades {filterSede !== 'todas' || filterProfesor !== 'todos' || filterTexto ? 'con los filters seleccionados.' : 'registradas.'}
           </p>
         </div>
       ) : (

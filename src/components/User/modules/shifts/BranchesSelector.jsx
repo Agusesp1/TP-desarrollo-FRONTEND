@@ -14,7 +14,7 @@ const BranchesSelector = ({ branches, branchSeleccionada, setSedeSeleccionada })
         <button
           key={s.id}
           type="button"
-          className={`  -pill ${branchSeleccionada?.toString() === s.id.toString() ? 'active' : ''}`}
+          className={`branch-pill ${branchSeleccionada?.toString() === s.id.toString() ? 'active' : ''}`}
           onClick={() => setSedeSeleccionada(s.id)}
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="me-1">

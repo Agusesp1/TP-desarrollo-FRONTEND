@@ -57,7 +57,7 @@ const ActivitiesTable = ({
                         <div className="small text-white-50">{resumen.diasTexto}</div>
                       </div>
                     ) : (
-                      <span className="badge bg-secondary text-white-50 px-2 py-1">Sin schedule</span>
+                      <span className="badge bg-secondary text-white-50 px-2 py-1">Sin horario</span>
                     )}
                   </td>
                   <td>
@@ -70,7 +70,7 @@ const ActivitiesTable = ({
                         {branchObj.name}
                       </span>
                     ) : (
-                      <span className="badge bg-secondary text-white-50 px-2 py-1">Sin branch</span>
+                      <span className="badge bg-secondary text-white-50 px-2 py-1">Sin sede</span>
                     )}
                   </td>
                   <td>
@@ -83,7 +83,7 @@ const ActivitiesTable = ({
                         {profObj.name} {profObj.lastname}
                       </span>
                     ) : (
-                      <span className="badge bg-secondary text-white-50 px-2 py-1">Sin teacher</span>
+                      <span className="badge bg-secondary text-white-50 px-2 py-1">Sin profesor</span>
                     )}
                   </td>
                   <td>
@@ -94,7 +94,7 @@ const ActivitiesTable = ({
                   </td>
                   <td>
                     <span className="badge-token-accent">
-                      {act.shifts?.length || 0} shifts
+                      {act.shifts?.length || 0} turnos
                     </span>
                   </td>
                   <td>

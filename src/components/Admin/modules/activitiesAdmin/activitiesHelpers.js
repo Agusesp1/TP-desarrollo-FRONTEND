@@ -25,7 +25,7 @@ export const convertirHoraAMin = (hora) => {
 export const obtenerResumenHorarios = (act) => {
   if (!act.shifts || act.shifts.length === 0) {
     return {
-      horariosTexto: 'Sin schedule',
+      horariosTexto: 'Sin horario',
       diasTexto: 'Sin días asignados',
       esGrupal: false,
       amountShifts: 0
@@ -51,7 +51,7 @@ export const obtenerResumenHorarios = (act) => {
 
   return {
     horariosTexto: `${primerHorario} a ${ultimoHorario} hs`,
-    diasTexto: esMusculacion ? `${diasUnicos} (Shifts continuos)` : diasUnicos,
+    diasTexto: esMusculacion ? `${diasUnicos} (Turnos continuos)` : diasUnicos,
     esGrupal: true,
     amountShifts: act.shifts.length
   };

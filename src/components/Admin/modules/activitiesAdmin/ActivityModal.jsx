@@ -31,7 +31,7 @@ const ActivityModal = ({
           <Row className="g-3">
             <Col md={12}>
               <Form.Group>
-                <Form.Label>Name de la Activity *</Form.Label>
+                <Form.Label>Nombre de la Actividad *</Form.Label>
                 <Form.Control
                   type="text"
                   required
@@ -50,7 +50,7 @@ const ActivityModal = ({
                     <circle cx="12" cy="12" r="10" />
                     <polyline points="12 6 12 12 16 14" />
                   </svg>
-                  Días y Schedules de Dictado *
+                  Días y Horarios *
                 </h6>
                 <Row className="g-3">
                   <Col md={12}>
@@ -82,7 +82,7 @@ const ActivityModal = ({
                           <circle cx="12" cy="12" r="10" />
                           <polyline points="12 6 12 12 16 14" />
                         </svg>
-                        Hora Home *
+                        Hora Inicio *
                       </Form.Label>
                       <Form.Control
                         type="time"
@@ -120,7 +120,7 @@ const ActivityModal = ({
                   {hayErrorHorario && (
                     <Col md={12}>
                       <div className="alert alert-danger py-1 px-2 small mb-0 d-flex align-items-center gap-1">
-                        <span>⚠️ El schedule de fin ({formData.endTime}) debe ser posterior al home ({formData.startTime}).</span>
+                        <span>⚠️ El horario de fin ({formData.endTime}) debe ser posterior al de inicio ({formData.startTime}).</span>
                       </div>
                     </Col>
                   )}
@@ -130,12 +130,12 @@ const ActivityModal = ({
 
             <Col md={6}>
               <Form.Group>
-                <Form.Label>Branch</Form.Label>
+                <Form.Label>Sede</Form.Label>
                 <Form.Select
                   value={formData.branch_id}
                   onChange={(e) => setFormData({ ...formData, branch_id: e.target.value })}
                 >
-                  <option value="">Seleccione una branch...</option>
+                  <option value="">Seleccione una sede...</option>
                   {branches && branches.map((branch) => (
                     <option key={branch.id} value={branch.id}>{branch.name}</option>
                   ))}
@@ -149,7 +149,7 @@ const ActivityModal = ({
                   value={formData.teacher_id}
                   onChange={(e) => setFormData({ ...formData, teacher_id: e.target.value })}
                 >
-                  <option value="">-- Sin teacher asignado --</option>
+                  <option value="">-- Sin profesor asignado --</option>
                   {teachers && teachers.map((teacher) => {
                     const branchProfObj = branches && branches.find((s) => s.id?.toString() === teacher.branch_id?.toString());
                     const esMismaSede = !formData.branch_id || !teacher.branch_id || teacher.branch_id.toString() === formData.branch_id.toString();
@@ -182,7 +182,7 @@ const ActivityModal = ({
             </Col>
             <Col md={6}>
               <Form.Group>
-                <Form.Label>Capacity Máximo de Personas *</Form.Label>
+                <Form.Label>Capacidad Máxima de Personas *</Form.Label>
                 <Form.Control
                   type="number"
                   min="1"
@@ -219,7 +219,7 @@ const ActivityModal = ({
             ) : activityEditando ? (
               'Guardar Cambios'
             ) : (
-              'Crear Activity'
+              'Crear Actividad'
             )}
           </Button>
         </Modal.Footer>

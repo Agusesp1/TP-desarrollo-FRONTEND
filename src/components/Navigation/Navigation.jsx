@@ -1,5 +1,5 @@
 import { Navbar, Nav, Container, Button } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import './Navigation.css';
 
@@ -36,12 +36,16 @@ const Navigation = () => {
             <Nav.Link as={Link} to="/" onClick={handleGoHome} className="fw-medium mx-1">
               Home
             </Nav.Link>
-            <Nav.Link as="a" href="/#nosotros" className="fw-medium mx-1">
-              Nosotros
-            </Nav.Link>
-            <Nav.Link as="a" href="/#contacto" className="fw-medium mx-1">
-              Contacto
-            </Nav.Link>
+            {!user && (
+              <>
+                <Nav.Link as="a" href="/#nosotros" className="fw-medium mx-1">
+                  Nosotros
+                </Nav.Link>
+                <Nav.Link as="a" href="/#contacto" className="fw-medium mx-1">
+                  Contacto
+                </Nav.Link>
+              </>
+            )}
 
             {user ? (
               <>
@@ -53,6 +57,25 @@ const Navigation = () => {
                     </svg>
                     Panel Admin
                   </Nav.Link>
+                )}
+
+                {user.role !== 'admin' && user.role !== 'teacher' && user.email !== 'administraciongymfit@gmail.com' && (
+                  <>
+                    <Nav.Link as={NavLink} to="/turnos" className="fw-medium mx-1 text-white d-flex align-items-center gap-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-icon">
+                        <circle cx="12" cy="12" r="10" />
+                        <polyline points="12 6 12 12 16 14" />
+                      </svg>
+                      Turnos
+                    </Nav.Link>
+                    <Nav.Link as={NavLink} to="/cuotas" className="fw-medium mx-1 text-white d-flex align-items-center gap-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-icon">
+                        <rect width="20" height="14" x="2" y="5" rx="2" />
+                        <line x1="2" x2="22" y1="10" y2="10" />
+                      </svg>
+                      Cuotas
+                    </Nav.Link>
+                  </>
                 )}
 
                 <Nav.Link as={Link} to="/user" className="fw-medium mx-1 text-white d-flex align-items-center">

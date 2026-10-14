@@ -5,6 +5,7 @@ import Auth from './components/Auth/Auth';
 import ResetPassword from './components/Auth/ResetPassword';
 import VerifyEmail from './components/Auth/VerifyEmail';
 import User from './components/User/User';
+import MemberSection from './components/User/MemberSection';
 import Admin from './components/Admin/Admin';
 import Navigation from './components/Navigation/Navigation';
 import Home from './components/Home/Home';
@@ -13,11 +14,9 @@ import ScrollToTop from './components/ScrollToTop/ScrollToTop';
 import WhatsAppButton from './components/WhatsAppButton/WhatsAppButton';
 
 // Si el user retorna de Mercado Payment a /dashboard/quotas con parámetros de payment,
-// preservamos los parámetros al redirigir hacia /user?tab=quotas
+// preservamos los parámetros al redirigir hacia /cuotas
 if (typeof window !== 'undefined' && window.location.pathname === '/dashboard/quotas' && window.location.search) {
-  const search = window.location.search;
-  const target = `/user${search}${search.includes('tab=') ? '' : '&tab=quotas'}`;
-  window.history.replaceState(null, '', target);
+  window.history.replaceState(null, '', `/cuotas${window.location.search}`);
 }
 
 function App() {
@@ -33,7 +32,9 @@ function App() {
           <Route path="/verify-email" element={<VerifyEmail />} />
           {/* User Dashboard route */}
           <Route path="/user" element={<User />} />
-          <Route path="/dashboard/quotas" element={<Navigate to="/user?tab=quotas" replace />} />
+          <Route path="/turnos" element={<MemberSection section="turnos" />} />
+          <Route path="/cuotas" element={<MemberSection section="cuotas" />} />
+          <Route path="/dashboard/quotas" element={<Navigate to="/cuotas" replace />} />
           {/* Admin Dashboard route */}
           <Route path="/admin" element={<Admin />} />
         </Routes>
