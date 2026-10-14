@@ -19,7 +19,7 @@ export const ModalConfirmarReserva = ({
     >
       <Modal.Header closeButton closeVariant="white" className="border-0 pb-0">
         <Modal.Title className="text-white fw-bold fs-5">
-          Confirmar Reservation
+          Confirmar Reserva
         </Modal.Title>
       </Modal.Header>
       <Modal.Body className="py-3">
@@ -52,7 +52,7 @@ export const ModalConfirmarReserva = ({
                   <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
                   <circle cx="12" cy="7" r="4"></circle>
                 </svg>
-                <span>Teacher: {shift.teacher ? `${shift.teacher.name} ${shift.teacher.lastname}` : 'Sin Asignar'}</span>
+                <span>Profesor: {shift.teacher ? `${shift.teacher.name} ${shift.teacher.lastname}` : 'Sin Asignar'}</span>
               </div>
               <div className="reservation-detail-item">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -92,7 +92,7 @@ export const ModalConfirmarReserva = ({
               Confirmando...
             </>
           ) : (
-            'Confirmar Reservation'
+            'Confirmar Reserva'
           )}
         </Button>
       </Modal.Footer>
@@ -115,15 +115,15 @@ export const ModalCancelarReserva = ({
     >
       <Modal.Header closeButton closeVariant="white" className="border-0 pb-0">
         <Modal.Title className="text-white fw-bold fs-5">
-          Cancelar Reservation
+          Cancelar Reserva
         </Modal.Title>
       </Modal.Header>
       <Modal.Body className="py-3">
         <p className="text-light mb-2">
-          ¿Estás seguro de que deseas cancelar tu shift para <strong>{modalCancelar.nameClase}</strong>?
+          ¿Estás seguro de que deseas cancelar tu turno para <strong>{modalCancelar.nameClase}</strong>?
         </p>
         <p className="text-secondary small mb-0">
-          Tu lugar será liberado inmediatamente para que otro member pueda reservarlo.
+          Tu lugar será liberado inmediatamente para que otro socio pueda reservarlo.
         </p>
       </Modal.Body>
       <Modal.Footer className="border-0 pt-0">
@@ -133,7 +133,7 @@ export const ModalCancelarReserva = ({
           onClick={() => setModalCancelar({ open: false, reservationId: null, nameClase: '' })}
           disabled={guardando}
         >
-          Conservar Shift
+          Conservar Turno
         </Button>
         <Button 
           variant="outline-danger" 
@@ -147,7 +147,7 @@ export const ModalCancelarReserva = ({
               Cancelando...
             </>
           ) : (
-            'Sí, Cancelar Shift'
+            'Sí, Cancelar Turno'
           )}
         </Button>
       </Modal.Footer>

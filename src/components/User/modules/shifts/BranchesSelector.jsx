@@ -3,18 +3,18 @@ import React from 'react';
 const BranchesSelector = ({ branches, branchSeleccionada, setSedeSeleccionada }) => {
   return (
     <div className="branches-scroll-container mb-3">
-      <button 
+      <button
         type="button"
         className={`branch-pill ${branchSeleccionada === 'todas' ? 'active' : ''}`}
         onClick={() => setSedeSeleccionada('todas')}
       >
-        TODAS LAS BRANCHES
+        TODAS LAS SUCURSALES
       </button>
       {branches.map((s) => (
-        <button 
+        <button
           key={s.id}
           type="button"
-          className={`branch-pill ${branchSeleccionada?.toString() === s.id.toString() ? 'active' : ''}`}
+          className={`  -pill ${branchSeleccionada?.toString() === s.id.toString() ? 'active' : ''}`}
           onClick={() => setSedeSeleccionada(s.id)}
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="me-1">

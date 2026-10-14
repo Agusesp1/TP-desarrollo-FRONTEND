@@ -7,7 +7,7 @@ const ResumenCards = ({ resumen }) => {
       <Col md={3} sm={6}>
         <div className="p-3 rounded-3 bg-dark bg-opacity-50 border border-secondary h-100">
           <span className="small text-secondary-accent text-uppercase fw-semibold" style={{ fontSize: '0.75rem' }}>
-            Quotas Pendientes
+            Cuotas Pendientes
           </span>
           <div className="d-flex align-items-baseline gap-2 mt-1">
             <h3 className="fw-bold mb-0 text-white">{resumen?.totalPendientes ?? 0}</h3>
@@ -43,7 +43,7 @@ const ResumenCards = ({ resumen }) => {
       <Col md={3} sm={6}>
         <div className="p-3 rounded-3 bg-dark bg-opacity-50 border border-secondary h-100">
           <span className="small text-success text-uppercase fw-semibold" style={{ fontSize: '0.75rem' }}>
-            Quotas Acreditadas
+            Cuotas Acreditadas
           </span>
           <div className="d-flex align-items-baseline gap-2 mt-1">
             <h3 className="fw-bold mb-0 text-success">{resumen?.totalPagadas ?? 0}</h3>

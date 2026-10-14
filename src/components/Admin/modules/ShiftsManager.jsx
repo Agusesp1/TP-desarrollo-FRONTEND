@@ -267,11 +267,11 @@ const ShiftsManager = ({
       {cargando ? (
         <div className="text-center py-5">
           <Spinner animation="border" variant="primary" />
-          <p className="mt-2 text-secondary">Cargando shifts...</p>
+          <p className="mt-2 text-secondary">Cargando turnos...</p>
         </div>
       ) : shiftsFiltrados.length === 0 ? (
         <div className="text-center py-5 text-secondary">
-          <p className="mb-0">No se encontraron shifts con los filters seleccionados.</p>
+          <p className="mb-0">No se encontraron turnos con los filtros seleccionados.</p>
         </div>
       ) : (
         <>
@@ -279,12 +279,12 @@ const ShiftsManager = ({
             <Table className="admin-table align-middle mb-0">
               <thead>
                 <tr>
-                  <th>Activity</th>
-                  <th>Schedule</th>
+                  <th>Actividad</th>
+                  <th>Horario</th>
                   <th>Días</th>
-                  <th>Teacher a Cargo</th>
-                  <th>Branch</th>
-                  <th>Status</th>
+                  <th>Profesor a Cargo</th>
+                  <th>Sede</th>
+                  <th>Estado</th>
                   <th className="text-end">Acciones</th>
                 </tr>
               </thead>
@@ -293,7 +293,7 @@ const ShiftsManager = ({
                   <tr key={t.id}>
                     <td>
                       <div className="fw-bold text-white">
-                        {t.activity?.name || 'Activity sin asignar'}
+                        {t.activity?.name || 'Actividad sin asignar'}
                       </div>
                     </td>
                     <td>
@@ -433,7 +433,7 @@ const ShiftsManager = ({
                     <option value="">-- Seleccionar Activity --</option>
                     {activities.map((a) => (
                       <option key={a.id} value={a.id}>
-                        {a.name} {a.teacher ? `(Teacher. ${a.teacher.name} ${a.teacher.lastname})` : ''}
+                        {a.name} {a.teacher ? `(Prof. ${a.teacher.name} ${a.teacher.lastname})` : ''}
                       </option>
                     ))}
                   </Form.Select>
@@ -530,7 +530,7 @@ const ShiftsManager = ({
               </Col>
               <Col md={6}>
                 <Form.Group>
-                  <Form.Label>Teacher a Cargo</Form.Label>
+                  <Form.Label>Profesor a Cargo</Form.Label>
                   <Form.Select
                     value={formData.teacher_id}
                     onChange={(e) => setFormData({ ...formData, teacher_id: e.target.value })}

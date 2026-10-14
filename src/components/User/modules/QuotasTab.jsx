@@ -96,10 +96,10 @@ const QuotasTab = ({ user }) => {
           }
         );
       } else {
-        setErrorCarga(data.message || 'No se pudieron obtener las quotas del user.');
+        setErrorCarga(data.message || 'No se pudieron obtener las cuotas del user.');
       }
     } catch (err) {
-      console.error('Error al consultar quotas:', err);
+      console.error('Error al consultar cuotas:', err);
       setErrorCarga('Error de conexión con el servidor. Verifique su red.');
     } finally {
       setCargando(false);
@@ -139,12 +139,12 @@ const QuotasTab = ({ user }) => {
             }
           );
         } else {
-          setErrorCarga(data.message || 'No se pudieron obtener las quotas del user.');
+          setErrorCarga(data.message || 'No se pudieron obtener las cuotas del usuario.');
         }
       })
       .catch((err) => {
         if (!ignore) {
-          console.error('Error al inicializar quotas:', err);
+          console.error('Error al inicializar cuotas:', err);
           setErrorCarga('Error de conexión con el servidor. Verifique su red.');
         }
       })
@@ -188,7 +188,7 @@ const QuotasTab = ({ user }) => {
           const data = await res.json();
 
           if (res.ok && data.success && data.quota) {
-            // 1. Eliminar de inmediato dicha quota de quotas pendientes
+            // 1. Eliminar de inmediato dicha quota de cuotas pendientes
             setCuotas((prev) => prev.filter((c) => c.id !== data.quota.id));
 
             // 2. Agregar al historial
@@ -206,14 +206,14 @@ const QuotasTab = ({ user }) => {
             setComprobanteMP(data.quota);
             setShowModalComprobanteMP(true);
 
-            mostrarFeedback(`¡Payment acreditado con éxito! Receipt: ${data.quota.receipt || payment_id || collection_id}`, 'success');
+            mostrarFeedback(`¡Pago acreditado con éxito! Recibo: ${data.quota.receipt || payment_id || collection_id}`, 'success');
           } else {
-            console.warn('La confirmación de Mercado Payment no devolvió quota exitosa:', data);
+            console.warn('La confirmación de Mercado Payment no devolvió cuota exitosa:', data);
             obtenerCuotas();
           }
         } catch (err) {
           console.error('Error al confirmar retorno de Mercado Payment:', err);
-          mostrarFeedback('Error al confirmar la acreditación del payment con el servidor.', 'danger');
+          mostrarFeedback('Error al confirmar la acreditación del pago con el servidor.', 'danger');
         } finally {
           // Limpiar la URL usando replaceState para que al recargar la página no vuelva a saltar el procesamiento
           window.history.replaceState({}, document.title, window.location.pathname + '?tab=quotas');
@@ -222,7 +222,7 @@ const QuotasTab = ({ user }) => {
 
       confirmarPagoRetornoMP();
     } else if (payment === 'failure' || status === 'rejected') {
-      mostrarFeedback('El payment a través de Mercado Payment no fue completado o fue rechazado.', 'warning');
+      mostrarFeedback('El pago a través de Mercado Pago no fue completado o fue rechazado.', 'warning');
       window.history.replaceState({}, document.title, window.location.pathname + '?tab=quotas');
     }
   }, [searchParams, obtenerCuotas]);
@@ -267,7 +267,7 @@ const QuotasTab = ({ user }) => {
   // Redirigir a Mercado Payment (Checkout Pro)
   const handleCompletarPagoMP = async () => {
     if (!mpPreference || (!mpPreference.init_point && !mpPreference.sandbox_init_point)) {
-      setPagoExitosoMsg('Error: No se pudo generar la preferencia de payment de Mercado Payment.');
+      setPagoExitosoMsg('Error: No se pudo generar la preferencia de pago de Mercado Pago.');
       return;
     }
     
@@ -279,7 +279,7 @@ const QuotasTab = ({ user }) => {
     const backdrops = document.querySelectorAll('.modal-backdrop');
     backdrops.forEach((b) => b.remove());
 
-    // Redirigir al user al flujo de Checkout Pro de Mercado Payment
+    // Redirigir al user al flujo de Checkout Pro de Mercado Pago
     // Como es un entorno de desarrollo/pruebas, priorizamos sandbox_init_point
     window.location.href = mpPreference.sandbox_init_point || mpPreference.init_point;
   };
@@ -335,19 +335,19 @@ const QuotasTab = ({ user }) => {
           totalNoPagadas: selectedCuota.status === 'no pagado' ? Math.max(0, prev.totalNoPagadas - 1) : prev.totalNoPagadas
         }));
 
-        setPagoExitosoMsg(`¡Payment registrado con éxito! Receipt: ${numComprobante}`);
-        mostrarFeedback(`¡Payment registrado con éxito! Quota ${selectedCuota.concepto || selectedCuota.periodo} acreditada.`, 'success');
+        setPagoExitosoMsg(`¡Pago registrado con éxito! Recibo: ${numComprobante}`);
+        mostrarFeedback(`¡Pago registrado con éxito! Cuota ${selectedCuota.concepto || selectedCuota.periodo} acreditada.`, 'success');
 
         setTimeout(() => {
           setShowPaymentModal(false);
           setPagoExitosoMsg(null);
         }, 1800);
       } else {
-        setPagoExitosoMsg(`Error al registrar payment: ${data.message || 'Intente nuevamente'}`);
+        setPagoExitosoMsg(`Error al registrar pago: ${data.message || 'Intente nuevamente'}`);
       }
     } catch (err) {
       console.error('Error al registrar payment:', err);
-      setPagoExitosoMsg('Error de conexión al procesar el payment.');
+      setPagoExitosoMsg('Error de conexión al procesar el pago.');
     } finally {
       setProcesandoPago(false);
     }
@@ -359,7 +359,7 @@ const QuotasTab = ({ user }) => {
     setShowReceiptModal(true);
   };
 
-  // Guard de role: administradores y teachers no poseen quotas
+  // Guard de role: administradores y teachers no poseen cuotas
   if (esRolExcluido) {
     return (
       <Card className="glass-card border-0 p-5 text-white text-center">
@@ -372,7 +372,7 @@ const QuotasTab = ({ user }) => {
         </div>
         <h4 className="fw-bold mb-2">Apartado no disponible</h4>
         <p className="text-secondary max-w-md mx-auto mb-0" style={{ maxWidth: '520px' }}>
-          Este apartado no está disponible para administradores ni teachers. Solo los members activos poseen gestión de quotas.
+          Este apartado no está disponible para administradores ni profesores. Solo los socios activos poseen gestión de cuotas.
         </p>
       </Card>
     );
@@ -409,7 +409,7 @@ const QuotasTab = ({ user }) => {
       {cargando ? (
         <div className="text-center py-5">
           <Spinner animation="border" variant="primary" />
-          <p className="mt-3 text-light opacity-75">Cargando status de tus quotas...</p>
+          <p className="mt-3 text-light opacity-75">Cargando estado de tus cuotas...</p>
         </div>
       ) : errorCarga ? (
         <Alert variant="danger" className="py-4 text-center border-0 shadow">
@@ -440,7 +440,7 @@ const QuotasTab = ({ user }) => {
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <polyline points="6 9 12 15 18 9" />
                     </svg>
-                    {`Mostrar más quotas (${quotas.length - 5} adicionales)`}
+                    {`Mostrar más cuotas (${quotas.length - 5} adicionales)`}
                   </>
                 )}
               </Button>
@@ -460,7 +460,6 @@ const QuotasTab = ({ user }) => {
         procesandoPago={procesandoPago}
         paymentExitosoMsg={paymentExitosoMsg}
         onPagarMP={handleCompletarPagoMP}
-        onPagarAlternativo={handleProcesarPagoAlternativo}
       />
 
       {/* Modal Historial de Payments y Comprobantes */}

@@ -36,7 +36,7 @@ const TeacherAgendaTab = ({ user }) => {
     return (
       <div className="text-center py-5">
         <Spinner animation="border" variant="primary" />
-        <p className="text-secondary small mt-3">Cargando tus clases, branches y schedules asignados...</p>
+        <p className="text-secondary small mt-3">Cargando tus clases, sedes y horarios asignados...</p>
       </div>
     );
   }
@@ -45,7 +45,7 @@ const TeacherAgendaTab = ({ user }) => {
     return (
       <Alert variant="warning" className="text-center py-4 border-0 rounded-4">
         <h5>{error}</h5>
-        <p className="small mb-0">Comunícate con la administración si tu profile de docente no se encuentra vinculado.</p>
+        <p className="small mb-0">Comunícate con la administración si tu perfil de docente no se encuentra vinculado.</p>
       </Alert>
     );
   }
@@ -83,7 +83,7 @@ const TeacherAgendaTab = ({ user }) => {
                 </svg>
               </div>
               <div>
-                <span className="text-secondary small text-uppercase fw-semibold">Branches Asignadas</span>
+                <span className="text-secondary small text-uppercase fw-semibold">Sedes Asignadas</span>
                 <h3 className="fw-bold text-white mb-0">{branches.length}</h3>
               </div>
             </div>
@@ -101,7 +101,7 @@ const TeacherAgendaTab = ({ user }) => {
                 </svg>
               </div>
               <div>
-                <span className="text-secondary small text-uppercase fw-semibold">Activities a Cargo</span>
+                <span className="text-secondary small text-uppercase fw-semibold">Actividades a Cargo</span>
                 <h3 className="fw-bold text-white mb-0">{activities.length}</h3>
               </div>
             </div>
@@ -118,7 +118,7 @@ const TeacherAgendaTab = ({ user }) => {
                 </svg>
               </div>
               <div>
-                <span className="text-secondary small text-uppercase fw-semibold">Shift Habitual</span>
+                <span className="text-secondary small text-uppercase fw-semibold">Turno Habitual</span>
                 <h4 className="fw-bold text-white mb-0">{teacher?.shift || 'Mañana'}</h4>
               </div>
             </div>
@@ -130,9 +130,9 @@ const TeacherAgendaTab = ({ user }) => {
       <Card className="glass-card border-0 p-4 mb-4 text-white">
         <div className="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
           <div>
-            <h5 className="fw-bold mb-1 text-white">Schedules y Clases Asignadas</h5>
+            <h5 className="fw-bold mb-1 text-white">Horarios y Clases Asignadas</h5>
             <p className="text-secondary small mb-0">
-              Consulta en qué días, schedules y branches dictas tus clases.
+              Consulta en qué días, horarios y sedes dictas tus clases.
             </p>
           </div>
           <Badge bg="primary" className="px-3 py-2 rounded-pill">
@@ -142,20 +142,20 @@ const TeacherAgendaTab = ({ user }) => {
 
         {shifts.length === 0 ? (
           <div className="text-center py-4 text-secondary">
-            No tienes shifts o clases asignadas actualmente en el sistema.
+            No tienes turnos o clases asignadas actualmente en el sistema.
           </div>
         ) : (
           <div className="table-responsive">
             <Table hover variant="dark" className="align-middle mb-0 bg-transparent">
               <thead>
                 <tr className="border-bottom border-secondary text-secondary small">
-                  <th>SCHEDULE</th>
+                  <th>HORARIO</th>
                   <th>DÍAS DE SEMANA</th>
-                  <th>ACTIVITY</th>
+                  <th>ACTIVIDAD</th>
                   <th>DURACIÓN</th>
-                  <th>BRANCH</th>
-                  <th>CAPACITY MÁX.</th>
-                  <th>STATUS</th>
+                  <th>SEDE</th>
+                  <th>CAPACIDAD MÁX.</th>
+                  <th>ESTADO</th>
                 </tr>
               </thead>
               <tbody>
@@ -181,7 +181,7 @@ const TeacherAgendaTab = ({ user }) => {
                           <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
                           <circle cx="12" cy="10" r="3"></circle>
                         </svg>
-                        <span>{t.branch?.name || 'Branch General'}</span>
+                        <span>{t.branch?.name || 'Sede General'}</span>
                       </div>
                     </td>
                     <td>
@@ -191,7 +191,7 @@ const TeacherAgendaTab = ({ user }) => {
                     </td>
                     <td>
                       <Badge bg={t.status ? 'success' : 'danger'} className="rounded-pill px-2 py-1">
-                        {t.status ? 'Active' : 'Inactivo'}
+                        {t.status ? 'Activo' : 'Inactivo'}
                       </Badge>
                     </td>
                   </tr>
@@ -207,11 +207,11 @@ const TeacherAgendaTab = ({ user }) => {
         {/* Branches Asignadas */}
         <Col lg={6}>
           <Card className="glass-card border-0 p-4 h-100 text-white">
-            <h5 className="fw-bold mb-1 text-white">Branches de Trabajo</h5>
-            <p className="text-secondary small mb-3">Branches de FitApp donde desarrollas tus activities.</p>
+            <h5 className="fw-bold mb-1 text-white">Sedes de Trabajo</h5>
+            <p className="text-secondary small mb-3">Sedes de FitApp donde desarrollas tus actividades.</p>
 
             {branches.length === 0 ? (
-              <p className="text-secondary small">No hay branches asignadas.</p>
+              <p className="text-secondary small">No hay sedes asignadas.</p>
             ) : (
               <div className="d-flex flex-column gap-3">
                 {branches.map((s) => (
@@ -219,14 +219,14 @@ const TeacherAgendaTab = ({ user }) => {
                     <div className="d-flex justify-content-between align-items-start mb-2">
                       <h6 className="fw-bold text-white mb-0">{s.name}</h6>
                       <Badge bg="brand" className="text-dark fw-bold px-2 py-1 rounded-pill">
-                        Branch Habilitada
+                        Sede Habilitada
                       </Badge>
                     </div>
                     <p className="text-secondary small mb-1">
                       📍 {s.address}, {s.city}
                     </p>
                     <p className="text-secondary small mb-1">
-                      🕒 Schedule: {s.opening_hours || '07:00 a 23:00 hs'}
+                      🕒 Horario: {s.opening_hours || '07:00 a 23:00 hs'}
                     </p>
                     {s.phone && (
                       <p className="text-secondary small mb-0">
@@ -243,11 +243,11 @@ const TeacherAgendaTab = ({ user }) => {
         {/* Activities a Cargo */}
         <Col lg={6}>
           <Card className="glass-card border-0 p-4 h-100 text-white">
-            <h5 className="fw-bold mb-1 text-white">Activities a tu Cargo</h5>
-            <p className="text-secondary small mb-3">Disciplinas y trainings que tienes asignados.</p>
+            <h5 className="fw-bold mb-1 text-white">Actividades a tu Cargo</h5>
+            <p className="text-secondary small mb-3">Disciplinas y entrenamientos que tienes asignados.</p>
 
             {activities.length === 0 ? (
-              <p className="text-secondary small">No hay activities asignadas.</p>
+              <p className="text-secondary small">No hay actividades asignadas.</p>
             ) : (
               <div className="d-flex flex-column gap-3">
                 {activities.map((a) => (
@@ -259,10 +259,10 @@ const TeacherAgendaTab = ({ user }) => {
                       </Badge>
                     </div>
                     <p className="text-secondary small mb-2">
-                      {a.description || 'Training especializado FitApp.'}
+                      {a.description || 'Entrenamiento especializado FitApp.'}
                     </p>
                     <span className="badge bg-dark border border-secondary border-opacity-50 text-secondary small">
-                      Capacity máxima: {a.capacity} alumnos por shift
+                      Capacidad máxima: {a.capacity} alumnos por turno
                     </span>
                   </div>
                 ))}

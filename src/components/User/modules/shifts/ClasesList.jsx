@@ -28,7 +28,7 @@ const ClasesList = ({
           </svg>
         </div>
         <p className="mb-1 text-white fw-medium">No hay clases programadas</p>
-        <p className="small mb-0">No se encontraron shifts activos para los filters y el día seleccionado.</p>
+        <p className="small mb-0">No se encontraron turnos activos para los filtros y el día seleccionado.</p>
       </div>
     );
   }

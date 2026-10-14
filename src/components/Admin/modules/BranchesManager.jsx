@@ -717,7 +717,7 @@ const BranchesManager = ({
                       <Col xs={12} sm={4}>
                         <Form.Group>
                           <Form.Label className="small fw-semibold text-white">
-                            Teacher a Cargo (Opcional)
+                            Profesor a Cargo (Opcional)
                           </Form.Label>
                           <Form.Select
                             value={teacherMusculacion}

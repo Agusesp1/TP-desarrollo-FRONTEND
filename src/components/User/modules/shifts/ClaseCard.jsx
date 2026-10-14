@@ -64,7 +64,7 @@ const ClaseCard = ({ shift, index, esMismoDia, onPedirReserva, onPedirCancelar }
                   ? `${shift.teacher.name} ${shift.teacher.lastname}`
                   : shift.activity?.teacher
                   ? `${shift.activity.teacher.name} ${shift.activity.teacher.lastname}`
-                  : 'Teacher del Staff'}
+                  : 'Profesor del Staff'}
               </span>
             </div>
           </div>
@@ -97,7 +97,7 @@ const ClaseCard = ({ shift, index, esMismoDia, onPedirReserva, onPedirCancelar }
               <circle cx="12" cy="10" r="3"></circle>
             </svg>
             <span className="text-truncate" style={{ maxWidth: '200px' }}>
-              {shift.branch?.name?.toUpperCase() || 'BRANCH GENERAL'}
+              {shift.branch?.name?.toUpperCase() || 'SEDE GENERAL'}
             </span>
           </div>
 
@@ -117,7 +117,7 @@ const ClaseCard = ({ shift, index, esMismoDia, onPedirReserva, onPedirCancelar }
                 size="sm"
                 className="rounded-pill px-3 py-1 text-secondary opacity-75"
                 disabled
-                title="Las reservations se habilitan solo el mismo día de la clase"
+                title="Las reservas se habilitan solo el mismo día de la clase"
               >
                 Solo en el día
               </Button>
@@ -128,7 +128,7 @@ const ClaseCard = ({ shift, index, esMismoDia, onPedirReserva, onPedirCancelar }
                 className="rounded-pill px-3 py-1"
                 disabled
               >
-                Capacity Lleno
+                Cupo Lleno
               </Button>
             ) : (
               <Button
@@ -137,7 +137,7 @@ const ClaseCard = ({ shift, index, esMismoDia, onPedirReserva, onPedirCancelar }
                 className="hero-btn rounded-pill px-3 py-1 fw-bold shadow-sm"
                 onClick={() => onPedirReserva(shift)}
               >
-                Reservar Shift
+                Reservar Turno
               </Button>
             )}
           </div>

@@ -80,7 +80,7 @@ const User = () => {
               <div>
                 <div className="d-flex align-items-center gap-2 flex-wrap">
                   <h3 className="fw-bold mb-0">
-                    {user ? `${user.name} ${user.lastname}` : 'Profile del Sistema'}
+                    {user ? `${user.name} ${user.lastname}` : 'Perfil del Sistema'}
                   </h3>
                   {esAdmin ? (
                     <Badge bg="warning" className="text-dark px-3 py-1 rounded-pill fw-bold">
@@ -88,11 +88,11 @@ const User = () => {
                     </Badge>
                   ) : esProfesor ? (
                     <Badge bg="info" className="text-dark px-3 py-1 rounded-pill fw-bold">
-                      Teacher del Staff FitApp
+                      Profesor del Staff FitApp
                     </Badge>
                   ) : (
                     <Badge bg="primary" className="px-3 py-1 rounded-pill">
-                      {user?.category || 'Member FitApp'}
+                      {user?.category || 'Socio FitApp'}
                     </Badge>
                   )}
                 </div>
@@ -135,7 +135,7 @@ const User = () => {
                   <line x1="8" y1="2" x2="8" y2="6" />
                   <line x1="3" y1="10" x2="21" y2="10" />
                 </svg>
-                Mis Clases, Branches & Schedules
+                Mis Clases, Sedes y Horarios
               </Nav.Link>
             </Nav.Item>
           )}
@@ -178,7 +178,7 @@ const User = () => {
                     <rect width="20" height="14" x="2" y="5" rx="2" />
                     <line x1="2" x2="22" y1="10" strokeWidth="2" />
                   </svg>
-                  Quotas y Payments
+                  Cuotas y Pagos
                 </Nav.Link>
               </Nav.Item>
 
@@ -191,7 +191,7 @@ const User = () => {
                     <circle cx="12" cy="12" r="10" />
                     <polyline points="12 6 12 12 16 14" />
                   </svg>
-                  Shifts y Reservations
+                  Turnos y Reservas
                 </Nav.Link>
               </Nav.Item>
             </>

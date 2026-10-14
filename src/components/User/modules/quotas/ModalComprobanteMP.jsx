@@ -18,7 +18,7 @@ const ModalComprobanteMP = ({ show, onHide, quota, currentUser }) => {
     ? `${currentUser.name} ${currentUser.lastname}`.trim()
     : safeCuota.user
     ? `${safeCuota.user.name} ${safeCuota.user.lastname}`.trim()
-    : 'Member Titular';
+    : 'Socio Titular';
 
   const dniSocio = currentUser?.dni || safeCuota?.user?.dni || 'Registrado';
 
@@ -28,7 +28,7 @@ const ModalComprobanteMP = ({ show, onHide, quota, currentUser }) => {
 
   const conceptoPeriodo =
     safeCuota.concepto ||
-    (safeCuota.numero_quota ? `Quota #${safeCuota.numero_quota} - ${safeCuota.periodo}` : (safeCuota.periodo || 'Quota Gym'));
+    (safeCuota.numero_quota ? `cuota #${safeCuota.numero_quota} - ${safeCuota.periodo}` : (safeCuota.periodo || 'cuota Gym'));
 
   // Formato de date y hora del payment
   const obtenerFechaHoraPago = () => {
@@ -83,10 +83,10 @@ const ModalComprobanteMP = ({ show, onHide, quota, currentUser }) => {
           </div>
           <div>
             <Modal.Title className="fw-bold fs-5 text-white mb-0">
-              ¡Payment Acreditado con Éxito!
+              ¡Pago Acreditado con Éxito!
             </Modal.Title>
             <small className="text-success-emphasis fw-medium">
-              Transacción aprobada por Mercado Payment
+              Transacción aprobada por Mercado Pago
             </small>
           </div>
         </div>
@@ -95,7 +95,7 @@ const ModalComprobanteMP = ({ show, onHide, quota, currentUser }) => {
       <Modal.Body className="p-4">
         {/* Message descriptivo */}
         <p className="text-light opacity-90 mb-4 text-center">
-          Tu quota ha sido procesada y acreditada correctamente a través de Mercado Payment.
+          Tu cuota ha sido procesada y acreditada correctamente a través de Mercado Pago.
         </p>
 
         {/* Mini Receipt Oficial */}
@@ -122,7 +122,7 @@ const ModalComprobanteMP = ({ show, onHide, quota, currentUser }) => {
               <div>
                 <h6 className="fw-bold mb-0 text-white letter-spacing-wide">FITAPP</h6>
                 <small className="text-light opacity-75" style={{ fontSize: '0.75rem' }}>
-                  Receipt de Payment Oficial
+                  Recibo de Pago Oficial
                 </small>
               </div>
             </div>
@@ -153,7 +153,7 @@ const ModalComprobanteMP = ({ show, onHide, quota, currentUser }) => {
           {/* Amount Abonado en tipografía grande y destacada */}
           <div className="text-center my-3 py-2 bg-success bg-opacity-10 rounded-3 border border-success border-opacity-25">
             <span className="text-success small text-uppercase fw-semibold d-block">
-              Amount Total Abonado
+              Monto Total Abonado
             </span>
             <div className="fw-bold text-white display-6 my-1">
               ${formatMonto(safeCuota.amount)}
@@ -162,7 +162,7 @@ const ModalComprobanteMP = ({ show, onHide, quota, currentUser }) => {
               className="badge px-2 py-1 text-white fw-medium"
               style={{ backgroundColor: '#009EE3', fontSize: '0.72rem' }}
             >
-              Mercado Payment (Instantáneo)
+              Mercado Pago (Instantáneo)
             </span>
           </div>
 
@@ -170,13 +170,13 @@ const ModalComprobanteMP = ({ show, onHide, quota, currentUser }) => {
           <div className="my-3">
             <Row className="g-2 small">
               <Col xs={6}>
-                <span className="text-light opacity-75 d-block">N° de Receipt:</span>
+                <span className="text-light opacity-75 d-block">N° de Recibo:</span>
                 <strong className="text-warning font-monospace fs-6">
                   {numeroComprobante}
                 </strong>
               </Col>
               <Col xs={6} className="text-end">
-                <span className="text-light opacity-75 d-block">Date y Hora:</span>
+                <span className="text-light opacity-75 d-block">Fecha y Hora:</span>
                 <strong className="text-white">
                   {obtenerFechaHoraPago()}
                 </strong>
@@ -187,7 +187,7 @@ const ModalComprobanteMP = ({ show, onHide, quota, currentUser }) => {
               </Col>
 
               <Col xs={6}>
-                <span className="text-light opacity-75 d-block">Member Titular:</span>
+                <span className="text-light opacity-75 d-block">Socio Titular:</span>
                 <strong className="text-white">{nameSocio}</strong>
               </Col>
               <Col xs={6} className="text-end">
@@ -202,7 +202,7 @@ const ModalComprobanteMP = ({ show, onHide, quota, currentUser }) => {
 
               <Col xs={12}>
                 <span className="text-light opacity-75 d-block">Método:</span>
-                <strong className="text-info">Mercado Payment (Instantáneo)</strong>
+                <strong className="text-info">Mercado Pago (Instantáneo)</strong>
               </Col>
             </Row>
           </div>
@@ -235,7 +235,7 @@ const ModalComprobanteMP = ({ show, onHide, quota, currentUser }) => {
             <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
             <rect width="12" height="8" x="6" y="14" />
           </svg>
-          Imprimir / Guardar Receipt
+          Imprimir / Guardar Recibo
         </Button>
 
         <Button

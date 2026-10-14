@@ -1,0 +1,630 @@
+\Admin\Admin.jsx: {
+  const { user } = useAuth();
+
+  // Active Tab: teachers | branches | activities | shifts | cli
+\Admin\Admin.jsx: {user?.email}
+\Admin\Admin.jsx: Ver Mi Profile de User
+\Admin\Admin.jsx: setActiveTab('teachers')}
+            >
+\Admin\Admin.jsx: Profesores ({teachers.length})
+\Admin\Admin.jsx: setActiveTab('shifts')}
+            >
+\Admin\Admin.jsx: Turnos ({shifts.length})
+\Admin\Admin.jsx: setActiveTab('clients')}
+            >
+\Admin\Admin.jsx: Users
+\Admin\Admin.jsx: setActiveTab('quotas')}
+            >
+\Admin\Admin.jsx: Quotas & Prices
+\Admin\Admin.jsx: {/* Submódulos según la pestaña seleccionada */}
+        {activeTab === 'teachers' && (
+\Admin\Admin.jsx: {
+              cargarActividades();
+              cargarTurnos();
+            }}
+            on
+\Admin\Admin.jsx: )}
+
+        {activeTab === 'clients' && (
+\Admin\Admin.jsx: )}
+
+        {activeTab === 'quotas' && (
+\Admin\AdminDeleteModal.jsx: ¿Estás completamente seguro de que deseas eliminar permanentemente{' '}
+          {item?.type === 't
+\Admin\AdminStats.jsx: Teachers
+\Admin\AdminStats.jsx: Shifts Schedules
+\Admin\modules\activitiesAdmin\ActivitiesFilters.jsx: Todos los teachers
+\Admin\modules\activitiesAdmin\ActivitiesFilters.jsx: Sin teacher asignado
+\Admin\modules\activitiesAdmin\ActivitiesFilters.jsx: {teachers && teachers.map((p) => (
+\Admin\modules\activitiesAdmin\ActivitiesTable.jsx: Teacher a Cargo
+\Admin\modules\activitiesAdmin\ActivitiesTable.jsx: Shifts Creados
+\Admin\modules\activitiesAdmin\ActivitiesTable.jsx: Status
+\Admin\modules\activitiesAdmin\ActivitiesTable.jsx: {activitiesPaginadas.map((act) => {
+              const branchObj = act.branch || (branches && bran
+\Admin\modules\activitiesAdmin\ActivitiesTable.jsx: Sin teacher
+\Admin\modules\activitiesAdmin\ActivitiesTable.jsx: {act.shifts?.length || 0} shifts
+\Admin\modules\activitiesAdmin\ActivitiesTable.jsx: {act.status ? 'Activa' : 'Pausada'}
+\Admin\modules\activitiesAdmin\ActivitiesTable.jsx: handleToggleEstado(act.id)}
+                        title={act.status ? 'Pausar activity' : 'Activa
+\Admin\modules\activitiesAdmin\ActivityModal.jsx: Teacher a Cargo
+\Admin\modules\activitiesAdmin\ActivityModal.jsx: -- Sin teacher asignado --
+\Admin\modules\activitiesAdmin\ActivityModal.jsx: {teachers && teachers.map((teacher) => {
+                    const branchProfObj = branches && bran
+\Admin\modules\activitiesAdmin\ActivityModal.jsx: {teacher.name} {teacher.lastname} ({teacher.specialty}){branchProfObj ? ` • ${branchProfObj.name}` :
+\Admin\modules\ActivitiesManager.jsx: {
+  // Filters
+  const [filterTexto, setFiltroTexto] = useState('');
+  const [filterSede, setFilt
+\Admin\modules\ActivitiesManager.jsx: p.id?.toString() === formData.teacher_id.toString());
+      if (teacher && teacher.branch_id && tea
+\Admin\modules\ActivitiesManager.jsx: Administra disciplinas deportivas, teachers a cargo, branches y cupos máximos por clase.
+\Admin\modules\ActivitiesManager.jsx: {/* Contenido Principal: Spinner, Status Vacío o Tabla */}
+      {cargando ? (
+\Admin\modules\BranchesManager.jsx: {
+  if (!Array.isArray(days) || days.length === 0) return 'Sin schedules configurados';
+
+  const dia
+\Admin\modules\BranchesManager.jsx: Administra los establecimientos físicos, días de apertura, schedules y generación automática de shif
+\Admin\modules\BranchesManager.jsx: Status
+\Admin\modules\BranchesManager.jsx: {branch.status ? 'Operativa' : 'Pausada'}
+\Admin\modules\BranchesManager.jsx: handleToggleEstado(branch.id)}
+                        title={branch.status ? 'Pausar branch' : 'Hab
+\Admin\modules\BranchesManager.jsx: {branchEditando ? `Editar Branch: ${branchEditando.name}` : 'Registrar Nueva Branch & Configurar Shi
+\Admin\modules\BranchesManager.jsx: {/* SECCIÓN 3: Generación Automática de Shifts de Musculación */}
+            {!branchEditando && (
+\Admin\modules\BranchesManager.jsx: Generación Automática de Shifts de Musculación
+\Admin\modules\BranchesManager.jsx: y todos sus shifts adaptados al schedule de cada día.
+\Admin\modules\BranchesManager.jsx: Intervalo / Duración del Shift *
+\Admin\modules\BranchesManager.jsx: Capacity Máximo por Shift *
+\Admin\modules\BranchesManager.jsx: Teacher a Cargo (Opcional)
+\Admin\modules\BranchesManager.jsx: Sin teacher asignado inicialmente
+\Admin\modules\BranchesManager.jsx: {teachers.map(p => (
+\Admin\modules\BranchesManager.jsx: {/* Caja de Vista Previa de Shifts */}
+\Admin\modules\BranchesManager.jsx: {totalTurnosSemanales} shifts
+\Admin\modules\BranchesManager.jsx: {item.abierto ? `${item.slots.length} shifts` : 'Cerrado'}
+\Admin\modules\BranchesManager.jsx: Sin shifts para este día
+\Admin\modules\BranchesManager.jsx: ) : branchEditando ? (
+              'Guardar Cambios'
+            ) : (
+              'Crear Branch
+\Admin\modules\CalendarAdmin.jsx: {
+  if (!horaStr) return 0;
+  const [h, m] = horaStr.split(':').map(Number);
+  return h + m / 60;
+};
+\Admin\modules\ClientesManager.jsx: {
+  return `REC-${quotaId}-${Math.floor(1000 + Math.random() * 9000)}`;
+};
+
+const ClientesManage
+\Admin\modules\ClientesManager.jsx: Ver Quotas Vencidas ({u.cantCuotasVencidas})
+\Admin\modules\ClientesManager.jsx: );
+  };
+
+  const renderBadgeEstadoCuenta = (u) => {
+    if (u.status) {
+      return (
+\Admin\modules\ClientesManager.jsx: Administración de Members y Clients
+\Admin\modules\ClientesManager.jsx: Consulta los users registrados, categorías de membresía y status de sus cuentas.
+\Admin\modules\ClientesManager.jsx: Cargando members...
+\Admin\modules\ClientesManager.jsx: No se encontraron members registrados.
+\Admin\modules\ClientesManager.jsx: Member / DNI
+\Admin\modules\ClientesManager.jsx: Status Quotas
+\Admin\modules\ClientesManager.jsx: Status Cuenta
+\Admin\modules\ClientesManager.jsx: {u.role === 'admin' ? 'Administrador' : (u.role === 'teacher' ? 'Teacher' : 'Member')}
+\Admin\modules\ClientesManager.jsx: handleToggleEstado(u.id)}
+                        >
+                          {u.status ? 'Pausar 
+\Admin\modules\ClientesManager.jsx: )}
+
+      {/* MODAL DETALLE Y COBRO DE QUOTAS VENCIDAS */}
+\Admin\modules\ClientesManager.jsx: Quotas Vencidas del Member
+\Admin\modules\ClientesManager.jsx: únicamente las quotas vencidas
+\Admin\modules\ClientesManager.jsx: (en demora o impagas) asociadas a este member.
+\Admin\modules\ClientesManager.jsx: 0 ? 'danger' : 'success'} className="px-3 py-2 rounded-pill">
+              {memberSeleccionado?.ca
+\Admin\modules\ClientesManager.jsx: {/* Formulario de cobro rápido para la quota seleccionada */}
+          {quotaEnCobro && (
+\Admin\modules\ClientesManager.jsx: Registrar Cobro: {quotaEnCobro.concepto || `Quota ${quotaEnCobro.periodo}`} - ${Number(quotaEnCobro.
+\Admin\modules\ClientesManager.jsx: N° Receipt / Recibo
+\Admin\modules\ClientesManager.jsx: )}
+
+          {/* Listado de quotas vencidas */}
+          {!memberSeleccionado?.quotasVencidas |
+\Admin\modules\ClientesManager.jsx: ¡El member se encuentra completamente al día!
+\Admin\modules\ClientesManager.jsx: No existen quotas vencidas pendientes de payment para este user.
+\Admin\modules\ClientesManager.jsx: Amount
+\Admin\modules\ClientesManager.jsx: Status Mora
+\Admin\modules\ClientesManager.jsx: {memberSeleccionado.quotasVencidas.map((quota) => (
+\Admin\modules\ClientesManager.jsx: {quota.concepto || `Quota #${quota.numero_quota || ''} - ${quota.periodo}`}
+\Admin\modules\ClientesManager.jsx: Emisión: {quota.date_emision || 'Ciclo mensual'}
+\Admin\modules\ClientesManager.jsx: ${Number(quota.amount || 0).toLocaleString('es-AR')}
+\Admin\modules\ClientesManager.jsx: {quota.dateVenc || quota.date_vencimiento}
+\Admin\modules\ClientesManager.jsx: {quota.dateLimite || quota.date_limite_payment || '-'}
+\Admin\modules\ClientesManager.jsx: {quota.status === 'en demora' ? (
+\Admin\modules\ClientesManager.jsx: handleIniciarCobro(quota)}
+                        >
+                          Cobrar
+\Admin\modules\quotasAdmin\ManualChargeModal.jsx: Registrar Cobro Manual de Quota
+\Admin\modules\quotasAdmin\ManualChargeModal.jsx: Member:
+\Admin\modules\quotasAdmin\ManualChargeModal.jsx: {quota?.user?.name} {quota?.user?.lastname}
+\Admin\modules\quotasAdmin\ManualChargeModal.jsx: {quota?.user?.dni || 'Sin DNI'}
+\Admin\modules\quotasAdmin\ManualChargeModal.jsx: {quota?.concepto || `Quota #${quota?.numero_quota} - ${quota?.periodo}`}
+\Admin\modules\quotasAdmin\ManualChargeModal.jsx: ${formatMonto(quota?.amount)}
+\Admin\modules\quotasAdmin\ManualChargeModal.jsx: Mercado Payment (Cobro QR Mostrador)
+\Admin\modules\quotasAdmin\ManualChargeModal.jsx: N° de Recibo o Receipt Interno
+\Admin\modules\quotasAdmin\ManualChargeModal.jsx: Se asignará automáticamente al receipt del member.
+\Admin\modules\quotasAdmin\MembersCuotasResumen.jsx: Quotas al Día / Pendientes
+\Admin\modules\quotasAdmin\MembersCuotasTable.jsx: Cargando nómina de quotas...
+\Admin\modules\quotasAdmin\MembersCuotasTable.jsx: ¡Sin quotas vencidas!
+\Admin\modules\quotasAdmin\MembersCuotasTable.jsx: No se registran members con mora o quotas impagas en este momento.
+\Admin\modules\quotasAdmin\MembersCuotasTable.jsx: Ver todas las quotas
+\Admin\modules\quotasAdmin\MembersCuotasTable.jsx: No se encontraron quotas que coincidan con la búsqueda o filter.
+\Admin\modules\quotasAdmin\MembersCuotasTable.jsx: Member / Membresía
+\Admin\modules\quotasAdmin\MembersCuotasTable.jsx: Período / Quota
+\Admin\modules\quotasAdmin\MembersCuotasTable.jsx: Amount
+\Admin\modules\quotasAdmin\MembersCuotasTable.jsx: Límite Payment (+5d)
+\Admin\modules\quotasAdmin\MembersCuotasTable.jsx: Status
+\Admin\modules\quotasAdmin\MembersCuotasTable.jsx: {c.user ? `${c.user.name} ${c.user.lastname}` : 'Member Desconocido'}
+\Admin\modules\quotasAdmin\MembersCuotasTable.jsx: DNI: {c.user?.dni || 'Sin DNI'}
+\Admin\modules\quotasAdmin\MembersCuotasTable.jsx: {c.user?.category || 'Estándar'}
+\Admin\modules\quotasAdmin\MembersCuotasTable.jsx: {c.concepto || `Quota #${c.numero_quota} - ${c.periodo}`}
+\Admin\modules\quotasAdmin\MembersCuotasTable.jsx: ${formatMonto(c.amount)}
+\Admin\modules\quotasAdmin\MembersCuotasTable.jsx: {c.status !== 'pagado' ? (
+\Admin\modules\quotasAdmin\MembersCuotasTable.jsx: Ver Receipt
+\Admin\modules\quotasAdmin\MembersQuotasFilters.jsx: {
+  const opcionesEstado = [
+    { id: 'vencidas', label: 'Solo Vencidas' },
+    { id: 'todos', l
+\Admin\modules\quotasAdmin\MembersQuotasFilters.jsx: {/* Selector rápido / Toggle de solo quotas vencidas */}
+\Admin\modules\quotasAdmin\MembersQuotasFilters.jsx: Filtrar únicamente quotas vencidas (Demora y No pagado)
+\Admin\modules\quotasAdmin\ModalComprobanteAdmin.jsx: {
+  if (!quota) return null;
+
+  return (
+\Admin\modules\quotasAdmin\ModalComprobanteAdmin.jsx: Receipt de Cobro Registrado
+\Admin\modules\quotasAdmin\ModalComprobanteAdmin.jsx: N° Receipt:
+\Admin\modules\quotasAdmin\ModalComprobanteAdmin.jsx: {quota.receipt || `REC-${quota.id}`}
+\Admin\modules\quotasAdmin\ModalComprobanteAdmin.jsx: Member:
+\Admin\modules\quotasAdmin\ModalComprobanteAdmin.jsx: {quota.user ? `${quota.user.name} ${quota.user.lastname}` : 'Member'}
+\Admin\modules\quotasAdmin\ModalComprobanteAdmin.jsx: {quota.user?.dni || 'Sin DNI'}
+\Admin\modules\quotasAdmin\ModalComprobanteAdmin.jsx: {quota.concepto || quota.periodo}
+\Admin\modules\quotasAdmin\ModalComprobanteAdmin.jsx: Date de Payment:
+\Admin\modules\quotasAdmin\ModalComprobanteAdmin.jsx: {quota.datePago || (quota.date_payment ? quota.date_payment.substring(0, 10) : '-')}
+\Admin\modules\quotasAdmin\ModalComprobanteAdmin.jsx: {quota.metodo || quota.metodo_payment || 'Payment en Caja'}
+\Admin\modules\quotasAdmin\ModalComprobanteAdmin.jsx: ${formatMonto(quota.amount)}
+\Admin\modules\quotasAdmin\PricesTable.jsx: Amount Programado
+\Admin\modules\quotasAdmin\PricesTable.jsx: Date de Vigencia (Desde)
+\Admin\modules\quotasAdmin\PricesTable.jsx: Status de Aplicación
+\Admin\modules\quotasAdmin\PricesTable.jsx: Date Creación
+\Admin\modules\quotasAdmin\PricesTable.jsx: ${formatMonto(p.amount)}
+\Admin\modules\quotasAdmin\PricesVigentesCard.jsx: Date de consulta: {dateConsulta || new Date().toISOString().substring(0, 10)}
+\Admin\modules\quotasAdmin\PricesVigentesCard.jsx: ${priceVigente?.amount ? formatMonto(priceVigente.amount) : '18.000'}
+\Admin\modules\quotasAdmin\PricesVigentesCard.jsx: / quota mensual
+\Admin\modules\quotasAdmin\QuotasAdminBadges.jsx: {
+  switch (status?.toLowerCase()) {
+    case 'pagado':
+      return (
+\Admin\modules\quotasAdmin\QuotasAdminBadges.jsx: );
+  }
+};
+
+export const RenderEstadoPrecioAdmin = ({ priceItem, priceVigente, dateConsulta }) =>
+\Admin\modules\quotasAdmin\QuotasAdminHeader.jsx: Gestión y Control de Quotas & Tarifas
+\Admin\modules\quotasAdmin\QuotasAdminHeader.jsx: Administra el cronograma de prices programados y fiscaliza el status de cobranza de los members.
+\Admin\modules\quotasAdmin\QuotasAdminHeader.jsx: setSubTab('members')}
+        >
+\Admin\modules\quotasAdmin\QuotasAdminHeader.jsx: Quotas de Members ({totalCuotas})
+\Admin\modules\quotasAdmin\SchedulePriceForm.jsx: Programar o Actualizar Nuevo Price de Quota
+\Admin\modules\quotasAdmin\SchedulePriceForm.jsx: date de entrada en vigencia
+\Admin\modules\quotasAdmin\SchedulePriceForm.jsx: . A partir de esa date, todas las nuevas quotas emitidas o recalculadas tomarán dicho valor.
+\Admin\modules\quotasAdmin\SchedulePriceForm.jsx: Amount de la Quota ($) *
+\Admin\modules\quotasAdmin\SchedulePriceForm.jsx: setFormPrecio({ ...formPrecio, amount: e.target.value })}
+              />
+\Admin\modules\quotasAdmin\SchedulePriceForm.jsx: Date exacta en que entra en vigencia
+\Admin\modules\QuotasAdminManager.jsx: {
+  // Pestaña activa dentro del módulo: 'members' o 'prices'
+  const [subTab, setSubTab] = useSta
+\Admin\modules\QuotasAdminManager.jsx: {
+    setCuotaParaCobrar(quota);
+    setMetodoCobro('Efectivo en Caja');
+    setComprobanteCobro(
+\Admin\modules\QuotasAdminManager.jsx: )}
+
+      {/* SECCIÓN 2: GESTIÓN Y CONTROL GLOBAL DE QUOTAS DE MEMBERS */}
+      {subTab === 'mem
+\Admin\modules\QuotasAdminManager.jsx: setShowModalCobro(false)}
+        quota={quotaParaCobrar}
+        metodoCobro={metodoCobro}
+     
+\Admin\modules\QuotasAdminManager.jsx: setShowModalComprobante(false)}
+        quota={quotaComprobante}
+      />
+\Admin\modules\ShiftsManager.jsx: {
+  const [filterActividad, setFiltroActividad] = useState('todas');
+  const [filterDia, setFiltro
+\Admin\modules\ShiftsManager.jsx: p.id?.toString() === formData.teacher_id.toString());
+      
+      // Determinar la branch efectiv
+\Admin\modules\ShiftsManager.jsx: Gestión y Programación de Shifts
+\Admin\modules\ShiftsManager.jsx: Organiza los bloques schedules por días (Lunes a Sábado), branches y teachers asignados.
+\Admin\modules\ShiftsManager.jsx: Nuevo Shift
+\Admin\modules\ShiftsManager.jsx: Cargando shifts...
+\Admin\modules\ShiftsManager.jsx: No se encontraron shifts con los filters seleccionados.
+\Admin\modules\ShiftsManager.jsx: Teacher a Cargo
+\Admin\modules\ShiftsManager.jsx: Status
+\Admin\modules\ShiftsManager.jsx: {t.teacher ? (
+\Admin\modules\ShiftsManager.jsx: {t.teacher.name} {t.teacher.lastname}
+\Admin\modules\ShiftsManager.jsx: Sin teacher
+\Admin\modules\ShiftsManager.jsx: {t.status ? 'Disponible' : 'Pausado'}
+\Admin\modules\ShiftsManager.jsx: handleToggleEstado(t.id)}
+                          title={t.status ? 'Pausar shift' : 'Habilitar s
+\Admin\modules\ShiftsManager.jsx: handleAbrirModal(t)}
+                          title="Editar shift"
+                        >
+   
+\Admin\modules\ShiftsManager.jsx: onPedirEliminar({
+                            type: 'shift',
+                            id: t.id,
+\Admin\modules\ShiftsManager.jsx: Mostrando shifts {indiceInicio + 1} a {Math.min(indiceInicio + elementosPorPagina, shiftsFiltrados.l
+\Admin\modules\ShiftsManager.jsx: )}
+
+      {/* Modal Crear / Editar Shift */}
+\Admin\modules\ShiftsManager.jsx: {shiftEditando ? 'Editar Shift Schedule' : 'Crear Nuevo Shift'}
+\Admin\modules\ShiftsManager.jsx: {
+                      const selectedId = e.target.value;
+                      const act = activ
+\Admin\modules\ShiftsManager.jsx: {a.name} {a.teacher ? `(Teacher. ${a.teacher.name} ${a.teacher.lastname})` : ''}
+\Admin\modules\ShiftsManager.jsx: Teacher a Cargo
+\Admin\modules\ShiftsManager.jsx: -- Sin teacher asignado --
+\Admin\modules\ShiftsManager.jsx: {teachers.map((p) => {
+                      const branchProfObj = branches.find((s) => s.id?.toStr
+\Admin\modules\ShiftsManager.jsx: ) : shiftEditando ? (
+                'Guardar Cambios'
+              ) : (
+                'Crea
+\Admin\modules\TeachersManager.jsx: {
+  const [filterTexto, setFiltroTexto] = useState('');
+  const [filterSede, setFiltroSede] = useSta
+\Admin\modules\TeachersManager.jsx: Shift
+\Admin\modules\TeachersManager.jsx: Status
+\Admin\modules\TeachersManager.jsx: {teachersFiltrados.map((teacher) => (
+\Admin\modules\TeachersManager.jsx: {teacher.name} {teacher.lastname}
+\Admin\modules\TeachersManager.jsx: DNI: {teacher.dni}
+\Admin\modules\TeachersManager.jsx: {teacher.email}
+\Admin\modules\TeachersManager.jsx: {teacher.phone || 'Sin teléfono'}
+\Admin\modules\TeachersManager.jsx: {teacher.specialty}
+\Admin\modules\TeachersManager.jsx: {teacher.shift}
+\Admin\modules\TeachersManager.jsx: {teacher.branch ? (
+\Admin\modules\TeachersManager.jsx: {teacher.branch.name}
+\Admin\modules\TeachersManager.jsx: {teacher.status ? 'Activo' : 'Inactivo'}
+\Admin\modules\TeachersManager.jsx: handleToggleEstado(teacher.id)}
+                        title={teacher.status ? 'Desactivar profesor
+\Admin\modules\TeachersManager.jsx: handleAbrirModal(teacher)}
+                        title="Editar datos del profesor"
+               
+\Admin\modules\TeachersManager.jsx: onPedirEliminar({
+                          type: 'teacher',
+                          id: teacher.i
+\Admin\modules\TeachersManager.jsx: Shift Preferencial
+\Admin\modules\TeachersManager.jsx: setFormData({ ...formData, shift: e.target.value })}
+                  >
+\Auth\Auth.jsx: );
+
+const Auth = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const
+\Auth\VerifyEmail.jsx: {
+  const [status, setStatus] = useState('loading'); // 'loading', 'success', 'error'
+  const [messa
+\Auth\VerifyEmail.jsx: {status === 'loading' && (
+\Auth\VerifyEmail.jsx: )}
+
+          {status === 'success' && (
+\Auth\VerifyEmail.jsx: )}
+
+          {status === 'error' && (
+\Footer\Footer.jsx: {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  const handleGoHome = (e) => {
+ 
+\Footer\Footer.jsx: {user ? (
+\Footer\Footer.jsx: &copy; {new Date().getFullYear()} FitApp Premium. Todos los derechos reservados.
+\Home\Home.jsx: {
+  const { user } = useAuth();
+  const [contactData, setContactData] = useState({
+    name: '',
+   
+\Home\Home.jsx: {user ? (
+\Home\Home.jsx: {user.name || 'Member'}
+\Home\Home.jsx: {user ? (
+\Home\Home.jsx: Members Activos
+\Home\Home.jsx: {user ? '¡Continúa alcanzando tus objetivos!' : '¿Listo para comenzar tu transformación?'}
+\Home\Home.jsx: {user ? 'Gestiona tus quotas y consulta tus schedules en tu profile.' : 'Únete hoy y obtén tu primer
+\Home\Home.jsx: {user ? (
+\Navigation\Navigation.jsx: {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleGoHome = (e
+\Navigation\Navigation.jsx: {user ? (
+\Navigation\Navigation.jsx: {(user.role === 'admin' || user.email === 'administraciongymfit@gmail.com') && (
+\User\modules\ProfileTab.jsx: {
+  const navigate = useNavigate();
+  const [profileData, setProfileData] = useState({
+    name: use
+\User\modules\ProfileTab.jsx: Modifica tu información de contacto y credenciales de member en FitApp.
+\User\modules\quotas\ModalComprobanteMP.jsx: {
+  const safeCuota = quota || {};
+
+  const limpiarModal = () => {
+    setTimeout(() => {
+      docu
+\User\modules\quotas\ModalComprobanteMP.jsx: ¡Payment Acreditado con Éxito!
+\User\modules\quotas\ModalComprobanteMP.jsx: Transacción aprobada por Mercado Payment
+\User\modules\quotas\ModalComprobanteMP.jsx: Tu quota ha sido procesada y acreditada correctamente a través de Mercado Payment.
+\User\modules\quotas\ModalComprobanteMP.jsx: {/* Mini Receipt Oficial */}
+\User\modules\quotas\ModalComprobanteMP.jsx: Receipt de Payment Oficial
+\User\modules\quotas\ModalComprobanteMP.jsx: {/* Badge verde de status */}
+\User\modules\quotas\ModalComprobanteMP.jsx: {/* Amount Abonado en tipografía grande y destacada */}
+\User\modules\quotas\ModalComprobanteMP.jsx: Amount Total Abonado
+\User\modules\quotas\ModalComprobanteMP.jsx: ${formatMonto(safeCuota.amount)}
+\User\modules\quotas\ModalComprobanteMP.jsx: Mercado Payment (Instantáneo)
+\User\modules\quotas\ModalComprobanteMP.jsx: {/* Detalles del Receipt */}
+\User\modules\quotas\ModalComprobanteMP.jsx: N° de Receipt:
+\User\modules\quotas\ModalComprobanteMP.jsx: Date y Hora:
+\User\modules\quotas\ModalComprobanteMP.jsx: Member Titular:
+\User\modules\quotas\ModalComprobanteMP.jsx: Mercado Payment (Instantáneo)
+\User\modules\quotas\ModalComprobanteMP.jsx: {/* Pie de seguridad del Receipt */}
+\User\modules\quotas\ModalComprobanteMP.jsx: Imprimir / Guardar Receipt
+\User\modules\quotas\ModalHistorial.jsx: Historial de Payments y Comprobantes Oficiales
+\User\modules\quotas\ModalHistorial.jsx: Aún no registras payments o recibos emitidos en el sistema.
+\User\modules\quotas\ModalHistorial.jsx: N° Receipt
+\User\modules\quotas\ModalHistorial.jsx: Date de Payment
+\User\modules\quotas\ModalHistorial.jsx: Medio de Payment
+\User\modules\quotas\ModalHistorial.jsx: Amount
+\User\modules\quotas\ModalHistorial.jsx: {item.receipt || `REC-${item.id}`}
+\User\modules\quotas\ModalHistorial.jsx: {item.concepto || `Quota #${item.numero_quota} - ${item.periodo}`}
+\User\modules\quotas\ModalHistorial.jsx: {item.metodo === 'Mercado Payment' || item.metodo_payment === 'Mercado Payment' ? (
+\User\modules\quotas\ModalHistorial.jsx: Mercado Payment
+\User\modules\quotas\ModalHistorial.jsx: {item.metodo || item.metodo_payment || 'Payment Registrado'}
+\User\modules\quotas\ModalHistorial.jsx: ${formatMonto(item.amount)}
+\User\modules\quotas\ModalRecibo.jsx: Receipt de Payment Oficial
+\User\modules\quotas\ModalRecibo.jsx: Receipt Electrónico Válido
+\User\modules\quotas\ModalRecibo.jsx: PAYMENT ACREDITADO
+\User\modules\quotas\ModalRecibo.jsx: N° de Receipt:
+\User\modules\quotas\ModalRecibo.jsx: {dataRecibo.receipt || (dataRecibo.id ? `REC-${dataRecibo.id}` : '-')}
+\User\modules\quotas\ModalRecibo.jsx: Member:
+\User\modules\quotas\ModalRecibo.jsx: {currentUser ? `${currentUser.name} ${currentUser.lastname}` : 'Member Titular'}
+\User\modules\quotas\ModalRecibo.jsx: {dataRecibo.concepto || (dataRecibo.numero_quota ? `Quota #${dataRecibo.numero_quota} - ${dataRecibo
+\User\modules\quotas\ModalRecibo.jsx: Date de Payment:
+\User\modules\quotas\ModalRecibo.jsx: {dataRecibo.metodo || dataRecibo.metodo_payment || 'Mercado Payment'}
+\User\modules\quotas\ModalRecibo.jsx: ${formatMonto(dataRecibo.amount)}
+\User\modules\quotas\ModalRecibo.jsx: window.print()}
+          className="rounded-pill px-3"
+        >
+          Imprimir Receipt
+\User\modules\quotas\PaymentModal.jsx: {
+  const [metodoPago, setMetodoPago] = useState('mp');
+  const [receiptTransferencia, setComproba
+\User\modules\quotas\PaymentModal.jsx: Pasarela de Payment Segura FitApp
+\User\modules\quotas\PaymentModal.jsx: )}
+
+        {/* Resumen de la Quota a abonar */}
+\User\modules\quotas\PaymentModal.jsx: {selectedCuota?.concepto || `Quota #${selectedCuota?.numero_quota} - ${selectedCuota?.periodo}`}
+\User\modules\quotas\PaymentModal.jsx: Member Titular:
+\User\modules\quotas\PaymentModal.jsx: {currentUser ? `${currentUser.name} ${currentUser.lastname}` : 'Member Registrado'}
+\User\modules\quotas\PaymentModal.jsx: Date Vencimiento:
+\User\modules\quotas\PaymentModal.jsx: Amount Total a Abonar:
+\User\modules\quotas\PaymentModal.jsx: ${formatMonto(selectedCuota?.amount)}
+\User\modules\quotas\PaymentModal.jsx: Selecciona el Medio de Payment:
+\User\modules\quotas\PaymentModal.jsx: {/* Opciones de método de payment */}
+\User\modules\quotas\PaymentModal.jsx: {/* Opción 1: Mercado Payment (DESTACADA) */}
+\User\modules\quotas\PaymentModal.jsx: Mercado Payment
+\User\modules\quotas\PaymentModal.jsx: {/* Sub-panel exclusivo cuando Mercado Payment está seleccionado */}
+            {metodoPago === 'm
+\User\modules\quotas\PaymentModal.jsx: Generando orden de Mercado Payment...
+\User\modules\quotas\PaymentModal.jsx: Acreditando en Mercado Payment...
+\User\modules\quotas\PaymentModal.jsx: Confirmar Payment con Mercado Payment (${formatMonto(selectedCuota?.amount)})
+\User\modules\quotas\PaymentModal.jsx: ) : (
+                      `Pagar $${formatMonto(selectedCuota?.amount)} con Tarjeta`
+           
+\User\modules\quotas\PaymentModal.jsx: Transfiere desde tu banco o billetera virtual e informa el receipt
+\User\modules\quotas\PaymentModal.jsx: FITAPP.GYM.PAYMENTS
+\User\modules\quotas\PaymentModal.jsx: N° de Transacción / Receipt Bancario (opcional)
+\User\modules\quotas\PaymentModal.jsx: ) : (
+                      `Confirmar Transferencia por $${formatMonto(selectedCuota?.amount)}`
+ 
+\User\modules\quotas\QuotasBadge.jsx: {
+  const status = quota?.status?.toLowerCase();
+
+  if (status === 'pagado') {
+    return (
+\User\modules\quotas\QuotasBadge.jsx: );
+  }
+
+  if (status === 'en demora') {
+    return (
+\User\modules\quotas\QuotasBadge.jsx: Plazo de gracia hasta el {quota.dateLimite || quota.date_limite_payment} (+5 días)
+\User\modules\quotas\QuotasBadge.jsx: );
+  }
+
+  if (status === 'no pagado') {
+    return (
+\User\modules\quotas\QuotasHeader.jsx: Status de Quotas y Membresía
+\User\modules\quotas\QuotasHeader.jsx: Revisa tus vencimientos mensuales, abona de forma instantánea con Mercado Payment y consulta tus com
+\User\modules\quotas\QuotasTable.jsx: Amount
+\User\modules\quotas\QuotasTable.jsx: Status
+\User\modules\quotas\QuotasTable.jsx: {quotas.length === 0 ? (
+\User\modules\quotas\QuotasTable.jsx: No posees quotas pendientes de payment en este momento.
+\User\modules\quotas\QuotasTable.jsx: ) : (
+            quotas.map((quota) => (
+\User\modules\quotas\QuotasTable.jsx: {quota.concepto || `Quota #${quota.numero_quota} - ${quota.periodo}`}
+\User\modules\quotas\QuotasTable.jsx: Membresía Activa FitApp • Emisión: {quota.date_emision || 'Home de ciclo'}
+\User\modules\quotas\QuotasTable.jsx: ${formatMonto(quota.amount)}
+\User\modules\quotas\QuotasTable.jsx: {quota.dateVenc || quota.date_vencimiento}
+\User\modules\quotas\QuotasTable.jsx: {quota.dateLimite || quota.date_limite_payment}
+\User\modules\quotas\QuotasTable.jsx: onAbrirPago(quota)}
+                  >
+\User\modules\quotas\QuotasTable.jsx: Pagar Quota
+\User\modules\quotas\ResumenCards.jsx: Quotas Pendientes
+\User\modules\quotas\ResumenCards.jsx: Quotas Acreditadas
+\User\modules\QuotasTab.jsx: {
+  const { user: authUser } = useAuth();
+  const currentUser = user || authUser;
+  const esRolEx
+\User\modules\QuotasTab.jsx: Este apartado no está disponible para administradores ni teachers. Solo los members activos poseen g
+\User\modules\QuotasTab.jsx: );
+  }
+
+  const quotasVisibles = mostrarTodasCuotas ? quotas : quotas.slice(0, 5);
+
+  return (
+\User\modules\QuotasTab.jsx: Cargando status de tus quotas...
+\User\modules\QuotasTab.jsx: {quotas.length > 5 && (
+\User\modules\QuotasTab.jsx: {`Mostrar más quotas (${quotas.length - 5} adicionales)`}
+\User\modules\QuotasTab.jsx: )}
+
+      {/* Modal Pasarela de Payment */}
+\User\modules\QuotasTab.jsx: setShowPaymentModal(false)}
+        selectedCuota={selectedCuota}
+        currentUser={currentUser
+\User\modules\QuotasTab.jsx: setShowHistoryModal(false)}
+        historial={historial}
+        onVerComprobante={handleVerCompr
+\User\modules\QuotasTab.jsx: setShowReceiptModal(false)}
+        recibo={reciboSeleccionado}
+        currentUser={currentUser}
+\User\modules\QuotasTab.jsx: setShowModalComprobanteMP(false)}
+        quota={receiptMP}
+        currentUser={currentUser}
+   
+\User\modules\SecurityTab.jsx: );
+
+const SecurityTab = ({ user }) => {
+  const [passwordData, setPasswordData] = useState({
+   
+\User\modules\SecurityTab.jsx: setPasswordMsg(null), 3500);
+      return;
+    }
+
+    setCargandoPassword(true);
+
+    try {
+ 
+\User\modules\shifts\ClaseCard.jsx: {
+  const capacityMax = shift.capacity_maximo || shift.activity?.capacity || 20;
+  const capacityAct
+\User\modules\shifts\ClaseCard.jsx: {shift.startTime} - {shift.endTime} hs
+\User\modules\shifts\ClaseCard.jsx: {/* Name y Teacher */}
+\User\modules\shifts\ClaseCard.jsx: {shift.activity?.name?.toUpperCase() || 'CLASE'}
+\User\modules\shifts\ClaseCard.jsx: GYM • {shift.activity?.duration || 60} MIN
+\User\modules\shifts\ClaseCard.jsx: {shift.teacher
+                  ? `${shift.teacher.name} ${shift.teacher.lastname}`
+               
+\User\modules\shifts\ClaseCard.jsx: {shift.branch?.name?.toUpperCase() || 'BRANCH GENERAL'}
+\User\modules\shifts\ClaseCard.jsx: onPedirCancelar(shift.mi_reservation_id, shift.activity?.name || 'Clase')}
+              >
+         
+\User\modules\shifts\ClaseCard.jsx: onPedirReserva(shift)}
+              >
+                Reservar Shift
+\User\modules\shifts\ClasesList.jsx: No se encontraron shifts activos para los filters y el día seleccionado.
+\User\modules\shifts\ClasesList.jsx: {shiftsFiltrados.map((shift, index) => (
+\User\modules\shifts\DateSelector.jsx: {/* Banner de restricción: Solo shifts del mismo día */}
+      {!esMismoDia && (
+\User\modules\shifts\DateSelector.jsx: . Por política del club, solo se permite reservar shifts para el
+\User\modules\shifts\MisReservasView.jsx: Aún no tienes shifts reservados
+\User\modules\shifts\MisReservasView.jsx: {misReservas.map((reservation) => {
+            const t = reservation.shift;
+            const esDeH
+\User\modules\shifts\MisReservasView.jsx: {esDeHoy ? '📅 Para Hoy' : reservation.date}
+\User\modules\shifts\MisReservasView.jsx: Teacher: {t?.teacher ? `${t.teacher.name} ${t.teacher.lastname}` : 'Sin Teacher'}
+\User\modules\shifts\MisReservasView.jsx: onPedirCancelar(reservation.id, t?.activity?.name || 'Clase')}
+                    >
+               
+\User\modules\shifts\ModalesReserva.jsx: {
+  const shift = modalReserva.shift;
+
+  return (
+\User\modules\shifts\ModalesReserva.jsx: !guardando && setModalReserva({ open: false, shift: null })} 
+      centered
+      className="dark-m
+\User\modules\shifts\ModalesReserva.jsx: {shift && (
+\User\modules\shifts\ModalesReserva.jsx: {shift.activity?.name?.toUpperCase()}
+\User\modules\shifts\ModalesReserva.jsx: Hoy ({dateHoyISO}) de {shift.startTime} a {shift.endTime} hs
+\User\modules\shifts\ModalesReserva.jsx: {shift.branch?.name} ({shift.branch?.address})
+\User\modules\shifts\ModalesReserva.jsx: Teacher: {shift.teacher ? `${shift.teacher.name} ${shift.teacher.lastname}` : 'Sin Asignar'}
+\User\modules\shifts\ModalesReserva.jsx: {shift.cupos_disponibles}
+\User\modules\shifts\ModalesReserva.jsx: setModalReserva({ open: false, shift: null })}
+          disabled={guardando}
+        >
+          Vo
+\User\modules\shifts\ModalesReserva.jsx: ¿Estás seguro de que deseas cancelar tu shift para
+\User\modules\shifts\ModalesReserva.jsx: Tu lugar será liberado inmediatamente para que otro member pueda reservarlo.
+\User\modules\shifts\ModalesReserva.jsx: setModalCancelar({ open: false, reservationId: null, nameClase: '' })}
+          disabled={guardando
+\User\modules\shifts\ModalesReserva.jsx: ) : (
+            'Sí, Cancelar Shift'
+          )}
+\User\modules\shifts\ShiftsHeader.jsx: {/* Selector de Vista: Shifts vs Mis Reservations */}
+\User\modules\shifts\ShiftsHeader.jsx: setVistaActiva('shifts')}
+        >
+          Clases Disponibles
+\User\modules\ShiftsTab.jsx: {
+  const dateHoyISO = getFechaLocalISO();
+  const diasSemana = generarDias();
+
+  // Estados de dato
+\User\modules\ShiftsTab.jsx: setVistaActiva('shifts')}
+        />
+      ) : (
+\User\modules\TeacherAgendaTab.jsx: {
+  const [datosAgenda, setDatosAgenda] = useState(null);
+  const [cargando, setCargando] = useState
+\User\modules\TeacherAgendaTab.jsx: );
+  }
+
+  const { teacher, shifts = [], branches = [], activities = [] } = datosAgenda || {};
+
+  ret
+\User\modules\TeacherAgendaTab.jsx: {/* Tarjetas de Estadísticas Rápidas del Teacher */}
+\User\modules\TeacherAgendaTab.jsx: {shifts.length}
+\User\modules\TeacherAgendaTab.jsx: Shift Habitual
+\User\modules\TeacherAgendaTab.jsx: {teacher?.shift || 'Mañana'}
+\User\modules\TeacherAgendaTab.jsx: {shifts.length} Clases Activas
+\User\modules\TeacherAgendaTab.jsx: {shifts.length === 0 ? (
+\User\modules\TeacherAgendaTab.jsx: No tienes shifts o clases asignadas actualmente en el sistema.
+\User\modules\TeacherAgendaTab.jsx: STATUS
+\User\modules\TeacherAgendaTab.jsx: {shifts.map((t) => (
+\User\modules\TeacherAgendaTab.jsx: {t.status ? 'Active' : 'Inactivo'}
+\User\modules\TeacherAgendaTab.jsx: Capacity máxima: {a.capacity} alumnos por shift
+\User\User.jsx: {
+  const { user, updateUser, logout } = useAuth();
+  const [searchParams] = useSearchParams();
+
+\User\User.jsx: {/* Header de User */}
+\User\User.jsx: {user ? `${user.name} ${user.lastname}` : 'Profile del Sistema'}
+\User\User.jsx: Teacher del Staff FitApp
+\User\User.jsx: {user?.category || 'Member FitApp'}
+\User\User.jsx: {user?.email || 'user@gymfit.com'}
+\User\User.jsx: {/* Pestaña exclusiva de Teachers */}
+          {esProfesor && (
+\User\User.jsx: {/* Únicamente mostrar Pestañas de Quotas y Shifts a los Members/Users regulares */}
+          {!es
+\User\User.jsx: setActiveTab('quotas')}
+                >
+\User\User.jsx: Quotas y Payments
+\User\User.jsx: setActiveTab('shifts')}
+                >
+\User\User.jsx: Shifts y Reservations
+\User\User.jsx: )}
+
+        {!esAdmin && !esProfesor && activeTab === 'quotas' && (
+\User\User.jsx: )}
+
+        {!esAdmin && !esProfesor && activeTab === 'shifts' && (
+\WhatsAppButton\WhatsAppButton.jsx: {/* Online Status Badge */}

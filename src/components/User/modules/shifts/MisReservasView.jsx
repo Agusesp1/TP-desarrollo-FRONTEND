@@ -11,7 +11,7 @@ const MisReservasView = ({
   return (
     <div className="mis-reservations-view py-2">
       <div className="d-flex align-items-center justify-content-between mb-3 px-1">
-        <h6 className="fw-bold text-white mb-0">Tus Reservations Confirmadas</h6>
+        <h6 className="fw-bold text-white mb-0">Tus Reservas Confirmadas</h6>
         <Badge bg="primary" className="px-3 py-1 rounded-pill">
           Total: {misReservas.length}
         </Badge>
@@ -20,7 +20,7 @@ const MisReservasView = ({
       {cargando ? (
         <div className="text-center py-5">
           <Spinner animation="border" variant="primary" />
-          <p className="text-secondary small mt-2">Cargando tus reservations...</p>
+          <p className="text-secondary small mt-2">Cargando tus reservas...</p>
         </div>
       ) : misReservas.length === 0 ? (
         <div className="text-center py-5 text-secondary">
@@ -30,7 +30,7 @@ const MisReservasView = ({
               <polyline points="12 6 12 12 16 14"></polyline>
             </svg>
           </div>
-          <p className="fw-medium text-white mb-1">Aún no tienes shifts reservados</p>
+          <p className="fw-medium text-white mb-1">Aún no tienes turnos reservados</p>
           <p className="small mb-3">Selecciona una clase del día de hoy para asegurar tu lugar en el gym.</p>
           <Button variant="primary" size="sm" className="rounded-pill px-4" onClick={onVolverAClases}>
             Ver Clases de Hoy
@@ -58,10 +58,10 @@ const MisReservasView = ({
                       {t?.activity?.name?.toUpperCase() || 'CLASE'}
                     </h6>
                     <p className="text-secondary small mb-2">
-                      Teacher: {t?.teacher ? `${t.teacher.name} ${t.teacher.lastname}` : 'Sin Teacher'}
+                      Profesor: {t?.teacher ? `${t.teacher.name} ${t.teacher.lastname}` : 'Sin Profesor'}
                     </p>
                     <p className="text-secondary small mb-0">
-                      Branch: <span className="text-white">{t?.branch?.name || 'Branch Central'}</span>
+                      Sede: <span className="text-white">{t?.branch?.name || 'Sede Central'}</span>
                     </p>
                   </div>
 
@@ -75,7 +75,7 @@ const MisReservasView = ({
                       className="rounded-pill px-3 py-1"
                       onClick={() => onPedirCancelar(reservation.id, t?.activity?.name || 'Clase')}
                     >
-                      Cancelar Shift
+                      Cancelar Turno
                     </Button>
                   </div>
                 </div>

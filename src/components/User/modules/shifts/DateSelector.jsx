@@ -39,7 +39,7 @@ const DateSelector = ({
               <line x1="12" y1="16" x2="12.01" y2="16"></line>
             </svg>
             <span>
-              Visualizando cronograma del <strong>{dayActualInfo?.dayNombre} {dayActualInfo?.dayNumero} de {dayActualInfo?.monthNombre}</strong>. Por política del club, solo se permite reservar shifts para el <strong>día de hoy</strong>.
+              Visualizando cronograma del <strong>{dayActualInfo?.dayNombre} {dayActualInfo?.dayNumero} de {dayActualInfo?.monthNombre}</strong>. Por política del club, solo se permite reservar turnos para el <strong>día de hoy</strong>.
             </span>
           </div>
           <Button 

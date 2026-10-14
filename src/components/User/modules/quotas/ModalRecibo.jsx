@@ -23,22 +23,22 @@ const ModalRecibo = ({ show, onHide, recibo, currentUser }) => {
       contentClassName="glass-card text-white border-secondary"
     >
       <Modal.Header closeButton closeVariant="white">
-        <Modal.Title className="fw-bold">Receipt de Payment Oficial</Modal.Title>
+        <Modal.Title className="fw-bold">Recibo de Pago Oficial</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <div className="p-4 rounded-3 bg-dark border border-secondary text-white">
           <div className="d-flex justify-content-between align-items-center mb-3 border-bottom border-secondary pb-3">
             <div>
               <h5 className="fw-bold mb-0 text-primary">FITAPP GYM</h5>
-              <small className="text-secondary">Receipt Electrónico Válido</small>
+              <small className="text-secondary">Recibo Electrónico Válido</small>
             </div>
             <Badge bg="success" className="px-3 py-2 fw-bold">
-              PAYMENT ACREDITADO
+              PAGO ACREDITADO
             </Badge>
           </div>
 
           <div className="mb-2">
-            <span className="text-light opacity-75 small">N° de Receipt:</span>
+            <span className="text-light opacity-75 small">N° de Recibo:</span>
             <div className="fw-bold font-monospace text-warning fs-5">
               {dataRecibo.receipt || (dataRecibo.id ? `REC-${dataRecibo.id}` : '-')}
             </div>
@@ -48,9 +48,9 @@ const ModalRecibo = ({ show, onHide, recibo, currentUser }) => {
 
           <Row className="g-2 small mb-3">
             <Col xs={6}>
-              <span className="text-light opacity-75 d-block">Member:</span>
+              <span className="text-light opacity-75 d-block">Socio:</span>
               <strong className="text-white">
-                {currentUser ? `${currentUser.name} ${currentUser.lastname}` : 'Member Titular'}
+                {currentUser ? `${currentUser.name} ${currentUser.lastname}` : 'Socio Titular'}
               </strong>
             </Col>
             <Col xs={6} className="text-end">
@@ -60,11 +60,11 @@ const ModalRecibo = ({ show, onHide, recibo, currentUser }) => {
             <Col xs={6}>
               <span className="text-light opacity-75 d-block">Concepto:</span>
               <strong className="text-white">
-                {dataRecibo.concepto || (dataRecibo.numero_quota ? `Quota #${dataRecibo.numero_quota} - ${dataRecibo.periodo}` : '-')}
+                {dataRecibo.concepto || (dataRecibo.numero_quota ? `Cuota #${dataRecibo.numero_quota} - ${dataRecibo.periodo}` : '-')}
               </strong>
             </Col>
             <Col xs={6} className="text-end">
-              <span className="text-light opacity-75 d-block">Date de Payment:</span>
+              <span className="text-light opacity-75 d-block">Fecha de Pago:</span>
               <strong className="text-white">
                 {dataRecibo.datePago || formatearFechaSegura(dataRecibo.date_payment)}
               </strong>
@@ -72,7 +72,7 @@ const ModalRecibo = ({ show, onHide, recibo, currentUser }) => {
             <Col xs={6}>
               <span className="text-light opacity-75 d-block">Método Utilizado:</span>
               <strong className="text-white">
-                {dataRecibo.metodo || dataRecibo.metodo_payment || 'Mercado Payment'}
+                {dataRecibo.metodo || dataRecibo.metodo_payment || 'Mercado Pago'}
               </strong>
             </Col>
             <Col xs={6} className="text-end">
@@ -94,7 +94,7 @@ const ModalRecibo = ({ show, onHide, recibo, currentUser }) => {
           onClick={() => window.print()}
           className="rounded-pill px-3"
         >
-          Imprimir Receipt
+          Imprimir Recibo
         </Button>
         <Button
           variant="primary"

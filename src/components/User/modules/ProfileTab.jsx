@@ -45,7 +45,7 @@ const ProfileTab = ({ user, updateUser, logout }) => {
     if (!userId) {
       updateUser(profileData);
       setProfileMsgType('success');
-      setMensaje('¡Profile actualizado en sesión local!');
+      setMensaje('¡Perfil actualizado en sesión local!');
       setTimeout(() => setMensaje(null), 3000);
       return;
     }
@@ -66,10 +66,10 @@ const ProfileTab = ({ user, updateUser, logout }) => {
       if (!response.ok || !data.success) {
         setProfileMsgType('danger');
         const detalle = data.detalles ? `: ${data.detalles}` : '';
-        setMensaje(`${data.message || 'Error al actualizar el profile'}${detalle}`);
+        setMensaje(`${data.message || 'Error al actualizar el perfil'}${detalle}`);
       } else {
         setProfileMsgType('success');
-        setMensaje(data.message || '¡Profile actualizado con éxito!');
+        setMensaje(data.message || '¡Perfil actualizado con éxito!');
         if (data.user) {
           updateUser(data.user);
         } else {
@@ -78,7 +78,7 @@ const ProfileTab = ({ user, updateUser, logout }) => {
         setTimeout(() => setMensaje(null), 3000);
       }
     } catch (error) {
-      console.error('Error al actualizar el profile:', error);
+      console.error('Error al actualizar el perfil:', error);
       setProfileMsgType('danger');
       setMensaje('No se pudo conectar con el servidor backend. Asegurate de que esté corriendo.');
     } finally {
@@ -128,7 +128,7 @@ const ProfileTab = ({ user, updateUser, logout }) => {
       <div className="mb-4">
         <h4 className="fw-bold mb-1 text-white">Datos Personales</h4>
         <p className="text-light opacity-75 small mb-0">
-          Modifica tu información de contacto y credenciales de member en FitApp.
+          Modifica tu información de contacto y credenciales de socio en FitApp.
         </p>
       </div>
 
@@ -142,7 +142,7 @@ const ProfileTab = ({ user, updateUser, logout }) => {
         <Row className="g-3">
           <Col md={6}>
             <Form.Group controlId="name">
-              <Form.Label className="small text-light">Name</Form.Label>
+              <Form.Label className="small text-light">Nombre</Form.Label>
               <Form.Control
                 type="text"
                 name="name"
@@ -156,7 +156,7 @@ const ProfileTab = ({ user, updateUser, logout }) => {
 
           <Col md={6}>
             <Form.Group controlId="lastname">
-              <Form.Label className="small text-light">Lastname</Form.Label>
+              <Form.Label className="small text-light">Apellido</Form.Label>
               <Form.Control
                 type="text"
                 name="lastname"
@@ -238,7 +238,7 @@ const ProfileTab = ({ user, updateUser, logout }) => {
             ¿Estás seguro de que deseas dar de baja tu membresía y cuenta en FitApp?
           </p>
           <small className="text-warning d-block">
-            ⚠️ Perderás el acceso a tus clases reservadas y beneficios del pase active.
+            ⚠️ Perderás el acceso a tus clases reservadas y beneficios del pase activo.
           </small>
         </Modal.Body>
         <Modal.Footer className="border-secondary">

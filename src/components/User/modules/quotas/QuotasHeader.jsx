@@ -5,9 +5,9 @@ const QuotasHeader = ({ cargando, onRecargar, onVerHistorial, totalHistorial = 0
   return (
     <div className="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
       <div>
-        <h4 className="fw-bold mb-1 text-white">Status de Quotas y Membresía</h4>
+        <h4 className="fw-bold mb-1 text-white">Estado de Cuotas y Membresía</h4>
         <p className="text-light opacity-75 small mb-0">
-          Revisa tus vencimientos mensuales, abona de forma instantánea con Mercado Payment y consulta tus comprobantes.
+          Revisa tus vencimientos mensuales, abona de forma instantánea con Mercado Pago y consulta tus comprobantes.
         </p>
       </div>
 

@@ -29,25 +29,25 @@ const ModalHistorial = ({ show, onHide, historial = [], onVerComprobante }) => {
             <line x1="16" y1="13" x2="8" y2="13" />
             <line x1="16" y1="17" x2="8" y2="17" />
           </svg>
-          Historial de Payments y Comprobantes Oficiales
+          Historial de Pagos y Comprobantes Oficiales
         </Modal.Title>
       </Modal.Header>
 
       <Modal.Body>
         {historial.length === 0 ? (
           <div className="text-center py-5 text-secondary">
-            <p className="mb-0">Aún no registras payments o recibos emitidos en el sistema.</p>
+            <p className="mb-0">Aún no registras pagos o recibos emitidos en el sistema.</p>
           </div>
         ) : (
           <div className="table-responsive">
             <Table hover variant="dark" className="align-middle mb-0">
               <thead>
                 <tr>
-                  <th>N° Receipt</th>
+                  <th>N° Recibo</th>
                   <th>Concepto</th>
-                  <th>Date de Payment</th>
-                  <th>Medio de Payment</th>
-                  <th>Amount</th>
+                  <th>Fecha de Pago</th>
+                  <th>Medio de Pago</th>
+                  <th>Monto</th>
                   <th className="text-end">Detalle</th>
                 </tr>
               </thead>
@@ -61,7 +61,7 @@ const ModalHistorial = ({ show, onHide, historial = [], onVerComprobante }) => {
                     </td>
                     <td>
                       <div className="fw-semibold text-white">
-                        {item.concepto || `Quota #${item.numero_quota} - ${item.periodo}`}
+                        {item.concepto || `Cuota #${item.numero_quota} - ${item.periodo}`}
                       </div>
                     </td>
                     <td>
@@ -70,13 +70,13 @@ const ModalHistorial = ({ show, onHide, historial = [], onVerComprobante }) => {
                       </span>
                     </td>
                     <td>
-                      {item.metodo === 'Mercado Payment' || item.metodo_payment === 'Mercado Payment' ? (
+                      {item.metodo === 'Mercado Pago' || item.metodo_payment === 'Mercado Pago' ? (
                         <span className="badge" style={{ backgroundColor: '#009EE3', color: '#fff' }}>
-                          Mercado Payment
+                          Mercado Pago
                         </span>
                       ) : (
                         <small className="text-light opacity-75">
-                          {item.metodo || item.metodo_payment || 'Payment Registrado'}
+                          {item.metodo || item.metodo_payment || 'Pago Registrado'}
                         </small>
                       )}
                     </td>

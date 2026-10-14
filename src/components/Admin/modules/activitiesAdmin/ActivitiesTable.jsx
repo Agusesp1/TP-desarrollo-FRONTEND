@@ -22,14 +22,14 @@ const ActivitiesTable = ({
         <Table className="admin-table align-middle mb-0">
           <thead>
             <tr>
-              <th>Activity</th>
-              <th>Días y Schedules</th>
-              <th>Branch Asignada</th>
-              <th>Teacher a Cargo</th>
+              <th>Actividad</th>
+              <th>Días y Horarios</th>
+              <th>Sede Asignada</th>
+              <th>Profesor a Cargo</th>
               <th>Duración</th>
-              <th>Capacity Máximo</th>
-              <th>Shifts Creados</th>
-              <th>Status</th>
+              <th>Cupo Máximo</th>
+              <th>Turnos Creados</th>
+              <th>Estado</th>
               <th className="text-end">Acciones</th>
             </tr>
           </thead>

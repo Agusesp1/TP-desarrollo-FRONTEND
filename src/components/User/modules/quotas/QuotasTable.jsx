@@ -10,10 +10,10 @@ const QuotasTable = ({ quotas = [], onAbrirPago }) => {
         <thead>
           <tr>
             <th>Concepto / Período</th>
-            <th>Amount</th>
+            <th>Monto</th>
             <th>Vencimiento</th>
             <th>Límite de Gracia</th>
-            <th>Status</th>
+            <th>Estado</th>
             <th className="text-end">Acción</th>
           </tr>
         </thead>
@@ -30,7 +30,7 @@ const QuotasTable = ({ quotas = [], onAbrirPago }) => {
                   </div>
                   <h5 className="fw-bold text-success mb-1">¡Felicitaciones! Te encuentras al día</h5>
                   <p className="text-light opacity-75 small mb-0">
-                    No posees quotas pendientes de payment en este momento.
+                    No posees cuotas pendientes de pago en este momento.
                   </p>
                 </div>
               </td>
@@ -40,7 +40,7 @@ const QuotasTable = ({ quotas = [], onAbrirPago }) => {
               <tr key={quota.id}>
                 <td>
                   <div className="fw-bold text-white">
-                    {quota.concepto || `Quota #${quota.numero_quota} - ${quota.periodo}`}
+                    {quota.concepto || `Cuota #${quota.numero_quota} - ${quota.periodo}`}
                   </div>
                   <small className="text-light opacity-75">
                     Membresía Activa FitApp • Emisión: {quota.date_emision || 'Home de ciclo'}
@@ -75,7 +75,7 @@ const QuotasTable = ({ quotas = [], onAbrirPago }) => {
                       <rect width="20" height="14" x="2" y="5" rx="2" />
                       <line x1="2" y1="10" />
                     </svg>
-                    Pagar Quota
+                    Pagar Cuota
                   </Button>
                 </td>
               </tr>

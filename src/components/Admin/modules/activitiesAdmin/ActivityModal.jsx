@@ -144,7 +144,7 @@ const ActivityModal = ({
             </Col>
             <Col md={6}>
               <Form.Group>
-                <Form.Label>Teacher a Cargo</Form.Label>
+                <Form.Label>Profesor a Cargo</Form.Label>
                 <Form.Select
                   value={formData.teacher_id}
                   onChange={(e) => setFormData({ ...formData, teacher_id: e.target.value })}

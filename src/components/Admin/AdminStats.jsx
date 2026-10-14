@@ -8,7 +8,7 @@ const AdminStats = ({ stats }) => {
         <Card className="stat-card border-0 p-3 text-white">
           <div className="d-flex align-items-center justify-content-between">
             <div>
-              <span className="text-light opacity-75 small fw-medium">Teachers</span>
+              <span className="text-light opacity-75 small fw-medium">Profesores</span>
               <h2 className="fw-bold mb-0 mt-1 text-white">{stats.totalProfesores}</h2>
               <small className="text-success fw-bold">{stats.teachersActivos} activos</small>
             </div>

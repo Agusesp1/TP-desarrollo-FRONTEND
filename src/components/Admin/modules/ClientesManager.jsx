@@ -346,7 +346,7 @@ const ClientesManager = ({ onMostrarAlerta, apiBase }) => {
                   </td>
                   <td>
                     <span className="badge-token-subdued">
-                      {u.role === 'admin' ? 'Administrador' : (u.role === 'teacher' ? 'Teacher' : 'Member')}
+                      {u.role === 'admin' ? 'Administrador' : (u.role === 'teacher' ? 'Profesor' : 'Socio')}
                     </span>
                   </td>
                   <td>

@@ -85,7 +85,7 @@ const ShiftsTab = ({ user }) => {
       }
     } catch (err) {
       console.error('Error al cargar shifts:', err);
-      mostrarMensaje('No se pudieron sincronizar los shifts con el servidor.', 'danger');
+      mostrarMensaje('No se pudieron sincronizar los turnos con el servidor.', 'danger');
     } finally {
       setCargando(false);
     }
@@ -98,11 +98,11 @@ const ShiftsTab = ({ user }) => {
   // Manejadores de Reservation
   const handlePedirReserva = (shift) => {
     if (!user) {
-      mostrarMensaje('Debes tener una sesión iniciada para reservar shifts.', 'danger');
+      mostrarMensaje('Debes tener una sesión iniciada para reservar turnos.', 'danger');
       return;
     }
     if (!esMismoDia) {
-      mostrarMensaje('Solo se permite reservar shifts para el día de hoy.', 'warning');
+      mostrarMensaje('Solo se permite reservar turnos para el día de hoy.', 'warning');
       return;
     }
     if (shift.esta_lleno) {
@@ -110,7 +110,7 @@ const ShiftsTab = ({ user }) => {
       return;
     }
     if (shift.reservado_por_mi) {
-      mostrarMensaje('Ya te encuentras inscripto en este shift para hoy.', 'info');
+      mostrarMensaje('Ya te encuentras inscripto en este turno para hoy.', 'info');
       return;
     }
     setModalReserva({ open: true, shift });
@@ -133,15 +133,15 @@ const ShiftsTab = ({ user }) => {
 
       const data = await res.json();
       if (res.ok && data.success) {
-        mostrarMensaje(data.message || '¡Reservation confirmada con éxito!', 'success');
+        mostrarMensaje(data.message || '¡Reserva confirmada con éxito!', 'success');
         setModalReserva({ open: false, shift: null });
         await cargarDatos();
       } else {
-        mostrarMensaje(data.message || 'No se pudo confirmar la reservation', 'danger');
+        mostrarMensaje(data.message || 'No se pudo confirmar la reserva', 'danger');
       }
     } catch (err) {
       console.error('Error al reservar shift:', err);
-      mostrarMensaje('Error de conexión al procesar la reservation.', 'danger');
+      mostrarMensaje('Error de conexión al procesar la reserva.', 'danger');
     } finally {
       setGuardando(false);
     }
@@ -165,15 +165,15 @@ const ShiftsTab = ({ user }) => {
 
       const data = await res.json();
       if (res.ok && data.success) {
-        mostrarMensaje(data.message || 'Reservation cancelada exitosamente.', 'success');
+        mostrarMensaje(data.message || 'Reserva cancelada exitosamente.', 'success');
         setModalCancelar({ open: false, reservationId: null, nameClase: '' });
         await cargarDatos();
       } else {
-        mostrarMensaje(data.message || 'Error al cancelar la reservation.', 'danger');
+        mostrarMensaje(data.message || 'Error al cancelar la reserva.', 'danger');
       }
     } catch (err) {
       console.error('Error al cancelar reservation:', err);
-      mostrarMensaje('Error de red al cancelar la reservation.', 'danger');
+      mostrarMensaje('Error de red al cancelar la reserva.', 'danger');
     } finally {
       setGuardando(false);
     }

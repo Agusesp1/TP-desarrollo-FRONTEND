@@ -78,7 +78,7 @@ const Home = () => {
               <h1 className="display-3 fw-bold mb-4 hero-title">
                 {user ? (
                   <>
-                    ¡Hola, <span className="text-gradient">{user.name || 'Member'}</span>! Bienvenid@ a FitApp
+                    ¡Hola, <span className="text-gradient">{user.name || 'Socio'}</span>! Bienvenid@ a FitApp
                   </>
                 ) : (
                   <>
@@ -104,7 +104,7 @@ const Home = () => {
                         <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
                         <circle cx="12" cy="7" r="4" />
                       </svg>
-                      Ir a Mi Profile
+                      Ir a Mi Perfil
                     </Button>
                   </>
                 ) : (
@@ -228,7 +228,7 @@ const Home = () => {
                 <Col sm={4}>
                   <div className="stat-card p-3 rounded-3">
                     <h3 className="fw-bold text-gradient mb-0">+5,000</h3>
-                    <small className="text-light opacity-75">Members Activos</small>
+                    <small className="text-light opacity-75">Socios Activos</small>
                   </div>
                 </Col>
                 <Col sm={4}>
@@ -240,7 +240,7 @@ const Home = () => {
                 <Col sm={4}>
                   <div className="stat-card p-3 rounded-3">
                     <h3 className="fw-bold text-gradient mb-0">3</h3>
-                    <small className="text-light opacity-75">Branches Premium</small>
+                    <small className="text-light opacity-75">Sedes Premium</small>
                   </div>
                 </Col>
               </Row>
@@ -248,14 +248,14 @@ const Home = () => {
 
             <Col lg={6}>
               <div className="about-image-card p-4 rounded-4 shadow-lg">
-                <h4 className="fw-bold text-white mb-3">Nuestras Branches</h4>
+                <h4 className="fw-bold text-white mb-3">Nuestras Sedes</h4>
                 <div className="branch-item p-3 mb-3 rounded-3">
                   <h5 className="fw-bold text-white mb-1 d-flex align-items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-icon text-primary">
                       <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
                       <circle cx="12" cy="10" r="3" />
                     </svg>
-                    Branch Central (Centro)
+                    Sede Central (Centro)
                   </h5>
                   <p className="small text-light opacity-75 mb-1">Av. Corrientes 1234, CABA</p>
                   <small className="text-primary">Lun a Vie: 06:00 - 23:00 hs | Sáb: 08:00 - 20:00 hs</small>
@@ -266,7 +266,7 @@ const Home = () => {
                       <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
                       <circle cx="12" cy="10" r="3" />
                     </svg>
-                    Branch Norte (Palermo)
+                    Sede Norte (Palermo)
                   </h5>
                   <p className="small text-light opacity-75 mb-1">Av. Santa Fe 4567, CABA</p>
                   <small className="text-primary">Lun a Vie: 06:00 - 23:00 hs | Sáb: 08:00 - 20:00 hs</small>
@@ -277,7 +277,7 @@ const Home = () => {
                       <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
                       <circle cx="12" cy="10" r="3" />
                     </svg>
-                    Branch Belgrano
+                    Sede Belgrano
                   </h5>
                   <p className="small text-light opacity-75 mb-1">Cabildo 2345, CABA</p>
                   <small className="text-primary">24 horas los 7 días de la semana</small>
@@ -396,7 +396,7 @@ const Home = () => {
               {user ? '¡Continúa alcanzando tus objetivos!' : '¿Listo para comenzar tu transformación?'}
             </h2>
             <p className="lead mb-4 opacity-75">
-              {user ? 'Gestiona tus quotas y consulta tus schedules en tu profile.' : 'Únete hoy y obtén tu primera sesión de evaluación totalmente gratuita.'}
+              {user ? 'Gestiona tus cuotas y consulta tus horarios en tu perfil.' : 'Únete hoy y obtén tu primera sesión de evaluación totalmente gratuita.'}
             </p>
             {user ? (
               <Button 
@@ -406,7 +406,7 @@ const Home = () => {
                 size="lg" 
                 className="px-5 py-3 fw-bold shadow"
               >
-                Acceder a Mi Profile
+                Acceder a Mi Perfil
               </Button>
             ) : (
               <Button 

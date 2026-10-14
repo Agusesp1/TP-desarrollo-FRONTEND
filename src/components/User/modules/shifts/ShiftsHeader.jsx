@@ -29,7 +29,7 @@ const ShiftsHeader = ({
             Reservar Clases
           </h4>
           <p className="text-secondary small mb-0">
-            {esMismoDia ? 'Elige tu clase para el día de hoy' : `Schedules para el ${dayActualInfo?.dayNombre} ${dayActualInfo?.dayNumero}`}
+            {esMismoDia ? 'Elige tu clase para el día de hoy' : `Horarios para el ${dayActualInfo?.dayNombre} ${dayActualInfo?.dayNumero}`}
           </p>
         </div>
       </div>
@@ -48,7 +48,7 @@ const ShiftsHeader = ({
           className={`shifts-tab-btn ${vistaActiva === 'mis-reservations' ? 'active' : ''}`}
           onClick={() => setVistaActiva('mis-reservations')}
         >
-          Mis Reservations
+          Mis Reservas
           {reservationsHoyCount > 0 && (
             <Badge bg="brand" className="ms-2 px-2 py-0.5 rounded-pill text-dark fw-bold">
               {reservationsHoyCount}

@@ -57,16 +57,16 @@ const Footer = () => {
 
           {/* Branches del Gym */}
           <Col lg={4} md={6}>
-            <h5 className="fw-bold text-white mb-3">Nuestras Branches</h5>
+            <h5 className="fw-bold text-white mb-3">Nuestras Sedes</h5>
             <ul className="list-unstyled small opacity-75 branches-list">
               <li className="mb-2">
-                <span className="fw-bold text-primary">• Branch Centro:</span> Av. Corrientes 1234, CABA
+                <span className="fw-bold text-primary">• Sede Centro:</span> Av. Corrientes 1234, CABA
               </li>
               <li className="mb-2">
-                <span className="fw-bold text-primary">• Branch Palermo:</span> Av. Santa Fe 4567, CABA
+                <span className="fw-bold text-primary">• Sede Palermo:</span> Av. Santa Fe 4567, CABA
               </li>
               <li className="mb-2">
-                <span className="fw-bold text-primary">• Branch Belgrano:</span> Av. Cabildo 2345, CABA (24hs)
+                <span className="fw-bold text-primary">• Sede Belgrano:</span> Av. Cabildo 2345, CABA (24hs)
               </li>
             </ul>
           </Col>
@@ -93,7 +93,7 @@ const Footer = () => {
                   {user ? (
                     <>
                       <li className="mb-2">
-                        <Link to="/user" className="text-light text-decoration-none opacity-75">Mi Profile</Link>
+                        <Link to="/user" className="text-light text-decoration-none opacity-75">Mi Perfil</Link>
                       </li>
                     </>
                   ) : (
@@ -102,7 +102,7 @@ const Footer = () => {
                         <Link to="/login" state={{ mode: 'login' }} className="text-light text-decoration-none opacity-75">Iniciar Sesión</Link>
                       </li>
                       <li className="mb-2">
-                        <Link to="/login" state={{ mode: 'register' }} className="text-light text-decoration-none opacity-75">Register</Link>
+                        <Link to="/login" state={{ mode: 'register' }} className="text-light text-decoration-none opacity-75">Registrarse</Link>
                       </li>
                     </>
                   )}
