@@ -26,11 +26,11 @@ const PricesTable = ({
           <Table className="admin-table align-middle mb-0">
             <thead>
               <tr>
-                <th>Amount Programado</th>
-                <th>Date de Vigencia (Desde)</th>
+                <th>Monto Programado</th>
+                <th>Fecha de Vigencia (Desde)</th>
                 <th>Descripción / Motivo</th>
-                <th>Status de Aplicación</th>
-                <th>Date Creación</th>
+                <th>Estado de Aplicación</th>
+                <th>Fecha de Creación</th>
               </tr>
             </thead>
             <tbody>

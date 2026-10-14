@@ -16,7 +16,7 @@ const ModalComprobanteAdmin = ({ show, onHide, quota }) => {
         <Modal.Title className="fw-bold">Receipt de Cobro Registrado</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <div className="p-4 rounded-3 bg-dark border border-secondary text-white">
+        <div className="receipt-printable p-4 rounded-3 bg-dark border border-secondary text-white">
           <div className="d-flex justify-content-between align-items-center mb-3 border-bottom border-secondary pb-3">
             <div>
               <h5 className="fw-bold mb-0 text-primary">ADMINISTRACIÓN FITAPP</h5>

@@ -26,7 +26,7 @@ const AdminStats = ({ stats }) => {
         <Card className="stat-card border-0 p-3 text-white">
           <div className="d-flex align-items-center justify-content-between">
             <div>
-              <span className="text-light opacity-75 small fw-medium">Branches</span>
+              <span className="text-light opacity-75 small fw-medium">Sedes</span>
               <h2 className="fw-bold mb-0 mt-1 text-white">{stats.totalSedes}</h2>
               <small className="text-light opacity-90 fw-bold">{stats.branchesActivas} operativas</small>
             </div>
@@ -44,7 +44,7 @@ const AdminStats = ({ stats }) => {
         <Card className="stat-card border-0 p-3 text-white">
           <div className="d-flex align-items-center justify-content-between">
             <div>
-              <span className="text-light opacity-75 small fw-medium">Activities</span>
+              <span className="text-light opacity-75 small fw-medium">Actividades</span>
               <h2 className="fw-bold mb-0 mt-1 text-white">{stats.totalActividades}</h2>
               <small className="text-success fw-bold">{stats.activitiesActivas} activas</small>
             </div>
@@ -65,7 +65,7 @@ const AdminStats = ({ stats }) => {
         <Card className="stat-card border-0 p-3 text-white">
           <div className="d-flex align-items-center justify-content-between">
             <div>
-              <span className="text-light opacity-75 small fw-medium">Shifts Schedules</span>
+              <span className="text-light opacity-75 small fw-medium">Turnos y Horarios</span>
               <h2 className="fw-bold mb-0 mt-1 text-white">{stats.totalTurnos}</h2>
               <small className="text-success fw-bold">{stats.shiftsActivos} disponibles</small>
             </div>

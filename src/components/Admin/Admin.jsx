@@ -235,7 +235,7 @@ const Admin = () => {
 
             <Col md={5} lg={4} className="text-md-end d-flex gap-2 justify-content-md-end">
               <Button as={Link} to="/user" variant="outline-light" size="sm" className="rounded-pill px-3">
-                Ver Mi Profile de User
+                Perfil de Usuario
               </Button>
             </Col>
           </Row>
@@ -296,7 +296,7 @@ const Admin = () => {
                 <path d="m4.93 4.93 4.24 4.24" />
                 <path d="m14.83 9.17 4.24-4.24" />
               </svg>
-              Activities ({activities.length})
+              Actividades ({activities.length})
             </Nav.Link>
           </Nav.Item>
 
@@ -324,7 +324,7 @@ const Admin = () => {
                 <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
                 <path d="M16 3.13a4 4 0 0 1 0 7.75" />
               </svg>
-              Users
+              Usuarios
             </Nav.Link>
           </Nav.Item>
 
@@ -338,7 +338,7 @@ const Admin = () => {
                 <line x1="2" x2="22" y1="10" strokeWidth="2" />
                 <line x1="6" y1="15" x2="8" y2="15" strokeWidth="2" />
               </svg>
-              Quotas & Prices
+              Cuotas & Precios
             </Nav.Link>
           </Nav.Item>
 

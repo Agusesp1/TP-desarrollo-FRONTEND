@@ -16,17 +16,17 @@ const SchedulePriceForm = ({
           <line x1="8" y1="2" x2="8" y2="6" />
           <line x1="3" y1="10" x2="21" y2="10" />
         </svg>
-        Programar o Actualizar Nuevo Price de Quota
+        Programar o Actualizar Nuevo Precio de Cuota
       </h5>
 
       <p className="text-secondary small mb-3">
-        Define con anticipación el nuevo importe y la <strong>date de entrada en vigencia</strong>. A partir de esa date, todas las nuevas quotas emitidas o recalculadas tomarán dicho valor.
+        Define con anticipación el nuevo importe y la <strong>fecha de entrada en vigencia</strong>. A partir de esa fecha, todas las nuevas cuotas emitidas o recalculadas tomarán dicho valor.
       </p>
 
       <Form onSubmit={onSubmit}>
         <Row className="g-3">
           <Col md={4}>
-            <Form.Label className="small text-light">Amount de la Quota ($) *</Form.Label>
+            <Form.Label className="small text-light">Monto de la Cuota ($) *</Form.Label>
             <InputGroup>
               <InputGroup.Text>$</InputGroup.Text>
               <Form.Control
@@ -43,7 +43,7 @@ const SchedulePriceForm = ({
 
           <Col md={4}>
             <Form.Label className="small text-light">
-              Vigente a partir de (start_date) *
+              Vigente a partir de (Fecha de Inicio) *
             </Form.Label>
             <Form.Control
               type="date"

@@ -12,12 +12,12 @@ const PricesVigentesCard = ({ priceVigente, dateConsulta, cargandoPrecios, onRec
               Tarifa Vigente Hoy
             </span>
             <span className="small text-secondary">
-              Date de consulta: {dateConsulta || new Date().toISOString().substring(0, 10)}
+              Fecha de consulta: {dateConsulta || new Date().toISOString().substring(0, 10)}
             </span>
           </div>
           <h2 className="fw-bold mb-1 text-white">
             ${priceVigente?.amount ? formatMonto(priceVigente.amount) : '18.000'}
-            <span className="text-secondary fs-6 fw-normal ms-2">/ quota mensual</span>
+            <span className="text-secondary fs-6 fw-normal ms-2">/ Cuota Mensual</span>
           </h2>
           <p className="text-light opacity-75 small mb-0">
             <strong>Vigente desde:</strong> {priceVigente?.start_date || 'Home de ciclo'} •{' '}

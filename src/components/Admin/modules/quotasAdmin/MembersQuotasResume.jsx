@@ -14,7 +14,7 @@ const MembersCuotasResumen = ({
       <Col lg={3} sm={6}>
         <div className="stat-card p-3 h-100">
           <span className="small text-light opacity-75 text-uppercase fw-semibold" style={{ fontSize: '0.74rem' }}>
-            Quotas al Día / Pendientes
+            Cuotas al día / Pendientes
           </span>
           <div className="d-flex align-items-baseline gap-2 mt-1">
             <h3 className="fw-bold mb-0 text-white">{totalAlDia}</h3>

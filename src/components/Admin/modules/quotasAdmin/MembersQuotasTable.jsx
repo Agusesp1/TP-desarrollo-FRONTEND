@@ -14,7 +14,7 @@ const MembersCuotasTable = ({
     return (
       <div className="text-center py-5">
         <Spinner animation="border" variant="primary" />
-        <p className="mt-2 text-secondary">Cargando nómina de quotas...</p>
+        <p className="mt-2 text-secondary">Cargando nómina de cuotas...</p>
       </div>
     );
   }
@@ -28,11 +28,11 @@ const MembersCuotasTable = ({
               <polyline points="20 6 9 17 4 12" />
             </svg>
           </div>
-          <h5 className="text-success fw-bold">¡Sin quotas vencidas!</h5>
-          <p className="mb-3 text-light opacity-75 small">No se registran members con mora o quotas impagas en este momento.</p>
+          <h5 className="text-success fw-bold">¡Sin cuotas vencidas!</h5>
+          <p className="mb-3 text-light opacity-75 small">No se registran miembros con mora o cuotas impagas en este momento.</p>
           {onVerTodas && (
             <Button variant="outline-primary" size="sm" className="rounded-pill px-3" onClick={onVerTodas}>
-              Ver todas las quotas
+              Ver todas las cuotas
             </Button>
           )}
         </div>
@@ -50,12 +50,12 @@ const MembersCuotasTable = ({
       <Table className="admin-table align-middle mb-0">
         <thead>
           <tr>
-            <th>Member / Membresía</th>
-            <th>Período / Quota</th>
-            <th>Amount</th>
-            <th>Vencimiento (1 month)</th>
-            <th>Límite Payment (+5d)</th>
-            <th>Status</th>
+            <th>Miembro / Membresía</th>
+            <th>Período / Cuota</th>
+            <th>Monto</th>
+            <th>Fecha de Vencimiento</th>
+            <th>Límite de Pago (+5d)</th>
+            <th>Estado</th>
             <th className="text-end">Acciones</th>
           </tr>
         </thead>

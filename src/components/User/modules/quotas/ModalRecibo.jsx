@@ -26,7 +26,7 @@ const ModalRecibo = ({ show, onHide, recibo, currentUser }) => {
         <Modal.Title className="fw-bold">Recibo de Pago Oficial</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <div className="p-4 rounded-3 bg-dark border border-secondary text-white">
+        <div className="receipt-printable p-4 rounded-3 bg-dark border border-secondary text-white">
           <div className="d-flex justify-content-between align-items-center mb-3 border-bottom border-secondary pb-3">
             <div>
               <h5 className="fw-bold mb-0 text-primary">FITAPP GYM</h5>

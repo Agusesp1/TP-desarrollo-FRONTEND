@@ -5,9 +5,9 @@ const QuotasAdminHeader = ({ subTab, setSubTab, totalCuotas = 0, totalPrecios = 
   return (
     <div className="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
       <div>
-        <h4 className="fw-bold mb-1 text-white">Gestión y Control de Quotas & Tarifas</h4>
+        <h4 className="fw-bold mb-1 text-white">Gestión y Control de Cuotas & Tarifas</h4>
         <p className="text-secondary small mb-0">
-          Administra el cronograma de prices programados y fiscaliza el status de cobranza de los members.
+          Administra el cronograma de precios programados y fiscaliza el status de cobranza de los socios.
         </p>
       </div>
 
@@ -25,7 +25,7 @@ const QuotasAdminHeader = ({ subTab, setSubTab, totalCuotas = 0, totalPrecios = 
             <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
             <path d="M16 3.13a4 4 0 0 1 0 7.75" />
           </svg>
-          Quotas de Members ({totalCuotas})
+          Cuotas de Socios ({totalCuotas})
         </Button>
 
         <Button
@@ -38,7 +38,7 @@ const QuotasAdminHeader = ({ subTab, setSubTab, totalCuotas = 0, totalPrecios = 
             <line x1="12" y1="1" x2="12" y2="23" />
             <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
           </svg>
-          Programación de Prices ({totalPrecios})
+          Programación de Precios ({totalPrecios})
         </Button>
       </div>
     </div>

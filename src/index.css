@@ -124,3 +124,74 @@ body {
 }
 
 
+
+
+/* ===== Impresión de recibos ===== */
+@media print {
+  @page { margin: 15mm; }
+
+  body * { visibility: hidden !important; }
+
+  .receipt-printable,
+  .receipt-printable * { visibility: visible !important; }
+
+  html, body {
+    background: #fff !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .modal-backdrop { display: none !important; }
+
+  .modal,
+  .modal-dialog,
+  .modal-content {
+    position: static !important;
+    display: block !important;
+    transform: none !important;
+    margin: 0 !important;
+    max-width: none !important;
+    background: #fff !important;
+    border: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+  }
+
+  .receipt-printable {
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    max-width: 700px;
+    padding: 24px !important;
+    background: #fff !important;
+    color: #000 !important;
+    border: 2px solid #333 !important;
+    border-radius: 8px !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .receipt-printable *,
+  .receipt-printable .text-white,
+  .receipt-printable .text-light,
+  .receipt-printable .text-secondary,
+  .receipt-printable .text-primary {
+    color: #000 !important;
+    opacity: 1 !important;
+    border-color: #999 !important;
+    background-color: transparent !important;
+  }
+
+  .receipt-printable .text-warning { color: #000 !important; }
+  .receipt-printable .text-success { color: #146c43 !important; }
+
+  .receipt-printable .badge,
+  .receipt-printable .badge-status-active {
+    border: 1px solid #146c43 !important;
+    color: #146c43 !important;
+    background: transparent !important;
+  }
+
+  .no-print { display: none !important; }
+}

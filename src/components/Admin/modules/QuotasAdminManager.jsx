@@ -7,9 +7,9 @@ import QuotasAdminHeader from './quotasAdmin/QuotasAdminHeader';
 import PricesVigentesCard from './quotasAdmin/PricesVigentesCard';
 import SchedulePriceForm from './quotasAdmin/SchedulePriceForm';
 import PricesTable from './quotasAdmin/PricesTable';
-import MembersCuotasResumen from './quotasAdmin/MembersCuotasResumen';
+import MembersCuotasResumen from './quotasAdmin/MembersQuotasResume';
 import MembersQuotasFilters from './quotasAdmin/MembersQuotasFilters';
-import MembersCuotasTable from './quotasAdmin/MembersCuotasTable';
+import MembersCuotasTable from './quotasAdmin/MembersQuotasTable';
 import ManualChargeModal from './quotasAdmin/ManualChargeModal';
 import ModalComprobanteAdmin from './quotasAdmin/ModalComprobanteAdmin';
 

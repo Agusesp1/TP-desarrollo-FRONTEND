@@ -9,11 +9,11 @@ const MembersQuotasFilters = ({
 }) => {
   const opcionesEstado = [
     { id: 'vencidas', label: 'Solo Vencidas' },
-    { id: 'todos', label: 'Todas las Quotas' },
+    { id: 'todos', label: 'Todas las Cuotas' },
     { id: 'en demora', label: 'En Demora' },
-    { id: 'no pagado', label: 'No Pagados' },
+    { id: 'no pagado', label: 'No Pagadas' },
     { id: 'pendiente', label: 'Pendientes' },
-    { id: 'pagado', label: 'Pagados' }
+    { id: 'pagado', label: 'Pagadas' }
   ];
 
   return (
@@ -26,7 +26,7 @@ const MembersQuotasFilters = ({
           className="user-select-none"
           label={
             <span className="small fw-semibold text-white opacity-90 ms-1">
-              Filtrar únicamente quotas vencidas (Demora y No pagado)
+              Filtrar únicamente cuotas vencidas (Demora y No pagadas)
             </span>
           }
           checked={filterEstado === 'vencidas'}

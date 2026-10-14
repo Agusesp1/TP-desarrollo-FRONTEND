@@ -26,7 +26,7 @@ const ManualChargeModal = ({
             <line x1="12" y1="1" x2="12" y2="23" />
             <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
           </svg>
-          Registrar Cobro Manual de Quota
+          Registrar Cobro Manual de Cuota
         </Modal.Title>
       </Modal.Header>
 
@@ -34,7 +34,7 @@ const ManualChargeModal = ({
         <Modal.Body>
           <div className="p-3 mb-3 rounded-3 bg-dark border border-secondary">
             <div className="d-flex justify-content-between mb-1">
-              <span className="text-secondary small">Member:</span>
+              <span className="text-secondary small">Miembro:</span>
               <span className="fw-bold text-white">
                 {quota?.user?.name} {quota?.user?.lastname}
               </span>
@@ -68,7 +68,7 @@ const ManualChargeModal = ({
               <option value="Tarjeta Débito (POSnet)">Tarjeta de Débito (POSnet en Mostrador)</option>
               <option value="Tarjeta Crédito (POSnet)">Tarjeta de Crédito (POSnet en Mostrador)</option>
               <option value="Transferencia Bancaria Directa">Transferencia Bancaria Directa</option>
-              <option value="Mercado Payment (Cobro QR Mostrador)">Mercado Payment (Cobro QR Mostrador)</option>
+              <option value="Mercado Pago">Mercado Pago</option>
             </Form.Select>
           </Form.Group>
 
