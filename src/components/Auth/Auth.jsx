@@ -2,9 +2,10 @@ import { useState, useEffect } from 'react';
 import { Container, Card, Form, Button, Row, Col, Alert, Spinner, InputGroup } from 'react-bootstrap';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { API_BASE } from '../../config/api';
 import './Auth.css';
 
-const API_BASE_URL = 'http://localhost:3000/api/auth';
+const API_BASE_URL = `${API_BASE}/auth`;
 
 const EyeIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">

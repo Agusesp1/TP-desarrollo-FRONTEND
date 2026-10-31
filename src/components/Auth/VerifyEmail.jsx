@@ -1,9 +1,10 @@
-﻿import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { API_BASE } from '../../config/api';
 import { Container, Card, Alert, Spinner, Button } from 'react-bootstrap';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
-const API_BASE_URL = 'http://localhost:3000/api/auth';
+const API_BASE_URL = `${API_BASE}/auth`;
 
 const VerifyEmail = () => {
   const [status, setStatus] = useState('loading'); // 'loading', 'success', 'error'

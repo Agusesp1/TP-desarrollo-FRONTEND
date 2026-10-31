@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { API_BASE } from '../../../config/api';
 import { Card, Form, Row, Col, Button, Alert, InputGroup, Spinner } from 'react-bootstrap';
 
 const EyeIcon = () => (
@@ -68,7 +69,7 @@ const SecurityTab = ({ user }) => {
     setCargandoPassword(true);
 
     try {
-      const response = await fetch(`http://localhost:3000/api/users/${userId}/password`, {
+      const response = await fetch(`${API_BASE}/users/${userId}/password`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'

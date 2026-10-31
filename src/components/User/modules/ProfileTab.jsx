@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Form, Row, Col, Button, Alert, Modal, Spinner } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import { API_BASE } from '../../../config/api';
 
 const ProfileTab = ({ user, updateUser, logout }) => {
   const navigate = useNavigate();
@@ -53,7 +54,7 @@ const ProfileTab = ({ user, updateUser, logout }) => {
     setCargandoPerfil(true);
 
     try {
-      const response = await fetch(`http://localhost:3000/api/users/${userId}`, {
+      const response = await fetch(`${API_BASE}/users/${userId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -98,7 +99,7 @@ const ProfileTab = ({ user, updateUser, logout }) => {
     setDeleteError(null);
 
     try {
-      const response = await fetch(`http://localhost:3000/api/users/${userId}`, {
+      const response = await fetch(`${API_BASE}/users/${userId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json'

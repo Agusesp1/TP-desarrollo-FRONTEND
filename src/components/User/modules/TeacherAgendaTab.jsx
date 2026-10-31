@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { API_BASE } from '../../../config/api';
 import { Card, Row, Col, Table, Badge, Spinner, Alert } from 'react-bootstrap';
 
 const TeacherAgendaTab = ({ user }) => {
@@ -13,7 +14,7 @@ const TeacherAgendaTab = ({ user }) => {
       setError(null);
 
       try {
-        const res = await fetch(`http://localhost:3000/api/teachers/agenda/${encodeURIComponent(user.email)}`);
+        const res = await fetch(`${API_BASE}/teachers/agenda/${encodeURIComponent(user.email)}`);
         const data = await res.json();
 
         if (res.ok && data.success) {

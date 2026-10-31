@@ -13,7 +13,7 @@ import ModalHistorial from './quotas/ModalHistorial';
 import ModalRecibo from './quotas/ModalRecibo';
 import ModalComprobanteMP from './quotas/ModalComprobanteMP';
 
-const API_BASE = 'http://localhost:3000/api';
+import { API_BASE } from '../../../config/api';
 
 const QuotasTab = ({ user }) => {
   const { user: authUser } = useAuth();

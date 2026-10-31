@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Form, Button, Alert, Spinner } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { API_BASE } from '../../config/api';
 import './Home.css';
 
 const Home = () => {
@@ -33,7 +34,7 @@ const Home = () => {
     setContactoEnviado(false);
 
     try {
-      const res = await fetch('http://localhost:3000/api/email/contacto', {
+      const res = await fetch(`${API_BASE}/email/contacto`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

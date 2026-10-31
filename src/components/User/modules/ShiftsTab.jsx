@@ -11,6 +11,7 @@ import FilterActividadBar from './shifts/FilterActividadBar';
 import ClasesList from './shifts/ClasesList';
 import MisReservasView from './shifts/MisReservasView';
 import { ModalConfirmarReserva, ModalCancelarReserva } from './shifts/ModalesReserva';
+import { API_BASE } from '../../../config/api';
 
 const ShiftsTab = ({ user }) => {
   const dateHoyISO = getFechaLocalISO();
@@ -47,8 +48,8 @@ const ShiftsTab = ({ user }) => {
     const cargarMaestros = async () => {
       try {
         const [resAct, resSedes] = await Promise.all([
-          fetch('http://localhost:3000/api/activities?soloActivas=true'),
-          fetch('http://localhost:3000/api/branches')
+          fetch(`${API_BASE}/activities?soloActivas=true`),
+          fetch(`${API_BASE}/branches`)
         ]);
         const dataAct = await resAct.json();
         const dataSedes = await resSedes.json();
@@ -68,8 +69,8 @@ const ShiftsTab = ({ user }) => {
     try {
       const userParam = user?.id ? `&user_id=${user.id}` : '';
       const [resTurnos, resReservas] = await Promise.all([
-        fetch(`http://localhost:3000/api/shifts?soloActivos=true&date=${daySeleccionado}${userParam}`),
-        user?.id ? fetch(`http://localhost:3000/api/reservations/user/${user.id}`) : Promise.resolve(null)
+        fetch(`${API_BASE}/shifts?soloActivos=true&date=${daySeleccionado}${userParam}`),
+        user?.id ? fetch(`${API_BASE}/reservations/user/${user.id}`) : Promise.resolve(null)
       ]);
 
       const dataTurnos = await resTurnos.json();
@@ -121,7 +122,7 @@ const ShiftsTab = ({ user }) => {
     setGuardando(true);
 
     try {
-      const res = await fetch('http://localhost:3000/api/reservations', {
+      const res = await fetch(`${API_BASE}/reservations`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -157,7 +158,7 @@ const ShiftsTab = ({ user }) => {
     setGuardando(true);
 
     try {
-      const res = await fetch(`http://localhost:3000/api/reservations/${modalCancelar.reservationId}`, {
+      const res = await fetch(`${API_BASE}/reservations/${modalCancelar.reservationId}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ user_id: user?.id })

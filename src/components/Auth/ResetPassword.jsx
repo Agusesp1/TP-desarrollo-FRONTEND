@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { API_BASE } from '../../config/api';
 import { Container, Card, Form, Button, Alert, Spinner } from 'react-bootstrap';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './Auth.css';
 
-const API_BASE_URL = 'http://localhost:3000/api/auth';
+const API_BASE_URL = `${API_BASE}/auth`;
 
 const ResetPassword = () => {
   const [newPassword, setNewPassword] = useState('');

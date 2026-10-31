@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { API_BASE } from '../../../config/api';
 import { Card } from 'react-bootstrap';
 
 // Submódulos de Quotas Admin
@@ -13,7 +14,7 @@ import MembersCuotasTable from './quotasAdmin/MembersQuotasTable';
 import ManualChargeModal from './quotasAdmin/ManualChargeModal';
 import ModalComprobanteAdmin from './quotasAdmin/ModalComprobanteAdmin';
 
-const QuotasAdminManager = ({ onMostrarAlerta, apiBase = 'http://localhost:3000/api' }) => {
+const QuotasAdminManager = ({ onMostrarAlerta, apiBase = API_BASE }) => {
   // Pestaña activa dentro del módulo: 'members' o 'prices'
   const [subTab, setSubTab] = useState('members');
 
