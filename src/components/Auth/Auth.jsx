@@ -142,7 +142,7 @@ const Auth = () => {
           }
         }
       } catch (error) {
-        console.error('Error de red al autenticar:', error);
+        console.error(`[Auth] Error de conexión con el backend en "${endpoint}":`, error);
         setTipoMensaje('danger');
         setMensaje('No se pudo conectar con el servidor backend.');
       }
