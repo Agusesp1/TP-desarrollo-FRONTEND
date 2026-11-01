@@ -74,27 +74,27 @@ const ShiftsManager = ({
   const handleGuardar = async (e) => {
     e.preventDefault();
 
-    // Validate formato y coherencia de schedules reales
+    // Validar formato y coherencia de horarios reales
     if (!esHoraValida(formData.startTime)) {
-      onMostrarAlerta('Debe ingresar un schedule de home válido entre 00:00 y 23:59.', 'danger');
+      onMostrarAlerta('Debe ingresar un horario de inicio válido entre 00:00 y 23:59.', 'danger');
       return;
     }
     if (!esHoraValida(formData.endTime)) {
-      onMostrarAlerta('Debe ingresar un schedule de fin válido entre 00:00 y 23:59.', 'danger');
+      onMostrarAlerta('Debe ingresar un horario de fin válido entre 00:00 y 23:59.', 'danger');
       return;
     }
     const minInicio = convertirHoraAMin(formData.startTime);
     const minFin = convertirHoraAMin(formData.endTime);
     if (minFin <= minInicio) {
-      onMostrarAlerta(`El schedule de fin (${formData.endTime}) debe ser posterior al schedule de home (${formData.startTime}).`, 'danger');
+      onMostrarAlerta(`El horario de fin (${formData.endTime}) debe ser posterior al horario de inicio (${formData.startTime}).`, 'danger');
       return;
     }
 
-    // Validate coincidencia de branch entre el Teacher y la Branch de la activity/shift
+    // Validar coincidencia de sede entre el Profesor y la Sede de la actividad/turno
     if (formData.teacher_id) {
       const teacher = teachers.find((p) => p.id?.toString() === formData.teacher_id.toString());
-      
-      // Determinar la branch efectiva del shift
+
+      // Determinar la sede efectiva del turno
       let effectiveSedeId = formData.branch_id;
       if (!effectiveSedeId && formData.activity_id) {
         const act = activities.find((a) => a.id?.toString() === formData.activity_id.toString());
@@ -105,11 +105,11 @@ const ShiftsManager = ({
         const branchProfObj = branches.find((s) => s.id?.toString() === teacher.branch_id.toString());
         const branchTurnoObj = branches.find((s) => s.id?.toString() === effectiveSedeId.toString());
 
-        const nomSedeProf = branchProfObj ? branchProfObj.name : `Branch #${teacher.branch_id}`;
-        const nomSedeTurno = branchTurnoObj ? branchTurnoObj.name : `Branch #${effectiveSedeId}`;
+        const nomSedeProf = branchProfObj ? branchProfObj.name : `Sede #${teacher.branch_id}`;
+        const nomSedeTurno = branchTurnoObj ? branchTurnoObj.name : `Sede #${effectiveSedeId}`;
 
         onMostrarAlerta(
-          `El teacher ${teacher.name} ${teacher.lastname} está asignado a ${nomSedeProf} y no puede dictar clases en ${nomSedeTurno}.`,
+          `El profesor ${teacher.name} ${teacher.lastname} está asignado a ${nomSedeProf} y no puede dictar clases en ${nomSedeTurno}.`,
           'danger'
         );
         return;
@@ -136,10 +136,10 @@ const ShiftsManager = ({
         setShowModal(false);
         onRecargar();
       } else {
-        onMostrarAlerta(data.message || 'Error al guardar shift', 'danger');
+        onMostrarAlerta(data.message || 'Error al guardar turno', 'danger');
       }
-    } catch (err) {
-      onMostrarAlerta('Error de red al guardar shift', 'danger');
+    } catch {
+      onMostrarAlerta('Error de red al guardar turno', 'danger');
     } finally {
       setGuardando(false);
     }
@@ -153,10 +153,10 @@ const ShiftsManager = ({
         onMostrarAlerta(data.message);
         onRecargar();
       } else {
-        onMostrarAlerta(data.message || 'Error al cambiar status del shift', 'danger');
+        onMostrarAlerta(data.message || 'Error al cambiar el estado del turno', 'danger');
       }
-    } catch (err) {
-      onMostrarAlerta('Error de red al actualizar status', 'danger');
+    } catch {
+      onMostrarAlerta('Error de red al actualizar el estado', 'danger');
     }
   };
 
@@ -183,7 +183,7 @@ const ShiftsManager = ({
   const indiceInicio = (paginaActual - 1) * elementosPorPagina;
   const shiftsPaginados = shiftsFiltrados.slice(indiceInicio, indiceInicio + elementosPorPagina);
 
-  // Branch efectiva seleccionada en el formulario
+  // Sede efectiva seleccionada en el formulario
   const selectedActividad = activities.find((a) => a.id?.toString() === formData.activity_id.toString());
   const effectiveSedeForm = formData.branch_id || (selectedActividad?.branch_id ? selectedActividad.branch_id.toString() : '');
 
@@ -191,9 +191,9 @@ const ShiftsManager = ({
     <Card className="glass-card border-0 p-4 text-white">
       <div className="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
         <div>
-          <h4 className="fw-bold mb-1 text-white">Gestión y Programación de Shifts</h4>
+          <h4 className="fw-bold mb-1 text-white">Gestión y Programación de Turnos</h4>
           <p className="text-secondary small mb-0">
-            Organiza los bloques schedules por días (Lunes a Sábado), branches y teachers asignados.
+            Organiza los bloques horarios por días (Lunes a Sábado), sedes y profesores asignados.
           </p>
         </div>
 
@@ -206,20 +206,20 @@ const ShiftsManager = ({
             <path d="M5 12h14" />
             <path d="M12 5v14" />
           </svg>
-          Nuevo Shift
+          Nuevo Turno
         </Button>
       </div>
 
-      {/* Filters */}
+      {/* Filtros */}
       <Row className="g-3 mb-4">
         <Col md={4}>
           <Form.Group>
-            <Form.Label className="small text-secondary">Filtrar por Activity</Form.Label>
+            <Form.Label className="small text-secondary">Filtrar por Actividad</Form.Label>
             <Form.Select
               value={filterActividad}
               onChange={(e) => setFiltroActividad(e.target.value)}
             >
-              <option value="todas">Todas las Activities</option>
+              <option value="todas">Todas las Actividades</option>
               {activities.map((a) => (
                 <option key={a.id} value={a.id}>
                   {a.name}
@@ -248,12 +248,12 @@ const ShiftsManager = ({
 
         <Col md={4}>
           <Form.Group>
-            <Form.Label className="small text-secondary">Filtrar por Branch</Form.Label>
+            <Form.Label className="small text-secondary">Filtrar por Sede</Form.Label>
             <Form.Select
               value={filterSede}
               onChange={(e) => setFiltroSede(e.target.value)}
             >
-              <option value="">Todas las Branches</option>
+              <option value="">Todas las Sedes</option>
               {branches.map((s) => (
                 <option key={s.id} value={s.id}>
                   {s.name} ({s.city})
@@ -310,7 +310,7 @@ const ShiftsManager = ({
                           {t.teacher.name} {t.teacher.lastname}
                         </span>
                       ) : (
-                        <span className="text-secondary small">Sin teacher</span>
+                        <span className="text-secondary small">Sin profesor</span>
                       )}
                     </td>
                     <td>
@@ -331,7 +331,7 @@ const ShiftsManager = ({
                           size="sm"
                           className="btn-token-outline-warning rounded-pill px-3 py-1"
                           onClick={() => handleToggleEstado(t.id)}
-                          title={t.status ? 'Pausar shift' : 'Habilitar shift'}
+                          title={t.status ? 'Pausar turno' : 'Habilitar turno'}
                         >
                           {t.status ? 'Pausar' : 'Habilitar'}
                         </Button>
@@ -339,7 +339,7 @@ const ShiftsManager = ({
                           size="sm"
                           className="btn-token-outline-primary rounded-pill px-3 py-1"
                           onClick={() => handleAbrirModal(t)}
-                          title="Editar shift"
+                          title="Editar turno"
                         >
                           Editar
                         </Button>
@@ -349,7 +349,7 @@ const ShiftsManager = ({
                           onClick={() => onPedirEliminar({
                             type: 'shift',
                             id: t.id,
-                            name: `${t.activity?.name || 'Shift'} (${t.startTime} - ${t.endTime})`
+                            name: `${t.activity?.name || 'Turno'} (${t.startTime} - ${t.endTime})`
                           })}
                           title="Eliminar permanentemente"
                         >
@@ -363,11 +363,11 @@ const ShiftsManager = ({
             </Table>
           </div>
 
-          {/* Controls de Paginación */}
+          {/* Controles de Paginación */}
           {totalPaginas > 1 && (
             <div className="d-flex justify-content-between align-items-center flex-wrap gap-2 mt-4 pt-3 border-top border-secondary">
               <span className="small text-secondary">
-                Mostrando shifts {indiceInicio + 1} a {Math.min(indiceInicio + elementosPorPagina, shiftsFiltrados.length)} de {shiftsFiltrados.length}
+                Mostrando turnos {indiceInicio + 1} a {Math.min(indiceInicio + elementosPorPagina, shiftsFiltrados.length)} de {shiftsFiltrados.length}
               </span>
 
               <Pagination className="mb-0 admin-pagination">
@@ -394,11 +394,11 @@ const ShiftsManager = ({
         </>
       )}
 
-      {/* Modal Crear / Editar Shift */}
+      {/* Modal Crear / Editar Turno */}
       <Modal show={showModal} onHide={() => setShowModal(false)} centered contentClassName="glass-card text-white">
         <Modal.Header closeButton closeVariant="white">
           <Modal.Title className="fw-bold">
-            {shiftEditando ? 'Editar Shift Schedule' : 'Crear Nuevo Shift'}
+            {shiftEditando ? 'Editar Horario de Turno' : 'Crear Nuevo Turno'}
           </Modal.Title>
         </Modal.Header>
         <Form onSubmit={handleGuardar}>
@@ -406,7 +406,7 @@ const ShiftsManager = ({
             <Row className="g-3">
               <Col md={12}>
                 <Form.Group>
-                  <Form.Label>Activity *</Form.Label>
+                  <Form.Label>Actividad *</Form.Label>
                   <Form.Select
                     required
                     value={formData.activity_id}
@@ -430,7 +430,7 @@ const ShiftsManager = ({
                       });
                     }}
                   >
-                    <option value="">-- Seleccionar Activity --</option>
+                    <option value="">-- Seleccionar Actividad --</option>
                     {activities.map((a) => (
                       <option key={a.id} value={a.id}>
                         {a.name} {a.teacher ? `(Prof. ${a.teacher.name} ${a.teacher.lastname})` : ''}
@@ -446,7 +446,7 @@ const ShiftsManager = ({
                       <circle cx="12" cy="12" r="10" />
                       <polyline points="12 6 12 12 16 14" />
                     </svg>
-                    Schedule de Home *
+                    Horario de Inicio *
                   </Form.Label>
                   <Form.Control
                     type="time"
@@ -478,7 +478,7 @@ const ShiftsManager = ({
                       <circle cx="12" cy="12" r="10" />
                       <polyline points="12 6 12 12 16 14" />
                     </svg>
-                    Schedule de Fin *
+                    Horario de Fin *
                   </Form.Label>
                   <Form.Control
                     type="time"
@@ -493,7 +493,7 @@ const ShiftsManager = ({
               {esHoraValida(formData.startTime) && esHoraValida(formData.endTime) && convertirHoraAMin(formData.endTime) <= convertirHoraAMin(formData.startTime) && (
                 <Col md={12}>
                   <div className="alert alert-danger py-1 px-2 small mb-0 d-flex align-items-center gap-1">
-                    <span>⚠️ El schedule de fin ({formData.endTime}) debe ser posterior al home ({formData.startTime}).</span>
+                    <span>⚠️ El horario de fin ({formData.endTime}) debe ser posterior al de inicio ({formData.startTime}).</span>
                   </div>
                 </Col>
               )}
@@ -514,12 +514,12 @@ const ShiftsManager = ({
               </Col>
               <Col md={6}>
                 <Form.Group>
-                  <Form.Label>Branch</Form.Label>
+                  <Form.Label>Sede</Form.Label>
                   <Form.Select
                     value={formData.branch_id}
                     onChange={(e) => setFormData({ ...formData, branch_id: e.target.value })}
                   >
-                    <option value="">-- Todas las Branches --</option>
+                    <option value="">-- Todas las Sedes --</option>
                     {branches.map((s) => (
                       <option key={s.id} value={s.id}>
                         {s.name} ({s.city})
@@ -535,14 +535,14 @@ const ShiftsManager = ({
                     value={formData.teacher_id}
                     onChange={(e) => setFormData({ ...formData, teacher_id: e.target.value })}
                   >
-                    <option value="">-- Sin teacher asignado --</option>
+                    <option value="">-- Sin profesor asignado --</option>
                     {teachers.map((p) => {
                       const branchProfObj = branches.find((s) => s.id?.toString() === p.branch_id?.toString());
                       const esMismaSede = !effectiveSedeForm || !p.branch_id || p.branch_id.toString() === effectiveSedeForm.toString();
 
                       return (
                         <option key={p.id} value={p.id} disabled={!esMismaSede}>
-                          {p.name} {p.lastname} ({p.specialty}){branchProfObj ? ` • ${branchProfObj.name}` : ''}{!esMismaSede ? ' [Branch incompatible]' : ''}
+                          {p.name} {p.lastname} ({p.specialty}){branchProfObj ? ` • ${branchProfObj.name}` : ''}{!esMismaSede ? ' [Sede incompatible]' : ''}
                         </option>
                       );
                     })}
@@ -564,7 +564,7 @@ const ShiftsManager = ({
               ) : shiftEditando ? (
                 'Guardar Cambios'
               ) : (
-                'Crear Shift'
+                'Crear Turno'
               )}
             </Button>
           </Modal.Footer>

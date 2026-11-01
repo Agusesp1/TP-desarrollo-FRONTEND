@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, Button, Row, Col, Table, Form, InputGroup, Modal, Spinner, Alert } from 'react-bootstrap';
+import { Card, Button, Row, Col, Table, Form, InputGroup, Modal, Spinner, Alert, Badge } from 'react-bootstrap';
 
 const TeachersManager = ({
   teachers,
@@ -14,11 +14,16 @@ const TeachersManager = ({
   const [filterSede, setFiltroSede] = useState('');
   const [filterEspecialidad, setFiltroEspecialidad] = useState('');
 
-  // Modal State
+  // Modal Crear / Editar State
   const [showModal, setShowModal] = useState(false);
   const [teacherEditando, setProfesorEditando] = useState(null);
   const [guardando, setGuardando] = useState(false);
   const [modalAlerta, setModalAlerta] = useState(null);
+
+  // Modal Detalle del Profesor
+  const [teacherDetalle, setTeacherDetalle] = useState(null);
+  const [showModalDetalle, setShowModalDetalle] = useState(false);
+
   const [formData, setFormData] = useState({
     name: '',
     lastname: '',
@@ -30,6 +35,11 @@ const TeachersManager = ({
     branch_id: '',
     password: ''
   });
+
+  const handleVerDetalle = (teacher) => {
+    setTeacherDetalle(teacher);
+    setShowModalDetalle(true);
+  };
 
   const handleAbrirModal = (teacher = null) => {
     setModalAlerta(null);
@@ -86,12 +96,12 @@ const TeachersManager = ({
         setShowModal(false);
         onRecargar();
       } else {
-        const errorMsg = data.message || 'Error al guardar teacher';
+        const errorMsg = data.message || 'Error al guardar profesor';
         setModalAlerta(errorMsg);
         onMostrarAlerta(errorMsg, 'danger');
       }
-    } catch (err) {
-      const errorMsg = 'Error de red al guardar teacher';
+    } catch {
+      const errorMsg = 'Error de red al guardar profesor';
       setModalAlerta(errorMsg);
       onMostrarAlerta(errorMsg, 'danger');
     } finally {
@@ -107,11 +117,18 @@ const TeachersManager = ({
         onMostrarAlerta(data.message);
         onRecargar();
       } else {
-        onMostrarAlerta(data.message || 'Error al cambiar status', 'danger');
+        onMostrarAlerta(data.message || 'Error al cambiar el estado del profesor', 'danger');
       }
-    } catch (err) {
-      onMostrarAlerta('Error de red al actualizar status', 'danger');
+    } catch {
+      onMostrarAlerta('Error de red al actualizar el estado', 'danger');
     }
+  };
+
+  const formatearFecha = (fecha) => {
+    if (!fecha) return 'No registrada';
+    const d = new Date(fecha);
+    if (Number.isNaN(d.getTime())) return String(fecha);
+    return d.toLocaleDateString('es-AR');
   };
 
   const teachersFiltrados = teachers.filter((p) => {
@@ -128,7 +145,7 @@ const TeachersManager = ({
         <div>
           <h4 className="fw-bold mb-1 text-white">Listado y Carga de Profesores</h4>
           <p className="text-secondary small mb-0">
-            Agrega, asigna sedes, edita especialidades y gestiona el cuerpo docente de FitApp.
+            Agrega, asigna sedes, edita especialidades, consulta detalles y gestiona el cuerpo docente de FitApp.
           </p>
         </div>
 
@@ -156,7 +173,7 @@ const TeachersManager = ({
             </InputGroup.Text>
             <Form.Control
               type="text"
-              placeholder="Buscar profesor..."
+              placeholder="Buscar profesor por nombre, DNI o especialidad..."
               value={filterTexto}
               onChange={(e) => setFiltroTexto(e.target.value)}
             />
@@ -215,9 +232,9 @@ const TeachersManager = ({
                 <th>Profesor / DNI</th>
                 <th>Contacto</th>
                 <th>Especialidad</th>
-                <th>Shift</th>
+                <th>Turno</th>
                 <th>Sede Asignada</th>
-                <th>Status</th>
+                <th>Estado</th>
                 <th className="text-end">Acciones</th>
               </tr>
             </thead>
@@ -225,7 +242,14 @@ const TeachersManager = ({
               {teachersFiltrados.map((teacher) => (
                 <tr key={teacher.id}>
                   <td>
-                    <div className="fw-bold text-white">{teacher.name} {teacher.lastname}</div>
+                    <div
+                      className="fw-bold text-white"
+                      style={{ cursor: 'pointer' }}
+                      onClick={() => handleVerDetalle(teacher)}
+                      title="Ver detalle del profesor"
+                    >
+                      {teacher.name} {teacher.lastname}
+                    </div>
                     <small className="text-secondary">DNI: {teacher.dni}</small>
                   </td>
                   <td>
@@ -253,7 +277,15 @@ const TeachersManager = ({
                     </span>
                   </td>
                   <td className="text-end">
-                    <div className="d-inline-flex gap-2">
+                    <div className="d-inline-flex gap-2 flex-wrap justify-content-end">
+                      <Button
+                        size="sm"
+                        className="btn-token-outline-primary rounded-pill px-3 py-1"
+                        onClick={() => handleVerDetalle(teacher)}
+                        title="Ver ficha completa del profesor"
+                      >
+                        Ver Detalle
+                      </Button>
                       <Button
                         size="sm"
                         className="btn-token-outline-warning rounded-pill px-3 py-1"
@@ -291,6 +323,119 @@ const TeachersManager = ({
         </div>
       )}
 
+      {/* Modal Detalle del Profesor */}
+      <Modal
+        show={showModalDetalle}
+        onHide={() => {
+          setShowModalDetalle(false);
+          setTeacherDetalle(null);
+        }}
+        size="lg"
+        centered
+        contentClassName="glass-card border-0 text-white"
+      >
+        <Modal.Header closeButton closeVariant="white" className="border-secondary border-opacity-25 pb-2">
+          <Modal.Title className="fw-bold d-flex align-items-center gap-2">
+            <div className="p-2 rounded-circle bg-primary bg-opacity-25 text-primary d-inline-flex">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+              </svg>
+            </div>
+            <div>
+              <span className="fs-5">Detalle del Profesor #{teacherDetalle?.id}</span>
+              <div className="small text-secondary fw-normal">
+                Ficha institucional de profesor y asignación de sede
+              </div>
+            </div>
+          </Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body className="pt-3">
+          {teacherDetalle && (
+            <>
+              <Row className="g-3 mb-3">
+                <Col md={6}>
+                  <div className="p-3 rounded-3 bg-dark bg-opacity-50 border border-secondary border-opacity-25 h-100">
+                    <div className="small text-secondary mb-1">Nombre y Apellido</div>
+                    <div className="fw-bold fs-6 text-white">
+                      {teacherDetalle.name} {teacherDetalle.lastname}
+                    </div>
+                    <div className="small text-secondary mt-2 mb-1">Documento (DNI)</div>
+                    <div className="fw-semibold text-white">{teacherDetalle.dni}</div>
+                    <div className="small text-secondary mt-2 mb-1">Fecha de Alta</div>
+                    <div className="text-white">{formatearFecha(teacherDetalle.date_alta)}</div>
+                  </div>
+                </Col>
+
+                <Col md={6}>
+                  <div className="p-3 rounded-3 bg-dark bg-opacity-50 border border-secondary border-opacity-25 h-100">
+                    <div className="small text-secondary mb-1">Correo Electrónico</div>
+                    <div className="fw-semibold text-white">{teacherDetalle.email}</div>
+                    <div className="small text-secondary mt-2 mb-1">Teléfono de Contacto</div>
+                    <div className="text-white">{teacherDetalle.phone || 'Sin teléfono registrado'}</div>
+                    <div className="small text-secondary mt-2 mb-1">Estado de Cuenta</div>
+                    <div>
+                      <Badge bg={teacherDetalle.status ? 'success' : 'danger'} className="px-3 py-1 rounded-pill">
+                        {teacherDetalle.status ? 'Activo' : 'Inactivo'}
+                      </Badge>
+                    </div>
+                  </div>
+                </Col>
+              </Row>
+
+              <div className="p-3 rounded-3 bg-dark bg-opacity-50 border border-secondary border-opacity-25">
+                <Row className="g-3 align-items-center">
+                  <Col sm={4}>
+                    <div className="small text-secondary mb-1">Especialidad</div>
+                    <span className="badge-token-accent">{teacherDetalle.specialty}</span>
+                  </Col>
+                  <Col sm={4}>
+                    <div className="small text-secondary mb-1">Turno Preferencial</div>
+                    <span className="badge-token-subdued">{teacherDetalle.shift}</span>
+                  </Col>
+                  <Col sm={4}>
+                    <div className="small text-secondary mb-1">Sede Asignada</div>
+                    <div className="fw-bold text-white">
+                      {teacherDetalle.branch
+                        ? `${teacherDetalle.branch.name} (${teacherDetalle.branch.city || 'Rosario'})`
+                        : 'Sin sede asignada'}
+                    </div>
+                    {teacherDetalle.branch?.address && (
+                      <small className="text-secondary d-block">{teacherDetalle.branch.address}</small>
+                    )}
+                  </Col>
+                </Row>
+              </div>
+            </>
+          )}
+        </Modal.Body>
+
+        <Modal.Footer className="border-secondary border-opacity-25 pt-2 d-flex justify-content-between">
+          <Button
+            variant="primary"
+            className="hero-btn rounded-pill px-4 fw-bold"
+            onClick={() => {
+              const profe = teacherDetalle;
+              setShowModalDetalle(false);
+              handleAbrirModal(profe);
+            }}
+          >
+            Editar Profesor
+          </Button>
+          <Button
+            variant="outline-secondary"
+            className="rounded-pill px-4"
+            onClick={() => {
+              setShowModalDetalle(false);
+              setTeacherDetalle(null);
+            }}
+          >
+            Cerrar
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
       {/* Modal Crear / Editar Profesor */}
       <Modal show={showModal} onHide={() => setShowModal(false)} centered contentClassName="glass-card text-white">
         <Modal.Header closeButton closeVariant="white">
@@ -313,7 +458,7 @@ const TeachersManager = ({
             <Row className="g-3">
               <Col md={6}>
                 <Form.Group>
-                  <Form.Label>Name *</Form.Label>
+                  <Form.Label>Nombre *</Form.Label>
                   <Form.Control
                     type="text"
                     required
@@ -324,7 +469,7 @@ const TeachersManager = ({
               </Col>
               <Col md={6}>
                 <Form.Group>
-                  <Form.Label>Lastname *</Form.Label>
+                  <Form.Label>Apellido *</Form.Label>
                   <Form.Control
                     type="text"
                     required
@@ -377,7 +522,7 @@ const TeachersManager = ({
                   <Form.Label>Contraseña de acceso</Form.Label>
                   <Form.Control
                     type="password"
-                    placeholder={teacherEditando ? "Dejar en blanco para conservar actual" : "Por defecto su DNI"}
+                    placeholder={teacherEditando ? 'Dejar en blanco para conservar actual' : 'Por defecto su DNI'}
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   />
@@ -401,7 +546,7 @@ const TeachersManager = ({
               </Col>
               <Col md={6}>
                 <Form.Group>
-                  <Form.Label>Shift Preferencial</Form.Label>
+                  <Form.Label>Turno Preferencial</Form.Label>
                   <Form.Select
                     value={formData.shift}
                     onChange={(e) => setFormData({ ...formData, shift: e.target.value })}

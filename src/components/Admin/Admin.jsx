@@ -85,7 +85,7 @@ const Admin = () => {
         setSedes(data.branches || []);
       }
     } catch (err) {
-      console.error('Error al cargar branches:', err);
+      console.error('Error al cargar sedes:', err);
     } finally {
       setCargandoSedes(false);
     }
@@ -115,7 +115,7 @@ const Admin = () => {
         setActividades(data.activities || []);
       }
     } catch (err) {
-      console.error('Error al cargar activities:', err);
+      console.error('Error al cargar actividades:', err);
     } finally {
       setCargandoActividades(false);
     }
@@ -130,7 +130,7 @@ const Admin = () => {
         setTurnos(data.shifts || []);
       }
     } catch (err) {
-      console.error('Error al cargar shifts:', err);
+      console.error('Error al cargar turnos:', err);
     } finally {
       setCargandoTurnos(false);
     }
@@ -353,7 +353,7 @@ const Admin = () => {
                 <line x1="8" y1="2" x2="8" y2="6" />
                 <line x1="3" y1="10" x2="21" y2="10" />
               </svg>
-              Calendar Semanal
+              Calendario Semanal
             </Nav.Link>
           </Nav.Item>
         </Nav>
