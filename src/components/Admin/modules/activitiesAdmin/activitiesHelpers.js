@@ -23,7 +23,7 @@ export const convertirHoraAMin = (hora) => {
  * @returns {object} { horariosTexto, diasTexto, esGrupal, amountShifts }
  */
 export const obtenerResumenHorarios = (act) => {
-  if (!act.shifts || act.shifts.length === 0) {
+  if (!act || !act.shifts || act.shifts.length === 0) {
     return {
       horariosTexto: 'Sin horario',
       diasTexto: 'Sin días asignados',
@@ -35,23 +35,23 @@ export const obtenerResumenHorarios = (act) => {
   if (act.shifts.length === 1) {
     const t = act.shifts[0];
     return {
-      horariosTexto: `${t.startTime} - ${t.endTime} hs`,
-      diasTexto: t.dayOfWeek,
+      horariosTexto: `${t.startTime || ''} - ${t.endTime || ''} hs`,
+      diasTexto: t.dayOfWeek || 'Sin día',
       esGrupal: false,
       amountShifts: 1
     };
   }
 
-  const horasInicio = act.shifts.map((t) => t.startTime).sort();
-  const horasFin = act.shifts.map((t) => t.endTime).sort();
-  const primerHorario = horasInicio[0];
-  const ultimoHorario = horasFin[horasFin.length - 1];
-  const diasUnicos = Array.from(new Set(act.shifts.map((t) => t.dayOfWeek))).join(', ');
-  const esMusculacion = act.name.toLowerCase().includes('musculac');
+  const horasInicio = act.shifts.map((t) => t.startTime || '').sort();
+  const horasFin = act.shifts.map((t) => t.endTime || '').sort();
+  const primerHorario = horasInicio[0] || '07:00';
+  const ultimoHorario = horasFin[horasFin.length - 1] || '23:00';
+  const diasUnicos = Array.from(new Set(act.shifts.map((t) => t.dayOfWeek).filter(Boolean))).join(', ');
+  const esMusculacion = (act.name || '').toLowerCase().includes('musculac');
 
   return {
     horariosTexto: `${primerHorario} a ${ultimoHorario} hs`,
-    diasTexto: esMusculacion ? `${diasUnicos} (Turnos continuos)` : diasUnicos,
+    diasTexto: esMusculacion ? `${diasUnicos || 'Lunes a Sábado'} (Turnos continuos)` : (diasUnicos || 'Sin días'),
     esGrupal: true,
     amountShifts: act.shifts.length
   };

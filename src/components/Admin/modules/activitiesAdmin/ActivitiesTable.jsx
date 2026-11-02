@@ -132,9 +132,20 @@ const ActivitiesTable = ({
                     )}
                   </td>
                   <td>
-                    <span className="badge-token-accent" title={resumen}>
-                      {resumen}
-                    </span>
+                    {resumen && resumen.amountShifts > 0 ? (
+                      <div>
+                        <span className={`badge-token-accent d-inline-flex align-items-center gap-1 mb-1 ${resumen.esGrupal ? 'bg-primary bg-opacity-25 border-primary text-info' : ''}`}>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <circle cx="12" cy="12" r="10" />
+                            <polyline points="12 6 12 12 16 14" />
+                          </svg>
+                          {resumen.horariosTexto}
+                        </span>
+                        <div className="small text-white-50">{resumen.diasTexto}</div>
+                      </div>
+                    ) : (
+                      <span className="badge bg-secondary text-white-50 px-2 py-1">Sin horario</span>
+                    )}
                   </td>
                   <td>
                     {branchObj ? (
