@@ -129,7 +129,7 @@ const SecurityTab = ({ user }) => {
                   onChange={handleChangePassword}
                   required
                   placeholder="••••••••"
-                  className="bg-transparent text-light border-secondary"
+                  className="bg-transparent text-white border-secondary"
                 />
                 <Button
                   variant="outline-secondary"

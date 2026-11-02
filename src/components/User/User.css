@@ -81,3 +81,47 @@
   border-radius: 1.25rem !important;
   backdrop-filter: blur(20px);
 }
+
+/* ==========================================================================
+   Security & Access - Inputs & Hints
+   ========================================================================== */
+.security-tab .form-label {
+  color: #ffffff !important;
+  font-weight: 500;
+}
+
+.security-tab .form-control {
+  color: #ffffff !important;
+}
+
+.security-tab .form-control::placeholder {
+  color: var(--text-secondary, #94A3B8) !important;
+  opacity: 0.9 !important;
+}
+
+.security-tab .form-control::-webkit-input-placeholder {
+  color: var(--text-secondary, #94A3B8) !important;
+  opacity: 0.9 !important;
+}
+
+.security-tab .form-control::-moz-placeholder {
+  color: var(--text-secondary, #94A3B8) !important;
+  opacity: 0.9 !important;
+}
+
+.security-tab .form-control:-ms-input-placeholder {
+  color: var(--text-secondary, #94A3B8) !important;
+  opacity: 0.9 !important;
+}
+
+.security-tab .input-group-text,
+.security-tab .btn-outline-secondary {
+  color: var(--text-secondary, #94A3B8) !important;
+  border-color: rgba(148, 163, 184, 0.3) !important;
+}
+
+.security-tab .btn-outline-secondary:hover {
+  color: #ffffff !important;
+  border-color: var(--primary-accent, #5856F0) !important;
+  background-color: rgba(88, 86, 240, 0.2) !important;
+}

@@ -106,13 +106,25 @@ body {
   stroke: var(--brand-highlight);
 }
 
-/* Color blanco únicamente para los placeholders del módulo de Seguridad y Contraseña del User */
-.security-tab .form-control::placeholder,
-.security-tab .form-control::-webkit-input-placeholder,
-.security-tab .form-control::-moz-placeholder,
+/* Color diferenciado para los placeholders / hints del módulo de Seguridad y Acceso (distinto al label) */
+.security-tab .form-control::placeholder {
+  color: var(--text-secondary, #94A3B8) !important;
+  opacity: 0.9 !important;
+}
+
+.security-tab .form-control::-webkit-input-placeholder {
+  color: var(--text-secondary, #94A3B8) !important;
+  opacity: 0.9 !important;
+}
+
+.security-tab .form-control::-moz-placeholder {
+  color: var(--text-secondary, #94A3B8) !important;
+  opacity: 0.9 !important;
+}
+
 .security-tab .form-control:-ms-input-placeholder {
-  color: #ffffff !important;
-  opacity: 1 !important;
+  color: var(--text-secondary, #94A3B8) !important;
+  opacity: 0.9 !important;
 }
 
 /* Asegurar que las vistas de user nunca recorten contenido ni barra de desplazamiento */
