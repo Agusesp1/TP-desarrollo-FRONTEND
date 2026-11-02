@@ -16,12 +16,16 @@ const PricesVigentesCard = ({ priceVigente, dateConsulta, cargandoPrecios, onRec
             </span>
           </div>
           <h2 className="fw-bold mb-1 text-white">
-            ${priceVigente?.amount ? formatMonto(priceVigente.amount) : '18.000'}
+            {priceVigente?.amount !== undefined && priceVigente?.amount !== null
+              ? `$${formatMonto(priceVigente.amount)}`
+              : cargandoPrecios
+              ? 'Cargando...'
+              : 'Sin tarifa configurada'}
             <span className="text-secondary fs-6 fw-normal ms-2">/ Cuota Mensual</span>
           </h2>
           <p className="text-light opacity-75 small mb-0">
-            <strong>Vigente desde:</strong> {priceVigente?.start_date || 'Home de ciclo'} •{' '}
-            <strong>Descripción:</strong> {priceVigente?.description || 'Tarifa general de membresía estándar'}
+            <strong>Vigente desde:</strong> {priceVigente?.start_date || '-'} •{' '}
+            <strong>Descripción:</strong> {priceVigente?.description || 'Sin descripción'}
           </p>
         </Col>
 

@@ -14,7 +14,7 @@ import MembersCuotasTable from './quotasAdmin/MembersQuotasTable';
 import ManualChargeModal from './quotasAdmin/ManualChargeModal';
 import ModalComprobanteAdmin from './quotasAdmin/ModalComprobanteAdmin';
 
-const QuotasAdminManager = ({ onMostrarAlerta, apiBase = API_BASE }) => {
+const QuotasAdminManager = ({ onMostrarAlerta, onRecargarEstadisticas, apiBase = API_BASE }) => {
   // Pestaña activa dentro del módulo: 'members' o 'prices'
   const [subTab, setSubTab] = useState('members');
 
@@ -216,6 +216,7 @@ const QuotasAdminManager = ({ onMostrarAlerta, apiBase = API_BASE }) => {
         );
         setShowModalCobro(false);
         cargarCuotas();
+        onRecargarEstadisticas?.();
       } else {
         onMostrarAlerta?.(data.message || 'Error al registrar cobro manual', 'danger');
       }

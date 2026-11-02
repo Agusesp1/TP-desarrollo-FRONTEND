@@ -5,7 +5,7 @@ const generarComprobanteNumero = (quotaId) => {
   return `REC-${quotaId}-${Math.floor(1000 + Math.random() * 9000)}`;
 };
 
-const ClientesManager = ({ onMostrarAlerta, apiBase }) => {
+const ClientesManager = ({ onMostrarAlerta, onRecargarEstadisticas, apiBase }) => {
   const [users, setUsuarios] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [filterTexto, setFiltroTexto] = useState('');
@@ -70,6 +70,7 @@ const ClientesManager = ({ onMostrarAlerta, apiBase }) => {
       if (res.ok && data.success) {
         onMostrarAlerta(data.message);
         cargarUsuarios();
+        onRecargarEstadisticas?.();
       } else {
         onMostrarAlerta(data.message || 'Error al cambiar el estado de la cuenta', 'danger');
       }
@@ -122,6 +123,7 @@ const ClientesManager = ({ onMostrarAlerta, apiBase }) => {
         setCuotaEnCobro(null);
 
         await cargarUsuarios();
+        onRecargarEstadisticas?.();
 
         setSocioSeleccionado((prev) => {
           if (!prev) return null;

@@ -19,7 +19,7 @@ const QuotasTab = ({ user }) => {
   const { user: authUser } = useAuth();
   const currentUser = user || authUser;
   const esRolExcluido = currentUser?.role === 'admin' || currentUser?.role === 'teacher';
-  const userId = currentUser?.id || currentUser?.user_id || 1;
+  const userId = currentUser?.id || currentUser?.user_id || null;
 
   // Estados de datos
   const [quotas, setCuotas] = useState([]);
@@ -108,6 +108,7 @@ const QuotasTab = ({ user }) => {
 
   useEffect(() => {
     if (!userId || esRolExcluido) {
+      setCargando(false);
       return;
     }
 

@@ -3,26 +3,64 @@ import { Card, Table, Form, Row, Col, Badge } from 'react-bootstrap';
 
 const diasSemana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
 
-// Schedules de 07:00 a 21:00
-const horas = [];
-for (let h = 7; h <= 21; h++) {
-  const horaStr = h.toString().padStart(2, '0') + ':00';
-  horas.push(horaStr);
-}
-
 const parseHoraStr = (horaStr) => {
-  if (!horaStr) return 0;
+  if (!horaStr) return null;
   const [h, m] = horaStr.split(':').map(Number);
-  return h + m / 60;
+  if (Number.isNaN(h)) return null;
+  return h + (m || 0) / 60;
 };
 
-const CalendarAdmin = ({ shifts, branches }) => {
+const CalendarAdmin = ({ shifts = [], branches = [] }) => {
   const [filterSede, setFiltroSede] = useState('');
 
   const shiftsFiltrados = useMemo(() => {
     if (!filterSede) return shifts;
     return shifts.filter(t => t.branch_id && t.branch_id.toString() === filterSede.toString());
   }, [shifts, filterSede]);
+
+  // Calcular rango horario dinámico a partir de los turnos y horarios de las sedes en la BD
+  const { horas, minHoraStr, maxHoraStr } = useMemo(() => {
+    let minH = 7;
+    let maxH = 21;
+
+    const sedesEvaluadas = filterSede
+      ? branches.filter((b) => b.id?.toString() === filterSede.toString())
+      : branches;
+
+    sedesEvaluadas.forEach((b) => {
+      if (Array.isArray(b.schedule_days)) {
+        b.schedule_days.forEach((d) => {
+          if (d.abierto) {
+            const ini = parseHoraStr(d.hora_home);
+            const fin = parseHoraStr(d.hora_fin);
+            if (ini !== null) minH = Math.min(minH, Math.floor(ini));
+            if (fin !== null) maxH = Math.max(maxH, Math.max(Math.ceil(fin) - 1, Math.floor(fin)));
+          }
+        });
+      }
+    });
+
+    shiftsFiltrados.forEach((t) => {
+      const ini = parseHoraStr(t.startTime);
+      const fin = parseHoraStr(t.endTime);
+      if (ini !== null) minH = Math.min(minH, Math.floor(ini));
+      if (fin !== null) maxH = Math.max(maxH, Math.max(Math.ceil(fin) - 1, Math.floor(ini)));
+    });
+
+    minH = Math.max(0, Math.min(23, minH));
+    maxH = Math.max(minH, Math.min(23, maxH));
+
+    const listaHoras = [];
+    for (let h = minH; h <= maxH; h++) {
+      listaHoras.push(`${h.toString().padStart(2, '0')}:00`);
+    }
+
+    return {
+      horas: listaHoras,
+      minHoraStr: `${minH.toString().padStart(2, '0')}:00`,
+      maxHoraStr: `${Math.min(24, maxH + 1).toString().padStart(2, '0')}:00`
+    };
+  }, [shiftsFiltrados, branches, filterSede]);
 
   // Helper para agrupar shifts por día
   const shiftsPorDia = useMemo(() => {
@@ -85,9 +123,9 @@ const CalendarAdmin = ({ shifts, branches }) => {
     <Card className="glass-card border-0 p-4 text-white">
       <div className="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
         <div>
-          <h4 className="fw-bold mb-1 text-white">Calendar de Activities</h4>
+          <h4 className="fw-bold mb-1 text-white">Calendario de Actividades</h4>
           <p className="text-secondary small mb-0">
-            Vista semanal de todas las clases y schedules. (7:00 a 21:00)
+            Vista semanal de todas las clases y horarios ({minHoraStr} a {maxHoraStr} hs).
           </p>
         </div>
       </div>
