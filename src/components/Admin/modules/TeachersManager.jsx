@@ -1,5 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Card, Button, Row, Col, Table, Form, InputGroup, Modal, Spinner, Alert, Badge } from 'react-bootstrap';
+
+const ESPECIALIDADES_BASE = [
+  'Musculación & Hipertrofia',
+  'Crossfit & Funcional',
+  'Spinning & Cardio',
+  'Yoga & Pilates',
+  'Zumba & Ritmos',
+  'Boxeo & Artes Marciales'
+];
 
 const TeachersManager = ({
   teachers,
@@ -13,6 +22,13 @@ const TeachersManager = ({
   const [filterTexto, setFiltroTexto] = useState('');
   const [filterSede, setFiltroSede] = useState('');
   const [filterEspecialidad, setFiltroEspecialidad] = useState('');
+
+  const especialidadesDisponibles = useMemo(() => {
+    const desdeBD = (teachers || [])
+      .map((p) => p.specialty?.trim())
+      .filter(Boolean);
+    return Array.from(new Set([...ESPECIALIDADES_BASE, ...desdeBD]));
+  }, [teachers]);
 
   // Modal Crear / Editar State
   const [showModal, setShowModal] = useState(false);
@@ -191,12 +207,11 @@ const TeachersManager = ({
             onChange={(e) => setFiltroEspecialidad(e.target.value)}
           >
             <option value="">Todas las Especialidades</option>
-            <option value="Musculación & Hipertrofia">Musculación & Hipertrofia</option>
-            <option value="Crossfit & Funcional">Crossfit & Funcional</option>
-            <option value="Spinning & Cardio">Spinning & Cardio</option>
-            <option value="Yoga & Pilates">Yoga & Pilates</option>
-            <option value="Zumba & Ritmos">Zumba & Ritmos</option>
-            <option value="Boxeo & Artes Marciales">Boxeo & Artes Marciales</option>
+            {especialidadesDisponibles.map((esp) => (
+              <option key={esp} value={esp}>
+                {esp}
+              </option>
+            ))}
           </Form.Select>
         </Col>
 
@@ -535,12 +550,11 @@ const TeachersManager = ({
                     value={formData.specialty}
                     onChange={(e) => setFormData({ ...formData, specialty: e.target.value })}
                   >
-                    <option value="Musculación & Hipertrofia">Musculación & Hipertrofia</option>
-                    <option value="Crossfit & Funcional">Crossfit & Funcional</option>
-                    <option value="Spinning & Cardio">Spinning & Cardio</option>
-                    <option value="Yoga & Pilates">Yoga & Pilates</option>
-                    <option value="Zumba & Ritmos">Zumba & Ritmos</option>
-                    <option value="Boxeo & Artes Marciales">Boxeo & Artes Marciales</option>
+                    {especialidadesDisponibles.map((esp) => (
+                      <option key={esp} value={esp}>
+                        {esp}
+                      </option>
+                    ))}
                   </Form.Select>
                 </Form.Group>
               </Col>

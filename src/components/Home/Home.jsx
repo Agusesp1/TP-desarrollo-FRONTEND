@@ -16,6 +16,31 @@ const Home = () => {
   const [contactoEnviado, setContactoEnviado] = useState(false);
   const [cargandoContacto, setCargandoContacto] = useState(false);
   const [errorContacto, setErrorContacto] = useState(null);
+  const [branches, setBranches] = useState([]);
+  const [loadingBranches, setLoadingBranches] = useState(true);
+
+  useEffect(() => {
+    let isMounted = true;
+    const fetchBranches = async () => {
+      try {
+        const res = await fetch(`${API_BASE}/branches?soloActivas=true`);
+        const data = await res.json();
+        if (isMounted && res.ok && data.success) {
+          setBranches(data.branches || []);
+        }
+      } catch (err) {
+        console.warn('Error al cargar sedes en Home:', err);
+      } finally {
+        if (isMounted) {
+          setLoadingBranches(false);
+        }
+      }
+    };
+    fetchBranches();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   useEffect(() => {
     if (user) {
@@ -250,39 +275,37 @@ const Home = () => {
             <Col lg={6}>
               <div className="about-image-card p-4 rounded-4 shadow-lg">
                 <h4 className="fw-bold text-white mb-3">Nuestras Sedes</h4>
-                <div className="branch-item p-3 mb-3 rounded-3">
-                  <h5 className="fw-bold text-white mb-1 d-flex align-items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-icon text-primary">
-                      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
-                      <circle cx="12" cy="10" r="3" />
-                    </svg>
-                    Sede Central (Centro)
-                  </h5>
-                  <p className="small text-light opacity-75 mb-1">Av. Corrientes 1234, CABA</p>
-                  <small className="text-primary">Lun a Vie: 06:00 - 23:00 hs | Sáb: 08:00 - 20:00 hs</small>
-                </div>
-                <div className="branch-item p-3 mb-3 rounded-3">
-                  <h5 className="fw-bold text-white mb-1 d-flex align-items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-icon text-primary">
-                      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
-                      <circle cx="12" cy="10" r="3" />
-                    </svg>
-                    Sede Norte (Palermo)
-                  </h5>
-                  <p className="small text-light opacity-75 mb-1">Av. Santa Fe 4567, CABA</p>
-                  <small className="text-primary">Lun a Vie: 06:00 - 23:00 hs | Sáb: 08:00 - 20:00 hs</small>
-                </div>
-                <div className="branch-item p-3 rounded-3">
-                  <h5 className="fw-bold text-white mb-1 d-flex align-items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-icon text-primary">
-                      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
-                      <circle cx="12" cy="10" r="3" />
-                    </svg>
-                    Sede Belgrano
-                  </h5>
-                  <p className="small text-light opacity-75 mb-1">Cabildo 2345, CABA</p>
-                  <small className="text-primary">24 horas los 7 días de la semana</small>
-                </div>
+                {loadingBranches ? (
+                  <div className="d-flex align-items-center gap-2 text-light opacity-75 py-3">
+                    <Spinner animation="border" size="sm" variant="primary" />
+                    <span>Cargando sedes...</span>
+                  </div>
+                ) : branches.length > 0 ? (
+                  branches.map((branch, idx) => (
+                    <div
+                      key={branch.id}
+                      className={`branch-item p-3 ${idx < branches.length - 1 ? 'mb-3' : ''} rounded-3`}
+                    >
+                      <h5 className="fw-bold text-white mb-1 d-flex align-items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-icon text-primary">
+                          <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                          <circle cx="12" cy="10" r="3" />
+                        </svg>
+                        {branch.name}
+                      </h5>
+                      <p className="small text-light opacity-75 mb-1">
+                        {branch.address}{branch.city ? `, ${branch.city}` : ''}
+                      </p>
+                      {branch.opening_hours && (
+                        <small className="text-primary">{branch.opening_hours}</small>
+                      )}
+                    </div>
+                  ))
+                ) : (
+                  <p className="small text-light opacity-75 mb-0">
+                    No hay sedes operativas registradas en este momento.
+                  </p>
+                )}
               </div>
             </Col>
           </Row>

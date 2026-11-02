@@ -364,7 +364,10 @@ const Admin = () => {
             teachers={teachers}
             branches={branches}
             cargando={cargandoProfesores}
-            onRecargar={cargarProfesores}
+            onRecargar={() => {
+              cargarProfesores();
+              cargarEstadisticas();
+            }}
             onMostrarAlerta={mostrarAlerta}
             onPedirEliminar={handlePedirEliminar}
             apiBase={API_BASE}
@@ -380,6 +383,7 @@ const Admin = () => {
               cargarSedes();
               cargarActividades();
               cargarTurnos();
+              cargarEstadisticas();
             }}
             onMostrarAlerta={mostrarAlerta}
             onPedirEliminar={handlePedirEliminar}
@@ -396,6 +400,7 @@ const Admin = () => {
             onRecargar={() => {
               cargarActividades();
               cargarTurnos();
+              cargarEstadisticas();
             }}
             onMostrarAlerta={mostrarAlerta}
             onPedirEliminar={handlePedirEliminar}
@@ -410,7 +415,10 @@ const Admin = () => {
             teachers={teachers}
             branches={branches}
             cargando={cargandoTurnos}
-            onRecargar={cargarTurnos}
+            onRecargar={() => {
+              cargarTurnos();
+              cargarEstadisticas();
+            }}
             onMostrarAlerta={mostrarAlerta}
             onPedirEliminar={handlePedirEliminar}
             apiBase={API_BASE}
@@ -420,6 +428,7 @@ const Admin = () => {
         {activeTab === 'clients' && (
           <ClientesManager
             onMostrarAlerta={mostrarAlerta}
+            onRecargarEstadisticas={cargarEstadisticas}
             apiBase={API_BASE}
           />
         )}
@@ -427,6 +436,7 @@ const Admin = () => {
         {activeTab === 'quotas' && (
           <QuotasAdminManager
             onMostrarAlerta={mostrarAlerta}
+            onRecargarEstadisticas={cargarEstadisticas}
             apiBase={API_BASE}
           />
         )}

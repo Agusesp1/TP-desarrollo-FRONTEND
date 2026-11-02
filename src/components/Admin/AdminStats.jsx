@@ -3,9 +3,29 @@ import { Row, Col, Card } from 'react-bootstrap';
 
 const AdminStats = ({ stats }) => {
   return (
-    <Row className="g-3 mb-4">
-      <Col xs={6} sm={6} lg={3}>
-        <Card className="stat-card border-0 p-3 text-white">
+    <Row className="g-3 mb-4 row-cols-2 row-cols-md-3 row-cols-xl-5">
+      <Col>
+        <Card className="stat-card border-0 p-3 text-white h-100">
+          <div className="d-flex align-items-center justify-content-between">
+            <div>
+              <span className="text-light opacity-75 small fw-medium">Socios</span>
+              <h2 className="fw-bold mb-0 mt-1 text-white">{stats.totalSocios ?? 0}</h2>
+              <small className="text-success fw-bold">activos</small>
+            </div>
+            <div className="stat-icon-wrapper stat-icon-primary">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+              </svg>
+            </div>
+          </div>
+        </Card>
+      </Col>
+
+      <Col>
+        <Card className="stat-card border-0 p-3 text-white h-100">
           <div className="d-flex align-items-center justify-content-between">
             <div>
               <span className="text-light opacity-75 small fw-medium">Profesores</span>
@@ -22,8 +42,8 @@ const AdminStats = ({ stats }) => {
         </Card>
       </Col>
 
-      <Col xs={6} sm={6} lg={3}>
-        <Card className="stat-card border-0 p-3 text-white">
+      <Col>
+        <Card className="stat-card border-0 p-3 text-white h-100">
           <div className="d-flex align-items-center justify-content-between">
             <div>
               <span className="text-light opacity-75 small fw-medium">Sedes</span>
@@ -40,8 +60,8 @@ const AdminStats = ({ stats }) => {
         </Card>
       </Col>
 
-      <Col xs={6} sm={6} lg={3}>
-        <Card className="stat-card border-0 p-3 text-white">
+      <Col>
+        <Card className="stat-card border-0 p-3 text-white h-100">
           <div className="d-flex align-items-center justify-content-between">
             <div>
               <span className="text-light opacity-75 small fw-medium">Actividades</span>
@@ -61,8 +81,8 @@ const AdminStats = ({ stats }) => {
         </Card>
       </Col>
 
-      <Col xs={6} sm={6} lg={3}>
-        <Card className="stat-card border-0 p-3 text-white">
+      <Col>
+        <Card className="stat-card border-0 p-3 text-white h-100">
           <div className="d-flex align-items-center justify-content-between">
             <div>
               <span className="text-light opacity-75 small fw-medium">Turnos y Horarios</span>

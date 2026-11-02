@@ -1,12 +1,41 @@
-import React from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+import { useState, useEffect } from 'react';
+import { Container, Row, Col, Spinner } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { API_BASE } from '../../config/api';
 import './Footer.css';
 
 const Footer = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [branches, setBranches] = useState([]);
+  const [loadingBranches, setLoadingBranches] = useState(true);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchBranches = async () => {
+      try {
+        const res = await fetch(`${API_BASE}/branches?soloActivas=true`);
+        const data = await res.json();
+        if (isMounted && res.ok && data.success) {
+          setBranches(data.branches || []);
+        }
+      } catch (err) {
+        console.warn('Error al cargar sedes en el footer:', err);
+      } finally {
+        if (isMounted) {
+          setLoadingBranches(false);
+        }
+      }
+    };
+
+    fetchBranches();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const handleGoHome = (e) => {
     e.preventDefault();
@@ -58,17 +87,26 @@ const Footer = () => {
           {/* Branches del Gym */}
           <Col lg={4} md={6}>
             <h5 className="fw-bold text-white mb-3">Nuestras Sedes</h5>
-            <ul className="list-unstyled small opacity-75 branches-list">
-              <li className="mb-2">
-                <span className="fw-bold text-primary">• Sede Centro:</span> Av. Corrientes 1234, CABA
-              </li>
-              <li className="mb-2">
-                <span className="fw-bold text-primary">• Sede Palermo:</span> Av. Santa Fe 4567, CABA
-              </li>
-              <li className="mb-2">
-                <span className="fw-bold text-primary">• Sede Belgrano:</span> Av. Cabildo 2345, CABA (24hs)
-              </li>
-            </ul>
+            {loadingBranches ? (
+              <div className="d-flex align-items-center gap-2 small text-secondary py-1">
+                <Spinner animation="border" size="sm" variant="primary" />
+                <span>Cargando sedes...</span>
+              </div>
+            ) : branches.length > 0 ? (
+              <ul className="list-unstyled small opacity-75 branches-list">
+                {branches.map((branch) => (
+                  <li key={branch.id} className="mb-2">
+                    <span className="fw-bold text-primary">
+                      • {branch.name ? branch.name.trim().replace(/:$/, '') : ''}:
+                    </span>{' '}
+                    {branch.address}
+                    {branch.city ? `, ${branch.city}` : ''}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="small opacity-75 text-secondary">No hay sedes disponibles por el momento.</p>
+            )}
           </Col>
 
           {/* Mapa del sitio */}
