@@ -17,10 +17,11 @@ const AdminDeleteModal = ({ show, onHide, item, onConfirm, eliminando }) => {
       <Modal.Body>
         <p className="mb-2">
           ¿Estás completamente seguro de que deseas eliminar permanentemente{' '}
-          {item?.type === 'teacher' && 'al teacher'}
-          {item?.type === 'branch' && 'la branch'}
-          {item?.type === 'activity' && 'la activity'}
-          {item?.type === 'shift' && 'el shift schedule'}{' '}
+          {item?.type === 'teacher' && 'al profesor'}
+          {item?.type === 'branch' && 'la sede'}
+          {item?.type === 'activity' && 'la actividad'}
+          {item?.type === 'shift' && 'el turno'}
+          {item?.type === 'shift-group' && 'el grupo completo de turnos'}{' '}
           <strong>&quot;{item?.name}&quot;</strong>?
         </p>
         <small className="text-warning d-block">

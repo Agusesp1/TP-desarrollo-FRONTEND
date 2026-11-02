@@ -162,6 +162,18 @@ const Admin = () => {
     setEliminando(true);
 
     try {
+      if (itemAEliminar.type === 'shift-group' && Array.isArray(itemAEliminar.ids)) {
+        await Promise.all(
+          itemAEliminar.ids.map((id) =>
+            fetch(`${API_BASE}/shifts/${id}`, { method: 'DELETE' })
+          )
+        );
+        mostrarAlerta(`Se eliminaron exitosamente ${itemAEliminar.ids.length} turnos.`);
+        setShowDeleteModal(false);
+        recargarTodo();
+        return;
+      }
+
       let endpoint = '';
       if (itemAEliminar.type === 'teacher') endpoint = `${API_BASE}/teachers/${itemAEliminar.id}`;
       if (itemAEliminar.type === 'branch') endpoint = `${API_BASE}/branches/${itemAEliminar.id}`;
