@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { procesarErrorApi } from '../../../utils/errorHandler';
 import { Card, Button, Row, Col, Table, Form, InputGroup, Modal, Spinner, Alert, Badge } from 'react-bootstrap';
 
 const ESPECIALIDADES_BASE = [
@@ -112,12 +113,12 @@ const TeachersManager = ({
         setShowModal(false);
         onRecargar();
       } else {
-        const errorMsg = data.message || 'Error al guardar profesor';
+        const errorMsg = procesarErrorApi(null, data, 'Guardar Profesor');
         setModalAlerta(errorMsg);
         onMostrarAlerta(errorMsg, 'danger');
       }
     } catch {
-      const errorMsg = 'Error de red al guardar profesor';
+      const errorMsg = procesarErrorApi(new Error('Network error'), null, 'Guardar Profesor');
       setModalAlerta(errorMsg);
       onMostrarAlerta(errorMsg, 'danger');
     } finally {
@@ -133,10 +134,12 @@ const TeachersManager = ({
         onMostrarAlerta(data.message);
         onRecargar();
       } else {
-        onMostrarAlerta(data.message || 'Error al cambiar el estado del profesor', 'danger');
+        const msg = procesarErrorApi(null, data, 'Toggle Estado Profesor');
+        onMostrarAlerta(msg, 'danger');
       }
     } catch {
-      onMostrarAlerta('Error de red al actualizar el estado', 'danger');
+      const msg = procesarErrorApi(new Error('Network error'), null, 'Toggle Estado Profesor');
+      onMostrarAlerta(msg, 'danger');
     }
   };
 

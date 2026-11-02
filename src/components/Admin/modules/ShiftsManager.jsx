@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { procesarErrorApi } from '../../../utils/errorHandler';
 import { Card, Button, Row, Col, Table, Form, Modal, Spinner, Pagination } from 'react-bootstrap';
 
 const ShiftsManager = ({
@@ -136,10 +137,12 @@ const ShiftsManager = ({
         setShowModal(false);
         onRecargar();
       } else {
-        onMostrarAlerta(data.message || 'Error al guardar turno', 'danger');
+        const msg = procesarErrorApi(null, data, 'Guardar Turno');
+        onMostrarAlerta(msg, 'danger');
       }
     } catch {
-      onMostrarAlerta('Error de red al guardar turno', 'danger');
+      const msg = procesarErrorApi(new Error('Network error'), null, 'Guardar Turno');
+      onMostrarAlerta(msg, 'danger');
     } finally {
       setGuardando(false);
     }
@@ -153,10 +156,12 @@ const ShiftsManager = ({
         onMostrarAlerta(data.message);
         onRecargar();
       } else {
-        onMostrarAlerta(data.message || 'Error al cambiar el estado del turno', 'danger');
+        const msg = procesarErrorApi(null, data, 'Toggle Estado Turno');
+        onMostrarAlerta(msg, 'danger');
       }
     } catch {
-      onMostrarAlerta('Error de red al actualizar el estado', 'danger');
+      const msg = procesarErrorApi(new Error('Network error'), null, 'Toggle Estado Turno');
+      onMostrarAlerta(msg, 'danger');
     }
   };
 

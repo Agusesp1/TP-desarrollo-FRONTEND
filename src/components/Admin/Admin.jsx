@@ -15,6 +15,7 @@ import CalendarAdmin from './modules/CalendarAdmin';
 import QuotasAdminManager from './modules/QuotasAdminManager';
 
 import { API_BASE } from '../../config/api';
+import { procesarErrorApi } from '../../utils/errorHandler';
 
 const Admin = () => {
   const { user } = useAuth();
@@ -175,10 +176,12 @@ const Admin = () => {
         setShowDeleteModal(false);
         recargarTodo();
       } else {
-        mostrarAlerta(data.message || 'Error al eliminar registro', 'danger');
+        const msg = procesarErrorApi(null, data, 'Eliminar Registro');
+        mostrarAlerta(msg, 'danger');
       }
     } catch {
-      mostrarAlerta('Error de conexión con el servidor', 'danger');
+      const msg = procesarErrorApi(new Error('Network error'), null, 'Eliminar Registro');
+      mostrarAlerta(msg, 'danger');
     } finally {
       setEliminando(false);
     }

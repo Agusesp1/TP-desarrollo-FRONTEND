@@ -130,8 +130,9 @@ const ActivityModal = ({
 
             <Col md={6}>
               <Form.Group>
-                <Form.Label>Sede</Form.Label>
+                <Form.Label>Sede *</Form.Label>
                 <Form.Select
+                  required
                   value={formData.branch_id}
                   onChange={(e) => setFormData({ ...formData, branch_id: e.target.value })}
                 >

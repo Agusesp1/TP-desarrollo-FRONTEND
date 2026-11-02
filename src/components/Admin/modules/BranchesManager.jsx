@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { Card } from 'react-bootstrap';
+import { procesarErrorApi } from '../../../utils/errorHandler';
 import {
   DIAS_SEMANA_DEFAULT,
   calcularSlots,
@@ -174,10 +175,12 @@ const BranchesManager = ({
         setShowModal(false);
         onRecargar();
       } else {
-        onMostrarAlerta(data.message || 'Error al guardar branch', 'danger');
+        const msg = procesarErrorApi(null, data, 'Guardar Sede');
+        onMostrarAlerta(msg, 'danger');
       }
     } catch (err) {
-      onMostrarAlerta('Error de red al guardar branch', 'danger');
+      const msg = procesarErrorApi(err, null, 'Guardar Sede');
+      onMostrarAlerta(msg, 'danger');
     } finally {
       setGuardando(false);
     }
@@ -191,10 +194,12 @@ const BranchesManager = ({
         onMostrarAlerta(data.message);
         onRecargar();
       } else {
-        onMostrarAlerta(data.message || 'Error al cambiar status de la branch', 'danger');
+        const msg = procesarErrorApi(null, data, 'Toggle Estado Sede');
+        onMostrarAlerta(msg, 'danger');
       }
     } catch (err) {
-      onMostrarAlerta('Error de red al actualizar status', 'danger');
+      const msg = procesarErrorApi(err, null, 'Toggle Estado Sede');
+      onMostrarAlerta(msg, 'danger');
     }
   };
 

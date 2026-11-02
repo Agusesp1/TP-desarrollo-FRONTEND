@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, Form, Row, Col, Button, Alert, Modal, Spinner } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { API_BASE } from '../../../config/api';
+import { procesarErrorApi } from '../../../utils/errorHandler';
 
 const ProfileTab = ({ user, updateUser, logout }) => {
   const navigate = useNavigate();
@@ -65,9 +66,9 @@ const ProfileTab = ({ user, updateUser, logout }) => {
       const data = await response.json();
 
       if (!response.ok || !data.success) {
+        const msg = procesarErrorApi(null, data, 'Actualizar Perfil');
         setProfileMsgType('danger');
-        const detalle = data.detalles ? `: ${data.detalles}` : '';
-        setMensaje(`${data.message || 'Error al actualizar el perfil'}${detalle}`);
+        setMensaje(msg);
       } else {
         setProfileMsgType('success');
         setMensaje(data.message || '¡Perfil actualizado con éxito!');
@@ -79,9 +80,9 @@ const ProfileTab = ({ user, updateUser, logout }) => {
         setTimeout(() => setMensaje(null), 3000);
       }
     } catch (error) {
-      console.error('Error al actualizar el perfil:', error);
+      const msg = procesarErrorApi(error, null, 'Actualizar Perfil');
       setProfileMsgType('danger');
-      setMensaje('No se pudo conectar con el servidor backend. Asegurate de que esté corriendo.');
+      setMensaje(msg);
     } finally {
       setCargandoPerfil(false);
     }
@@ -109,16 +110,16 @@ const ProfileTab = ({ user, updateUser, logout }) => {
       const data = await response.json();
 
       if (!response.ok || !data.success) {
-        const detalle = data.detalles ? `: ${data.detalles}` : '';
-        setDeleteError(`${data.message || 'Error al dar de baja la cuenta'}${detalle}`);
+        const msg = procesarErrorApi(null, data, 'Baja de Cuenta');
+        setDeleteError(msg);
       } else {
         setShowDeleteModal(false);
         logout();
         navigate('/login');
       }
     } catch (error) {
-      console.error('Error al dar de baja el profile:', error);
-      setDeleteError('No se pudo conectar con el servidor backend.');
+      const msg = procesarErrorApi(error, null, 'Baja de Cuenta');
+      setDeleteError(msg);
     } finally {
       setCargandoDelete(false);
     }

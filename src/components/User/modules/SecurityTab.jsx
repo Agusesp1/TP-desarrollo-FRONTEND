@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { API_BASE } from '../../../config/api';
+import { procesarErrorApi } from '../../../utils/errorHandler';
 import { Card, Form, Row, Col, Button, Alert, InputGroup, Spinner } from 'react-bootstrap';
 
 const EyeIcon = () => (
@@ -83,9 +84,9 @@ const SecurityTab = ({ user }) => {
       const data = await response.json();
 
       if (!response.ok || !data.success) {
+        const msg = procesarErrorApi(null, data, 'Cambio de Contraseña');
         setPasswordMsgType('danger');
-        const detalle = data.detalles ? `: ${data.detalles}` : '';
-        setPasswordMsg(`${data.message || 'Error al actualizar la contraseña'}${detalle}`);
+        setPasswordMsg(msg);
       } else {
         setPasswordMsgType('success');
         setPasswordMsg(data.message || '¡Contraseña actualizada exitosamente!');

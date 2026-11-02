@@ -4,6 +4,7 @@ import ActivitiesFilters from './activitiesAdmin/ActivitiesFilters';
 import ActivitiesTable from './activitiesAdmin/ActivitiesTable';
 import ActivityModal from './activitiesAdmin/ActivityModal';
 import { esHoraValida, convertirHoraAMin } from './activitiesAdmin/activitiesHelpers';
+import { procesarErrorApi } from '../../../utils/errorHandler';
 
 const ActivitiesManager = ({
   activities = [],
@@ -91,6 +92,12 @@ const ActivitiesManager = ({
   const handleGuardar = async (e) => {
     e.preventDefault();
 
+    if (!formData.branch_id) {
+      onMostrarAlerta('Debe seleccionar una sede para la actividad.', 'danger');
+      return;
+    }
+
+
     // Validate formato y coherencia de schedules reales
     if (!esHoraValida(formData.startTime)) {
       onMostrarAlerta('Debe ingresar un schedule de home válido entre 00:00 y 23:59.', 'danger');
@@ -145,10 +152,12 @@ const ActivitiesManager = ({
         setShowModal(false);
         onRecargar();
       } else {
-        onMostrarAlerta(data.message || 'Error al guardar activity', 'danger');
+        const msg = procesarErrorApi(null, data, 'Guardar Actividad');
+        onMostrarAlerta(msg, 'danger');
       }
     } catch (err) {
-      onMostrarAlerta('Error de red al guardar activity', 'danger');
+      const msg = procesarErrorApi(err, null, 'Guardar Actividad');
+      onMostrarAlerta(msg, 'danger');
     } finally {
       setGuardando(false);
     }
@@ -162,10 +171,12 @@ const ActivitiesManager = ({
         onMostrarAlerta(data.message);
         onRecargar();
       } else {
-        onMostrarAlerta(data.message || 'Error al cambiar status de la activity', 'danger');
+        const msg = procesarErrorApi(null, data, 'Toggle Estado Actividad');
+        onMostrarAlerta(msg, 'danger');
       }
     } catch (err) {
-      onMostrarAlerta('Error de red al actualizar status', 'danger');
+      const msg = procesarErrorApi(err, null, 'Toggle Estado Actividad');
+      onMostrarAlerta(msg, 'danger');
     }
   };
 
@@ -173,7 +184,9 @@ const ActivitiesManager = ({
   const activitiesAgrupadas = useMemo(() => {
     const map = new Map();
     activities.forEach((act) => {
-      const clave = act.name.trim().toLowerCase();
+      const sedeId = act.branch_id || act.branch?.id || 'sin_sede';
+      const profId = act.teacher_id || act.teacher?.id || 'sin_profesor';
+      const clave = `${act.name.trim().toLowerCase()}__${sedeId}__${profId}`;
       if (map.has(clave)) {
         const existente = map.get(clave);
         const shiftsCombinados = [...(existente.shifts || []), ...(act.shifts || [])];

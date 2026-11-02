@@ -3,6 +3,7 @@ import { Container, Card, Form, Button, Row, Col, Alert, Spinner, InputGroup } f
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { API_BASE } from '../../config/api';
+import { procesarErrorApi } from '../../utils/errorHandler';
 import './Auth.css';
 
 const API_BASE_URL = `${API_BASE}/auth`;
@@ -126,9 +127,9 @@ const Auth = () => {
         const data = await response.json();
 
         if (!response.ok || !data.success) {
+          const msg = procesarErrorApi(null, data, isLogin ? 'Inicio de Sesión' : 'Registro');
           setTipoMensaje('danger');
-          const detalleTexto = data.detalles ? `: ${data.detalles}` : '';
-          setMensaje(`${data.message || 'Ocurrió un error al procesar la solicitud'}${detalleTexto}`);
+          setMensaje(msg);
         } else {
           if (data.requiresTwoFactor) {
             setTipoMensaje('success');
@@ -142,9 +143,9 @@ const Auth = () => {
           }
         }
       } catch (error) {
-        console.error(`[Auth] Error de conexión con el backend en "${endpoint}":`, error);
+        const msg = procesarErrorApi(error, null, isLogin ? 'Inicio de Sesión' : 'Registro');
         setTipoMensaje('danger');
-        setMensaje('No se pudo conectar con el servidor backend.');
+        setMensaje(msg);
       }
     } else if (step === '2fa') {
       try {
@@ -159,17 +160,18 @@ const Auth = () => {
         const data = await response.json();
 
         if (!response.ok || !data.success) {
+          const msg = procesarErrorApi(null, data, 'Verificación 2FA');
           setTipoMensaje('danger');
-          setMensaje(data.message || 'Código inválido o expirado.');
+          setMensaje(msg);
         } else {
           setTipoMensaje('success');
           setMensaje('¡Verificación exitosa! Redirigiendo...');
           handleSuccessLogin(data, formData);
         }
       } catch (error) {
-        console.error('Error de red al verificar 2fa:', error);
+        const msg = procesarErrorApi(error, null, 'Verificación 2FA');
         setTipoMensaje('danger');
-        setMensaje('No se pudo conectar con el servidor backend.');
+        setMensaje(msg);
       }
     } else if (step === 'forgot') {
       try {
@@ -184,8 +186,9 @@ const Auth = () => {
         const data = await response.json();
 
         if (!response.ok || !data.success) {
+          const msg = procesarErrorApi(null, data, 'Recuperación de Contraseña');
           setTipoMensaje('danger');
-          setMensaje(data.message || 'Error al solicitar la recuperación.');
+          setMensaje(msg);
         } else {
           setTipoMensaje('success');
           setMensaje('Si el correo existe, se enviará un enlace de recuperación. Revisa tu bandeja de entrada.');
@@ -193,9 +196,9 @@ const Auth = () => {
           setTimeout(() => setStep('auth'), 3000);
         }
       } catch (error) {
-        console.error('Error de red:', error);
+        const msg = procesarErrorApi(error, null, 'Recuperación de Contraseña');
         setTipoMensaje('danger');
-        setMensaje('No se pudo conectar con el servidor backend.');
+        setMensaje(msg);
       }
     }
     
